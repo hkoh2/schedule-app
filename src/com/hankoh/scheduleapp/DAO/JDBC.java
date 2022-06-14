@@ -1,4 +1,4 @@
-package com.hankoh.scheduleapp;
+package com.hankoh.scheduleapp.DAO;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -16,7 +16,7 @@ public class JDBC {
     // Driver reference
     private static final String userName = "sqlUser";
     // Username
-    private static String password = "Passw0rd!";
+    private static final String password = "Passw0rd!";
     // Password
     private static Connection connection = null;
     // Connection Interface

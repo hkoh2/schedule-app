@@ -1,5 +1,6 @@
 package com.hankoh.scheduleapp;
 
+import com.hankoh.scheduleapp.DAO.JDBC;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,6 +13,7 @@ import java.sql.Statement;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class Main extends Application {
     public static void main(String[] args) {
@@ -55,9 +57,10 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/com/hankoh/scheduleapp/view/main.fxml"));
-        stage.setTitle("Inventory Management");
-        stage.setScene(new Scene(root, 800, 400));
+        ResourceBundle msg = ResourceBundle.getBundle("com.hankoh.scheduleapp.properties.MessagesBundle", Locale.getDefault());
+        Parent root = FXMLLoader.load(getClass().getResource("/com/hankoh/scheduleapp/view/login.fxml"));
+        stage.setTitle(msg.getString("Title"));
+        stage.setScene(new Scene(root));
         stage.show();
     }
 
