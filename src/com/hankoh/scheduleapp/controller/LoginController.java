@@ -60,9 +60,11 @@ public class LoginController {
         if (userDao.loginUser(username.getText(), password.getText())) {
             System.out.println("Logged in");
             loginErrorText.setText("Logged In!");
+            Logger.loginAttempted(username.getText(), true);
         } else {
             System.out.println("Wrong username or password");
             loginErrorText.setText("Wrong username or password");
+            Logger.loginAttempted(username.getText(), false);
         }
     }
 }
