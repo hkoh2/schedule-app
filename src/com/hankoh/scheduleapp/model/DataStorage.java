@@ -21,4 +21,5 @@ public final class DataStorage {
     public User getUser(User user) {
         return user;
     }
+
 }

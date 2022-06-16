@@ -2,6 +2,8 @@ package com.hankoh.scheduleapp.controller;
 
 import com.hankoh.scheduleapp.DAO.UserDao;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -28,7 +30,8 @@ public class LoginController {
     public Text loginErrorText;
     public Label passwordLabel;
     public Label usernameLabel;
-    public ComboBox languageCombo;
+    public ComboBox<String> languageCombo;
+    private ObservableList<String> language = FXCollections.observableArrayList("English", "Français");
     public TextField password;
     public TextField username;
 
@@ -42,6 +45,9 @@ public class LoginController {
         usernameLabel.setText(msg.getString("login.username"));
         passwordLabel.setText(msg.getString("login.password"));
 
+        languageCombo.getItems().addAll("english", "français");
+        String currentLanguage = Locale.getDefault().getDisplayLanguage();
+        languageCombo.getSelectionModel().select(currentLanguage);
 
         // lambda for closing app
         exitButton.setOnAction(event -> Platform.exit());
@@ -65,6 +71,20 @@ public class LoginController {
             System.out.println("Wrong username or password");
             loginErrorText.setText("Wrong username or password");
             Logger.loginAttempted(username.getText(), false);
+        }
+    }
+
+    public void onLanguageSelect(ActionEvent actionEvent) {
+        String langVal = languageCombo.getValue();
+        switch (langVal) {
+            case "english":
+                System.out.println("English selected");
+                break;
+            case "français":
+                System.out.println("French selected");
+                break;
+            default:
+                break;
         }
     }
 }
