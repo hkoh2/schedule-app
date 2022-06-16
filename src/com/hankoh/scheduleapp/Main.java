@@ -9,8 +9,8 @@ import javafx.stage.Stage;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -19,7 +19,7 @@ public class Main extends Application {
     public static void main(String[] args) {
 
         // Test location
-        Locale.setDefault(new Locale("fr", "FR"));
+        Locale.setDefault(new Locale("fr"));
 
 
         System.out.println("Hello world!");
@@ -27,10 +27,12 @@ public class Main extends Application {
         LocalDateTime now = LocalDateTime.now();
         System.out.println(now);
         Locale current = Locale.getDefault();
-        String displayCountry = current.getDisplayCountry();
+        //String displayCountry = current.getDisplayCountry();
+        String displayCountry = current.getDisplayLanguage();
+
 
         String country = current.getCountry();
-        System.out.println("country - " + country + displayCountry);
+        System.out.println("country - " + country + " " + displayCountry);
         JDBC.makeConnection();
 
         String query = "SELECT * FROM users";
