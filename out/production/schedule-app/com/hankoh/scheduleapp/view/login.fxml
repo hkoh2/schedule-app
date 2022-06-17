@@ -33,6 +33,7 @@
             </Label>
             <Button fx:id="loginButton" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#onLoginButtonClick" text="Log In" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
             <Text fx:id="loginErrorText" strokeType="OUTSIDE" strokeWidth="0.0" text="Error message" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Button fx:id="devLoginButton" mnemonicParsing="false" onAction="#onDevLoginClick" text="Button" GridPane.rowIndex="3" />
          </children>
       </GridPane>
       <Text fx:id="titleText" layoutX="66.0" layoutY="51.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Schedule App">
