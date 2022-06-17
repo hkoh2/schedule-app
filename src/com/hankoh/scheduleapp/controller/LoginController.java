@@ -1,6 +1,8 @@
 package com.hankoh.scheduleapp.controller;
 
 import com.hankoh.scheduleapp.DAO.UserDao;
+import com.hankoh.scheduleapp.model.DataStorage;
+import com.hankoh.scheduleapp.model.User;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -38,6 +40,7 @@ public class LoginController {
     public Label passwordLabel;
     public Label usernameLabel;
     public ComboBox<String> languageCombo;
+    public Button devLoginButton;
     private ObservableList<String> language = FXCollections.observableArrayList("English", "Français");
     public TextField password;
     public TextField username;
@@ -62,6 +65,7 @@ public class LoginController {
     }
 
     public void onExitButtonClick() {
+        // not used.
 
     }
 
@@ -103,5 +107,10 @@ public class LoginController {
             default:
                 break;
         }
+    }
+
+    public void onDevLoginClick(ActionEvent actionEvent) throws IOException {
+        DataStorage.getInstance().setUser(new User(9999, "dev"));
+        loginUser(actionEvent);
     }
 }
