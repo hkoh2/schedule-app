@@ -61,7 +61,7 @@ public class Main extends Application {
     public void start(Stage stage) throws Exception {
         ResourceBundle msg = ResourceBundle.getBundle("com.hankoh.scheduleapp.properties.MessagesBundle", Locale.getDefault());
         Parent root = FXMLLoader.load(getClass().getResource("/com/hankoh/scheduleapp/view/login.fxml"));
-        stage.setTitle(msg.getString("Title"));
+        stage.setTitle(msg.getString("title"));
         stage.setScene(new Scene(root));
         stage.show();
     }

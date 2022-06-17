@@ -5,14 +5,21 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 /**
@@ -58,7 +65,7 @@ public class LoginController {
 
     }
 
-    public void onLoginButtonClick(ActionEvent actionEvent) throws SQLException {
+    public void onLoginButtonClick(ActionEvent actionEvent) throws SQLException, IOException {
         UserDao userDao = new UserDao();
 
         // Checks username and password.
@@ -67,11 +74,21 @@ public class LoginController {
             System.out.println("Logged in");
             loginErrorText.setText("Logged In!");
             Logger.loginAttempted(username.getText(), true);
+            loginUser(actionEvent);
         } else {
             System.out.println("Wrong username or password");
             loginErrorText.setText("Wrong username or password");
             Logger.loginAttempted(username.getText(), false);
+            // provide error messages.
         }
+    }
+
+    private void loginUser(ActionEvent actionEvent) throws IOException {
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/hankoh/scheduleapp/view/main.fxml")));
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.setTitle("Schedule App");
+        stage.setScene(new Scene(root));
+        stage.show();
     }
 
     public void onLanguageSelect(ActionEvent actionEvent) {

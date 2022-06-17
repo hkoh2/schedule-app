@@ -18,7 +18,7 @@ public final class DataStorage {
         this.user = user;
     }
 
-    public User getUser(User user) {
+    public User getUser() {
         return user;
     }
 
