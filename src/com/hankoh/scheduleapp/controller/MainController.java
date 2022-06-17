@@ -2,12 +2,12 @@ package com.hankoh.scheduleapp.controller;
 
 import com.hankoh.scheduleapp.model.DataStorage;
 import javafx.event.ActionEvent;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
+import javafx.scene.control.*;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 import java.util.Locale;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class MainController {
@@ -25,9 +25,10 @@ public class MainController {
     public Label appointmentsLabel;
     public Text welcomeText;
     public Text mainTitleLabel;
+    ResourceBundle msg;
 
     public void initialize() {
-        ResourceBundle msg = ResourceBundle.getBundle(
+        msg = ResourceBundle.getBundle(
                 "com.hankoh.scheduleapp.properties.MessagesBundle",
                 Locale.getDefault()
         );
@@ -73,5 +74,14 @@ public class MainController {
     }
 
     public void onExitButtonClick(ActionEvent actionEvent) {
+        Stage stage = (Stage) exitButton.getScene().getWindow();
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle(msg.getString("confirm"));
+        alert.setHeaderText(msg.getString("confirm"));
+        alert.setContentText(msg.getString("exit_msg"));
+        Optional<ButtonType> choice = alert.showAndWait();
+        if (choice.isPresent() && choice.get() == ButtonType.OK) {
+            stage.close();
+        }
     }
 }
