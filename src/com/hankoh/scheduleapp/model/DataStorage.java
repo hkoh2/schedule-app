@@ -22,4 +22,9 @@ public final class DataStorage {
         return user;
     }
 
+    public void clearAll() {
+        this.user = null;
+
+    }
+
 }
