@@ -25,8 +25,15 @@
                      <children>
                         <TableView layoutY="40.0" prefHeight="375.0" prefWidth="1000.0">
                           <columns>
-                            <TableColumn prefWidth="75.0" text="C1" />
-                            <TableColumn prefWidth="75.0" text="C2" />
+                            <TableColumn prefWidth="75.0" text="ID" />
+                            <TableColumn prefWidth="75.0" text="Title" />
+                              <TableColumn prefWidth="147.20001220703125" text="Description" />
+                              <TableColumn prefWidth="104.0" text="Location" />
+                              <TableColumn prefWidth="95.19998168945312" text="Type" />
+                              <TableColumn prefWidth="106.39996337890625" text="Start" />
+                              <TableColumn prefWidth="150.4000244140625" text="End" />
+                              <TableColumn prefWidth="89.5999755859375" text="Customer" />
+                              <TableColumn prefWidth="160.0" text="User" />
                           </columns>
                         </TableView>
                         <ButtonBar layoutX="397.0" layoutY="417.0" prefHeight="40.0" prefWidth="602.0">
@@ -47,8 +54,11 @@
                      <children>
                         <TableView layoutY="40.0" prefHeight="375.0" prefWidth="1000.0">
                            <columns>
-                              <TableColumn prefWidth="75.0" text="C1" />
-                              <TableColumn prefWidth="75.0" text="C2" />
+                              <TableColumn prefWidth="75.0" text="ID" />
+                              <TableColumn prefWidth="185.59992218017578" text="Customer" />
+                              <TableColumn prefWidth="228.00003051757812" text="Address" />
+                              <TableColumn minWidth="0.0" prefWidth="139.199951171875" text="Postal Code" />
+                              <TableColumn minWidth="0.0" prefWidth="216.0" text="Phone" />
                            </columns>
                         </TableView>
                         <ButtonBar layoutX="397.0" layoutY="417.0" prefHeight="40.0" prefWidth="602.0">

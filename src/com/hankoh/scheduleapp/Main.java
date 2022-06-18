@@ -21,7 +21,6 @@ public class Main extends Application {
         // Test location
         Locale.setDefault(new Locale("fr"));
 
-
         System.out.println("Hello world!");
         System.out.println(LocalDateTime.now());
         LocalDateTime now = LocalDateTime.now();
@@ -29,7 +28,6 @@ public class Main extends Application {
         Locale current = Locale.getDefault();
         //String displayCountry = current.getDisplayCountry();
         String displayCountry = current.getDisplayLanguage();
-
 
         String country = current.getCountry();
         System.out.println("country - " + country + " " + displayCountry);
@@ -45,16 +43,11 @@ public class Main extends Application {
                 System.out.println("Username: " + rs.getString("User_Name"));
                 System.out.println("PW: " + rs.getString("Password"));
                 System.out.println("Time stamp: " + rs.getTimestamp("Create_Date"));
-
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-
         launch(args);
-
     }
 
     @Override
