@@ -41,7 +41,7 @@ public class LoginController {
     public Label usernameLabel;
     public ComboBox<String> languageCombo;
     public Button devLoginButton;
-    private ObservableList<String> language = FXCollections.observableArrayList("English", "Français");
+    private final ObservableList<String> language = FXCollections.observableArrayList("English", "Français");
     public TextField password;
     public TextField username;
 

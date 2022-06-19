@@ -31,6 +31,7 @@ public class MainController {
     public Label appointmentsLabel;
     public Text welcomeText;
     public Text mainTitleLabel;
+    public ComboBox<String> appointmentFilterCombo;
     ResourceBundle msg;
 
     public void initialize() {
@@ -47,6 +48,16 @@ public class MainController {
         newAppointmentButton.setText(msg.getString("new"));
         editAppointmentButton.setText(msg.getString("edit"));
         deleteAppointmentButton.setText(msg.getString("delete"));
+
+        String strAll = msg.getString("appointment.all");
+        String strMonth = msg.getString("appointment.month");
+        String strWeek = msg.getString("appointment.week");
+        appointmentFilterCombo
+                .getItems()
+                .addAll(strAll, strMonth, strWeek);
+        appointmentFilterCombo
+                .getSelectionModel()
+                .select(strAll);
 
         customersTab.setText(msg.getString("main.customers"));
         customersLabel.setText(msg.getString("main.customers"));
