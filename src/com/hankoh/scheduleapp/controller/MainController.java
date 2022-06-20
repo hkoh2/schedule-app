@@ -1,6 +1,9 @@
 package com.hankoh.scheduleapp.controller;
 
+import com.hankoh.scheduleapp.DAO.AppointmentDao;
+import com.hankoh.scheduleapp.model.Appointment;
 import com.hankoh.scheduleapp.model.DataStorage;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -11,6 +14,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
@@ -34,7 +38,9 @@ public class MainController {
     public ComboBox<String> appointmentFilterCombo;
     ResourceBundle msg;
 
-    public void initialize() {
+    private ObservableList<Appointment> appointments;
+
+    public void initialize() throws SQLException {
         msg = ResourceBundle.getBundle(
                 "com.hankoh.scheduleapp.properties.MessagesBundle",
                 Locale.getDefault()
@@ -67,6 +73,11 @@ public class MainController {
 
         logoutButton.setText(msg.getString("logout"));
         exitButton.setText(msg.getString("exit_button"));
+
+
+        AppointmentDao appointmentDao = new AppointmentDao();
+        appointments = appointmentDao.getAllAppointments();
+        appointments.forEach(appt -> System.out.println(appt.getType()));
     }
 
     public void onNewAppointmentButtonClick(ActionEvent actionEvent) {
