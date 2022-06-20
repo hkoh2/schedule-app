@@ -3,6 +3,7 @@ package com.hankoh.scheduleapp.controller;
 import com.hankoh.scheduleapp.DAO.AppointmentDao;
 import com.hankoh.scheduleapp.model.Appointment;
 import com.hankoh.scheduleapp.model.DataStorage;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -10,11 +11,13 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.sql.Time;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
@@ -36,9 +39,19 @@ public class MainController {
     public Text welcomeText;
     public Text mainTitleLabel;
     public ComboBox<String> appointmentFilterCombo;
+    public TableColumn<Appointment, String> appointmentUserColumn;
+    public TableColumn<Appointment, String> appointmentCustomerColumn;
+    public TableColumn<Appointment, Time> appointmentEndColumn;
+    public TableColumn<Appointment, String> appointmentStartColumn;
+    public TableColumn<Appointment, String> appointmentTypeColumn;
+    public TableColumn<Appointment, String> appointmentLocationColumn;
+    public TableColumn<Appointment, String> appointmentDescriptionColumn;
+    public TableColumn<Appointment, String> appointmentTitleColumn;
+    public TableColumn<Appointment, Integer> appointmentIdColumn;
+    public TableView<Appointment> appointmentsTable;
     ResourceBundle msg;
 
-    private ObservableList<Appointment> appointments;
+    private ObservableList<Appointment> appointments = FXCollections.observableArrayList();
 
     public void initialize() throws SQLException {
         msg = ResourceBundle.getBundle(
@@ -77,7 +90,21 @@ public class MainController {
 
         AppointmentDao appointmentDao = new AppointmentDao();
         appointments = appointmentDao.getAllAppointments();
-        appointments.forEach(appt -> System.out.println(appt.getType()));
+        appointments.forEach(appt -> System.out.println(appt.getAppointmentId()));
+
+        appointmentIdColumn.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
+        appointmentTitleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
+        appointmentDescriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
+        appointmentLocationColumn.setCellValueFactory(new PropertyValueFactory<>("location"));
+        appointmentTypeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
+        appointmentStartColumn.setCellValueFactory(new PropertyValueFactory<>("startTime"));
+        appointmentEndColumn.setCellValueFactory(new PropertyValueFactory<>("endTime"));
+        appointmentCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("customerId"));
+        appointmentUserColumn.setCellValueFactory(new PropertyValueFactory<>("userId"));
+
+        appointmentsTable.setItems(appointments);
+
+        
     }
 
     public void onNewAppointmentButtonClick(ActionEvent actionEvent) {

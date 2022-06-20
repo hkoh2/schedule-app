@@ -24,17 +24,17 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <TableView layoutY="45.0" prefHeight="375.0" prefWidth="1000.0">
+                        <TableView fx:id="appointmentsTable" layoutY="45.0" prefHeight="375.0" prefWidth="1000.0">
                           <columns>
-                            <TableColumn prefWidth="75.0" text="ID" />
-                            <TableColumn prefWidth="75.0" text="Title" />
-                              <TableColumn prefWidth="147.20001220703125" text="Description" />
-                              <TableColumn prefWidth="104.0" text="Location" />
-                              <TableColumn prefWidth="95.19998168945312" text="Type" />
-                              <TableColumn prefWidth="106.39996337890625" text="Start" />
-                              <TableColumn prefWidth="150.4000244140625" text="End" />
-                              <TableColumn prefWidth="89.5999755859375" text="Customer" />
-                              <TableColumn prefWidth="160.0" text="User" />
+                            <TableColumn fx:id="appointmentIdColumn" prefWidth="75.0" text="ID" />
+                            <TableColumn fx:id="appointmentTitleColumn" prefWidth="75.0" text="Title" />
+                              <TableColumn fx:id="appointmentDescriptionColumn" prefWidth="147.20001220703125" text="Description" />
+                              <TableColumn fx:id="appointmentLocationColumn" prefWidth="104.0" text="Location" />
+                              <TableColumn fx:id="appointmentTypeColumn" prefWidth="95.19998168945312" text="Type" />
+                              <TableColumn fx:id="appointmentStartColumn" prefWidth="106.39996337890625" text="Start" />
+                              <TableColumn fx:id="appointmentEndColumn" prefWidth="150.4000244140625" text="End" />
+                              <TableColumn fx:id="appointmentCustomerColumn" prefWidth="89.5999755859375" text="Customer" />
+                              <TableColumn fx:id="appointmentUserColumn" prefWidth="160.0" text="User" />
                           </columns>
                         </TableView>
                         <ButtonBar layoutX="397.0" layoutY="417.0" prefHeight="40.0" prefWidth="602.0">
