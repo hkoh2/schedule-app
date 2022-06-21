@@ -54,13 +54,13 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="500.0" prefWidth="1000.0">
                      <children>
-                        <TableView layoutY="45.0" prefHeight="375.0" prefWidth="1000.0">
+                        <TableView fx:id="customersTable" layoutY="45.0" prefHeight="375.0" prefWidth="1000.0">
                            <columns>
-                              <TableColumn prefWidth="75.0" text="ID" />
-                              <TableColumn prefWidth="185.59992218017578" text="Customer" />
-                              <TableColumn prefWidth="228.00003051757812" text="Address" />
-                              <TableColumn minWidth="0.0" prefWidth="139.199951171875" text="Postal Code" />
-                              <TableColumn minWidth="0.0" prefWidth="216.0" text="Phone" />
+                              <TableColumn fx:id="customerIdColumn" prefWidth="75.0" text="ID" />
+                              <TableColumn fx:id="customerNameColumn" prefWidth="185.59992218017578" text="Customer Name" />
+                              <TableColumn fx:id="customerAddressColumn" prefWidth="228.00003051757812" text="Address" />
+                              <TableColumn fx:id="customerPostalColumn" minWidth="0.0" prefWidth="139.199951171875" text="Postal Code" />
+                              <TableColumn fx:id="customerPhoneColumn" minWidth="0.0" prefWidth="216.0" text="Phone" />
                            </columns>
                         </TableView>
                         <ButtonBar layoutX="397.0" layoutY="417.0" prefHeight="40.0" prefWidth="602.0">

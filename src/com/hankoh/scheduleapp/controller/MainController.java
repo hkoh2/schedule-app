@@ -51,6 +51,12 @@ public class MainController {
     public TableColumn<Appointment, String> appointmentTitleColumn;
     public TableColumn<Appointment, Integer> appointmentIdColumn;
     public TableView<Appointment> appointmentsTable;
+    public TableColumn<Customer, Integer> customerIdColumn;
+    public TableColumn<Customer, String> customerNameColumn;
+    public TableColumn<Customer, String> customerAddressColumn;
+    public TableColumn<Customer, String> customerPostalColumn;
+    public TableColumn<Customer, String> customerPhoneColumn;
+    public TableView<Customer> customersTable;
     ResourceBundle msg;
 
     private ObservableList<Appointment> appointments = FXCollections.observableArrayList();
@@ -111,7 +117,13 @@ public class MainController {
         customers = customerDao.getAllCustomers();
         customers.forEach(cust -> System.out.println(cust.getName()));
 
-        
+        customerIdColumn.setCellValueFactory(new PropertyValueFactory<>("customerId"));
+        customerNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        customerAddressColumn.setCellValueFactory(new PropertyValueFactory<>("address"));
+        customerPostalColumn.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
+        customerPhoneColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
+        customersTable.setItems(customers);
+
     }
 
     public void onNewAppointmentButtonClick(ActionEvent actionEvent) {
