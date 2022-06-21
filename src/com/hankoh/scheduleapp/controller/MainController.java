@@ -158,10 +158,30 @@ public class MainController {
     }
 
 
-    public void onNewAppointmentButtonClick(ActionEvent actionEvent) {
+    public void onNewAppointmentButtonClick(ActionEvent actionEvent) throws IOException {
+        System.out.println("Add new appointment");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/hankoh/scheduleapp/view/appointment-edit.fxml"));
+        loader.setController(new AppointmentAddController());
+        Parent root = loader.load();
+
+
+        Stage stage = (Stage)((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.setTitle("New Appointment");
+        stage.setScene(new Scene(root));
+        stage.show();
     }
 
-    public void onEditAppointmentButtonClick(ActionEvent actionEvent) {
+    public void onEditAppointmentButtonClick(ActionEvent actionEvent) throws IOException {
+        System.out.println("Modify new appointment");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/hankoh/scheduleapp/view/appointment-edit.fxml"));
+        loader.setController(new AppointmentModifyController());
+        Parent root = loader.load();
+
+
+        Stage stage = (Stage)((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.setTitle("Modify Appointment");
+        stage.setScene(new Scene(root));
+        stage.show();
     }
 
     public void onDeleteAppointmentButtonClick(ActionEvent actionEvent) {
