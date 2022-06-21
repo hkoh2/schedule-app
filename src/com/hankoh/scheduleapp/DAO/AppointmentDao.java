@@ -34,8 +34,8 @@ public class AppointmentDao {
             Appointment appointment = new Appointment(
                     id,
                     title,
-                    location,
                     description,
+                    location,
                     type,
                     start,
                     end,
