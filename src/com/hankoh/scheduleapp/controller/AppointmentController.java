@@ -10,7 +10,7 @@ public class AppointmentController extends Internationalizable {
     public Label descriptionLabel;
     public TextArea descriptionArea;
     public Label typeLabel;
-    public Label startTimeField;
+    public Label startTimeLabel;
     public Label endTimeLabel;
     public TextField typeField;
     public DatePicker startDatePicker;
@@ -30,5 +30,21 @@ public class AppointmentController extends Internationalizable {
     public Button saveButton;
     public Button exitButton;
     public Label appointmentTitleLabel;
+
+    public void initialize() {
+        appointmentTitleLabel.setText(msg.getString("appointment.main_title"));
+        titleLabel.setText(msg.getString("appointment.title"));
+        idLabel.setText(msg.getString("appointment.id"));
+        nameLabel.setText(msg.getString("appointment.customer_name"));
+        descriptionLabel.setText(msg.getString("appointment.description"));
+        locationLabel.setText(msg.getString("appointment.location"));
+        typeLabel.setText(msg.getString("appointment.type"));
+        startTimeLabel.setText(msg.getString("appointment.start_time"));
+        endTimeLabel.setText(msg.getString("appointment.end_time"));
+        userLabel.setText(msg.getString("appointment.user"));
+
+        exitButton.setText(msg.getString("exit_button"));
+        saveButton.setText(msg.getString("save_button"));
+    }
 
 }

@@ -33,7 +33,7 @@
             <Label fx:id="descriptionLabel" text="Description" GridPane.rowIndex="4" />
             <TextArea fx:id="descriptionArea" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <Label fx:id="typeLabel" text="Type" GridPane.rowIndex="6" />
-            <Label fx:id="startTimeField" text="Start Time" GridPane.rowIndex="7" />
+            <Label fx:id="startTimeLabel" text="Start Time" GridPane.rowIndex="7" />
             <Label fx:id="endTimeLabel" text="End Time" GridPane.rowIndex="8" />
             <TextField fx:id="typeField" GridPane.columnIndex="1" GridPane.rowIndex="6" />
             <DatePicker fx:id="startDatePicker" GridPane.columnIndex="1" GridPane.rowIndex="7" />

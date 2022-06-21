@@ -166,7 +166,7 @@ public class MainController {
 
 
         Stage stage = (Stage)((Node) actionEvent.getSource()).getScene().getWindow();
-        stage.setTitle("New Appointment");
+        stage.setTitle(msg.getString("appointment.main_title"));
         stage.setScene(new Scene(root));
         stage.show();
     }

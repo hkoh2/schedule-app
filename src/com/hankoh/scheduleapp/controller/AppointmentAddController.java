@@ -20,8 +20,7 @@ public class AppointmentAddController extends AppointmentController {
     }
 
     public void initialize() {
-        System.out.println("Appointment add loaded");
-        appointmentTitleLabel.setText("Extends!!!!!!!!!!");
+        super.initialize();
     }
 
     public void onExitButtonClick(ActionEvent actionEvent) throws IOException {
