@@ -1,7 +1,9 @@
 package com.hankoh.scheduleapp.controller;
 
 import com.hankoh.scheduleapp.DAO.AppointmentDao;
+import com.hankoh.scheduleapp.DAO.CustomerDao;
 import com.hankoh.scheduleapp.model.Appointment;
+import com.hankoh.scheduleapp.model.Customer;
 import com.hankoh.scheduleapp.model.DataStorage;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -52,6 +54,7 @@ public class MainController {
     ResourceBundle msg;
 
     private ObservableList<Appointment> appointments = FXCollections.observableArrayList();
+    private ObservableList<Customer> customers = FXCollections.observableArrayList();
 
     public void initialize() throws SQLException {
         msg = ResourceBundle.getBundle(
@@ -103,6 +106,10 @@ public class MainController {
         appointmentUserColumn.setCellValueFactory(new PropertyValueFactory<>("userId"));
 
         appointmentsTable.setItems(appointments);
+
+        CustomerDao customerDao = new CustomerDao();
+        customers = customerDao.getAllCustomers();
+        customers.forEach(cust -> System.out.println(cust.getName()));
 
         
     }

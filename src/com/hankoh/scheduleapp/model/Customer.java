@@ -6,13 +6,15 @@ public class Customer {
     private String address;
     private String postalCode;
     private String phone;
+    private int divisionId;
 
-    public Customer(int customerId, String name, String address, String postalCode, String phone) {
+    public Customer(int customerId, String name, String address, String postalCode, String phone, int divisionId) {
         this.customerId = customerId;
         this.name = name;
         this.address = address;
         this.postalCode = postalCode;
         this.phone = phone;
+        this.divisionId = divisionId;
     }
 
     public int getCustomerId() {
@@ -53,5 +55,13 @@ public class Customer {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public int getDivisionId() {
+        return divisionId;
+    }
+
+    public void setDivisionId(int divisionId) {
+        this.divisionId = divisionId;
     }
 }
