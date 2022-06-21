@@ -43,6 +43,31 @@ public class Appointment {
         //this.contact = contact;
         this.contactId = contactId;
     }
+    public Appointment(
+            int appointmentId,
+            String title,
+            String description,
+            String location,
+            String type,
+            Time startTime,
+            Time endTime,
+            Customer customer,
+            User user,
+            int contactId
+    ) {
+        this.appointmentId = appointmentId;
+        this.title = title;
+        this.description = description;
+        this.location = location;
+        this.type = type;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.customer = customer;
+        this.customerId = customer.getCustomerId();
+        this.user = user;
+        this.userId = user.getUserId();
+        this.contactId = contactId;
+    }
 
     public Appointment(String id, String title, String description) {
 

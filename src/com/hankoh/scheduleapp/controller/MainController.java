@@ -5,6 +5,7 @@ import com.hankoh.scheduleapp.DAO.CustomerDao;
 import com.hankoh.scheduleapp.model.Appointment;
 import com.hankoh.scheduleapp.model.Customer;
 import com.hankoh.scheduleapp.model.DataStorage;
+import com.hankoh.scheduleapp.model.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -41,8 +42,8 @@ public class MainController {
     public Text welcomeText;
     public Text mainTitleLabel;
     public ComboBox<String> appointmentFilterCombo;
-    public TableColumn<Appointment, String> appointmentUserColumn;
-    public TableColumn<Appointment, String> appointmentCustomerColumn;
+    public TableColumn<Appointment, User> appointmentUserColumn;
+    public TableColumn<Appointment, Customer> appointmentCustomerColumn;
     public TableColumn<Appointment, Time> appointmentEndColumn;
     public TableColumn<Appointment, String> appointmentStartColumn;
     public TableColumn<Appointment, String> appointmentTypeColumn;
@@ -99,7 +100,7 @@ public class MainController {
 
         AppointmentDao appointmentDao = new AppointmentDao();
         appointments = appointmentDao.getAllAppointments();
-        appointments.forEach(appt -> System.out.println(appt.getAppointmentId()));
+        //appointments.forEach(appt -> System.out.println(appt.getAppointmentId()));
 
         appointmentIdColumn.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
         appointmentTitleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
@@ -108,14 +109,16 @@ public class MainController {
         appointmentTypeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
         appointmentStartColumn.setCellValueFactory(new PropertyValueFactory<>("startTime"));
         appointmentEndColumn.setCellValueFactory(new PropertyValueFactory<>("endTime"));
-        appointmentCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("customerId"));
-        appointmentUserColumn.setCellValueFactory(new PropertyValueFactory<>("userId"));
+        appointmentCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("Customer"));
+        appointmentCustomerColumn.setCellFactory(column -> customerCell());
+        appointmentUserColumn.setCellValueFactory(new PropertyValueFactory<>("User"));;
+        appointmentUserColumn.setCellFactory(column -> userCell());
 
         appointmentsTable.setItems(appointments);
 
         CustomerDao customerDao = new CustomerDao();
         customers = customerDao.getAllCustomers();
-        customers.forEach(cust -> System.out.println(cust.getName()));
+        //customers.forEach(cust -> System.out.println(cust.getName()));
 
         customerIdColumn.setCellValueFactory(new PropertyValueFactory<>("customerId"));
         customerNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -125,6 +128,35 @@ public class MainController {
         customersTable.setItems(customers);
 
     }
+
+    private TableCell<Appointment, Customer> customerCell() {
+        return new TableCell<>() {
+            @Override
+            protected void updateItem(Customer customer, boolean b) {
+                super.updateItem(customer, b);
+                if (customer == null || b) {
+                    setText("");
+                } else {
+                    setText(customer.getName());
+                }
+            }
+        };
+    }
+
+    private TableCell<Appointment, User> userCell() {
+        return new TableCell<>() {
+            @Override
+            protected void updateItem(User user, boolean b) {
+                super.updateItem(user, b);
+                if (user == null || b) {
+                    setText("");
+                } else {
+                    setText(user.getUserName());
+                }
+            }
+        };
+    }
+
 
     public void onNewAppointmentButtonClick(ActionEvent actionEvent) {
     }
