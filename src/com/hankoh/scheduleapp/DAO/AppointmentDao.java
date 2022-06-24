@@ -71,7 +71,8 @@ public class AppointmentDao {
         return appointments;
     }
 
-    public void addAppointment() {
+    public void addAppointment(Appointment appointment) {
+        // build query
 
     }
 }

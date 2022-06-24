@@ -1,6 +1,9 @@
 package com.hankoh.scheduleapp.controller;
 
+import javafx.event.ActionEvent;
 import javafx.scene.control.*;
+
+import java.io.IOException;
 
 public class AppointmentController extends Internationalizable {
     public TextField idField;
@@ -16,17 +19,17 @@ public class AppointmentController extends Internationalizable {
     public DatePicker startDatePicker;
     public DatePicker endDatePicker;
     public Label nameLabel;
-    public TextField labelField;
+    public TextField nameField;
     public TextField userField;
     public Label userLabel;
     public Label locationLabel;
     public TextField locationField;
     public TextField startHourField;
     public TextField startMinuteField;
-    public ComboBox startMerdiemComboBox;
+    public ComboBox<String> startMerdiemComboBox;
     public TextField endHourField;
     public TextField endMinuteField;
-    public ComboBox endMeridiemComboBox;
+    public ComboBox<String> endMeridiemComboBox;
     public Button saveButton;
     public Button exitButton;
     public Label appointmentTitleLabel;
@@ -47,4 +50,6 @@ public class AppointmentController extends Internationalizable {
         saveButton.setText(msg.getString("save_button"));
     }
 
+    public void onExitButtonClick(ActionEvent actionEvent) throws IOException {
+    }
 }

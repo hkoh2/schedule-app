@@ -16,6 +16,9 @@ public class Appointment {
     private int userId;
     private Contact contact;
     private int contactId;
+    public Appointment() {
+
+    }
 
     public Appointment(
             int appointmentId,
@@ -43,6 +46,19 @@ public class Appointment {
         //this.contact = contact;
         this.contactId = contactId;
     }
+    //public Appointment(
+    //        String title,
+    //        String description,
+    //        String location,
+    //        String type,
+    //        Time startTime,
+    //        Time endTime,
+    //        int customerId,
+    //        int userId,
+    //        int contactId
+    //) {
+    //
+    //}
     public Appointment(
             int appointmentId,
             String title,

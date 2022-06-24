@@ -160,8 +160,7 @@ public class MainController {
 
     public void onNewAppointmentButtonClick(ActionEvent actionEvent) throws IOException {
         System.out.println("Add new appointment");
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/hankoh/scheduleapp/view/appointment-edit.fxml"));
-        loader.setController(new AppointmentAddController());
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/hankoh/scheduleapp/view/appointment-add.fxml"));
         Parent root = loader.load();
 
 
@@ -174,7 +173,6 @@ public class MainController {
     public void onEditAppointmentButtonClick(ActionEvent actionEvent) throws IOException {
         System.out.println("Modify new appointment");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/hankoh/scheduleapp/view/appointment-edit.fxml"));
-        loader.setController(new AppointmentModifyController());
         Parent root = loader.load();
 
 

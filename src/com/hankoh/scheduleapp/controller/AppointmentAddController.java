@@ -1,5 +1,7 @@
 package com.hankoh.scheduleapp.controller;
 
+import com.hankoh.scheduleapp.DAO.AppointmentDao;
+import com.hankoh.scheduleapp.model.Appointment;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -10,6 +12,7 @@ import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -21,6 +24,12 @@ public class AppointmentAddController extends AppointmentController {
 
     public void initialize() {
         super.initialize();
+
+        startMerdiemComboBox.getItems().addAll("AM", "PM");
+        startMerdiemComboBox.getSelectionModel().selectFirst();
+        endMeridiemComboBox.getItems().addAll("AM", "PM");
+        endMeridiemComboBox.getSelectionModel().selectFirst();
+
     }
 
     public void onExitButtonClick(ActionEvent actionEvent) throws IOException {
@@ -37,6 +46,26 @@ public class AppointmentAddController extends AppointmentController {
             stage.show();
         }
 
+    }
+
+    public void onSaveButtonClick(ActionEvent actionEvent) throws IOException {
+        String name = nameField.getText();
+        String Title = titleField.getText();
+        String description = descriptionArea.getText();
+        String location = locationField.getText();
+        String type = typeField.getText();
+        LocalDate startDate = startDatePicker.getValue();
+        String startHour = startHourField.getText();
+        String startMinute = startMinuteField.getText();
+        LocalDate endDate = endDatePicker.getValue();
+        String endHour = endHourField.getText();
+        String endMinute = endMinuteField.getText();
+        String user = userField.getText();
+
+        Appointment newAppointment = new Appointment();
+
+        AppointmentDao appointmentDao = new AppointmentDao();
+        appointmentDao.addAppointment(newAppointment);
     }
 
 }
