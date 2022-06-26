@@ -1,5 +1,7 @@
 # schedule-app
 
+# MAKE EVERYTHING FLAT!
+
 ## C195 QAM2
 
 ## Requirements
@@ -21,3 +23,6 @@
 ### E
 1. README.txt
  
+# TODO
+* Appointment constructor for new appointment (no appointment ID, etc)
+* Timestamp format for table

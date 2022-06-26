@@ -1,6 +1,6 @@
 package com.hankoh.scheduleapp.model;
 
-import java.sql.Time;
+import java.sql.Timestamp;
 
 public class Appointment {
     private int appointmentId;
@@ -8,17 +8,16 @@ public class Appointment {
     private String description;
     private String location;
     private String type;
-    private Time startTime;
-    private Time endTime;
-    private Customer customer;
+    // Store time as UTC and convert time to zone before displaying
+    private Timestamp startTime;
+    private Timestamp endTime;
     private int customerId;
-    private User user;
+    private String customerName;
     private int userId;
-    private Contact contact;
+    private String userName;
     private int contactId;
-    public Appointment() {
-
-    }
+    private String contactName;
+    private String contactEmail;
 
     public Appointment(
             int appointmentId,
@@ -26,69 +25,52 @@ public class Appointment {
             String description,
             String location,
             String type,
-            Time startTime,
-            Time endTime,
+            Timestamp startTime,
+            Timestamp endTime,
+            int customerId,
+            String customerName,
+            int userId,
+            String userName,
+            int contactId,
+            String contactName,
+            String contactEmail) {
+        this.appointmentId = appointmentId;
+        this.title = title;
+        this.description = description;
+        this.location = location;
+        this.type = type;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.customerId = customerId;
+        this.customerName = customerName;
+        this.userId = userId;
+        this.userName = userName;
+        this.contactId = contactId;
+        this.contactName = contactName;
+        this.contactEmail = contactEmail;
+    }
+
+    public Appointment(
+            String title,
+            String description,
+            String location,
+            String type,
+            Timestamp startTime,
+            Timestamp endTime,
             int customerId,
             int userId,
             int contactId
     ) {
-        this.appointmentId = appointmentId;
         this.title = title;
         this.description = description;
         this.location = location;
         this.type = type;
         this.startTime = startTime;
         this.endTime = endTime;
-        //this.customer = customer;
         this.customerId = customerId;
-        //this.user = user;
         this.userId = userId;
-        //this.contact = contact;
         this.contactId = contactId;
     }
-    //public Appointment(
-    //        String title,
-    //        String description,
-    //        String location,
-    //        String type,
-    //        Time startTime,
-    //        Time endTime,
-    //        int customerId,
-    //        int userId,
-    //        int contactId
-    //) {
-    //
-    //}
-    public Appointment(
-            int appointmentId,
-            String title,
-            String description,
-            String location,
-            String type,
-            Time startTime,
-            Time endTime,
-            Customer customer,
-            User user,
-            int contactId
-    ) {
-        this.appointmentId = appointmentId;
-        this.title = title;
-        this.description = description;
-        this.location = location;
-        this.type = type;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.customer = customer;
-        this.customerId = customer.getCustomerId();
-        this.user = user;
-        this.userId = user.getUserId();
-        this.contactId = contactId;
-    }
-
-    public Appointment(String id, String title, String description) {
-
-    }
-
     public int getAppointmentId() {
         return appointmentId;
     }
@@ -129,28 +111,20 @@ public class Appointment {
         this.type = type;
     }
 
-    public Time getStartTime() {
+    public Timestamp getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Time startTime) {
+    public void setStartTime(Timestamp startTime) {
         this.startTime = startTime;
     }
 
-    public Time getEndTime() {
+    public Timestamp getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Time endTime) {
+    public void setEndTime(Timestamp endTime) {
         this.endTime = endTime;
-    }
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
     }
 
     public int getCustomerId() {
@@ -161,13 +135,6 @@ public class Appointment {
         this.customerId = customerId;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 
     public int getUserId() {
         return userId;
@@ -177,12 +144,36 @@ public class Appointment {
         this.userId = userId;
     }
 
-    public Contact getContact() {
-        return contact;
+    public String getCustomerName() {
+        return customerName;
     }
 
-    public void setContact(Contact contact) {
-        this.contact = contact;
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getContactName() {
+        return contactName;
+    }
+
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
+    }
+
+    public String getContactEmail() {
+        return contactEmail;
+    }
+
+    public void setContactEmail(String contactEmail) {
+        this.contactEmail = contactEmail;
     }
 
     public int getContactId() {

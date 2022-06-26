@@ -1,24 +1,36 @@
 package com.hankoh.scheduleapp.DAO;
 
 import com.hankoh.scheduleapp.model.Appointment;
-import com.hankoh.scheduleapp.model.Customer;
-import com.hankoh.scheduleapp.model.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 public class AppointmentDao {
 
     private final ObservableList<Appointment> appointments = FXCollections.observableArrayList();
+    Connection conn;
 
     public AppointmentDao() {
-
+        conn = JDBC.getConnection();
     }
 
     public ObservableList<Appointment> getAllAppointments() throws SQLException {
-        Connection conn = JDBC.getConnection();
-        String query = "SELECT * FROM appointments INNER JOIN customers ON appointments.Customer_ID = customers.Customer_ID INNER JOIN users ON appointments.User_ID = users.User_ID";
+        //String query = "SELECT * FROM appointments INNER JOIN customers ON appointments.Customer_ID = customers.Customer_ID INNER JOIN users ON appointments.User_ID = users.User_ID";
+        //String query = "SELECT * FROM appointments INNER JOIN customers ON appointments.Customer_ID = customers.Customer_ID INNER JOIN users ON appointments.User_ID = users.User_ID INNER JOIN contacts ON appointments.Contact_ID = contacts.Contact_ID";
+        String query = """
+                SELECT * 
+                FROM appointments 
+                INNER JOIN customers 
+                ON appointments.Customer_ID = customers.Customer_ID 
+                INNER JOIN users 
+                ON appointments.User_ID = users.User_ID 
+                INNER JOIN contacts 
+                ON appointments.Contact_ID = contacts.Contact_ID
+                """;
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery(query);
         while(rs.next()) {
@@ -27,29 +39,22 @@ public class AppointmentDao {
             String description = rs.getString("Description");
             String location = rs.getString("Location");
             String type = rs.getString("Type");
-            Time start = rs.getTime("Start");
-            Time end = rs.getTime("End");
+            Timestamp start = rs.getTimestamp("Start");
+            Timestamp end = rs.getTimestamp("End");
             int customerId = rs.getInt("Customers.Customer_ID");
             String customerName = rs.getString("Customer_Name");
+            String customerAddress = rs.getString("Address");
             String userName = rs.getString("User_Name");
             int userId = rs.getInt("User_ID");
             int contactId = rs.getInt("Contact_ID");
-            System.out.println("Cust and User: " + customerId + " " + customerName + " " + userName);
+            String contactName = rs.getString("Contact_Name");
+            String contactEmail = rs.getString("Email");
 
-            //
-            Customer customer = new Customer(
-                    customerId,
-                    customerName,
-                    "",
-                    "",
-                    "",
-                    0
-            );
+            LocalDateTime localStart = start.toLocalDateTime();
+            ZonedDateTime zonedStart = localStart.atZone(ZoneId.systemDefault());
 
-            User user = new User(
-                    userId,
-                    userName
-            );
+            LocalDateTime localEnd = end.toLocalDateTime();
+            ZonedDateTime zonedEnd = localEnd.atZone(ZoneId.systemDefault());
 
             Appointment appointment = new Appointment(
                     id,
@@ -59,20 +64,62 @@ public class AppointmentDao {
                     type,
                     start,
                     end,
-                    customer,
-                    user,
-                    contactId
+                    customerId,
+                    customerName,
+                    userId,
+                    userName,
+                    contactId,
+                    contactName,
+                    contactEmail
             );
 
             appointments.add(appointment);
         }
 
-        System.out.println("Appointment size - " + appointments.size());
+        //System.out.println("Appointment size - " + appointments.size());
         return appointments;
     }
 
-    public void addAppointment(Appointment appointment) {
+    public void addAppointment(Appointment appointment) throws SQLException {
         // build query
+        PreparedStatement stmt = getInsertStatement(appointment);
+        int count = stmt.executeUpdate();
+        System.out.println(count + " appointment added");
+    }
 
+    public void removeAppointment(int appointmentId) throws SQLException {
+        PreparedStatement stmt = getRemoveStatement(appointmentId);
+        int count = stmt.executeUpdate();
+        System.out.println(count + " appointment removed");
+    }
+
+    public PreparedStatement getInsertStatement(Appointment appointment) throws SQLException {
+        String query = """
+                INSERT INTO appointments
+                (Title, Description, Location, Type, Start, End, Customer_ID, User_ID, Contact_ID)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """;
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setString(1, appointment.getTitle());
+        stmt.setString(2, appointment.getDescription());
+        stmt.setString(3, appointment.getLocation());
+        stmt.setString(4, appointment.getType());
+        stmt.setTimestamp(5, appointment.getStartTime());
+        stmt.setTimestamp(6, appointment.getEndTime());
+        stmt.setInt(7, appointment.getCustomerId());
+        stmt.setInt(8, appointment.getUserId());
+        stmt.setInt(9, appointment.getContactId());
+
+        return stmt;
+    }
+
+    public PreparedStatement getRemoveStatement(int appointmentId) throws SQLException {
+        String query = """
+                DELETE FROM appointments
+                WHERE Appointment_ID = ?
+                """;
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setInt(1, appointmentId);
+        return stmt;
     }
 }

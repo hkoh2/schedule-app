@@ -42,8 +42,8 @@ public class MainController {
     public Text welcomeText;
     public Text mainTitleLabel;
     public ComboBox<String> appointmentFilterCombo;
-    public TableColumn<Appointment, User> appointmentUserColumn;
-    public TableColumn<Appointment, Customer> appointmentCustomerColumn;
+    public TableColumn<Appointment, String> appointmentUserColumn;
+    public TableColumn<Appointment, String> appointmentCustomerColumn;
     public TableColumn<Appointment, Time> appointmentEndColumn;
     public TableColumn<Appointment, String> appointmentStartColumn;
     public TableColumn<Appointment, String> appointmentTypeColumn;
@@ -109,10 +109,10 @@ public class MainController {
         appointmentTypeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
         appointmentStartColumn.setCellValueFactory(new PropertyValueFactory<>("startTime"));
         appointmentEndColumn.setCellValueFactory(new PropertyValueFactory<>("endTime"));
-        appointmentCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("Customer"));
-        appointmentCustomerColumn.setCellFactory(column -> customerCell());
-        appointmentUserColumn.setCellValueFactory(new PropertyValueFactory<>("User"));;
-        appointmentUserColumn.setCellFactory(column -> userCell());
+        appointmentCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("customerName"));
+        //appointmentCustomerColumn.setCellFactory(column -> customerCell());
+        appointmentUserColumn.setCellValueFactory(new PropertyValueFactory<>("userName"));;
+        //appointmentUserColumn.setCellFactory(column -> userCell());
 
         appointmentsTable.setItems(appointments);
 
@@ -127,6 +127,13 @@ public class MainController {
         customerPhoneColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
         customersTable.setItems(customers);
 
+
+    }
+
+    private void refreshAppointments() throws SQLException {
+        AppointmentDao appointmentDao = new AppointmentDao();
+        appointments = appointmentDao.getAllAppointments();
+        appointmentsTable.setItems(appointments);
     }
 
     private TableCell<Appointment, Customer> customerCell() {
@@ -182,7 +189,13 @@ public class MainController {
         stage.show();
     }
 
-    public void onDeleteAppointmentButtonClick(ActionEvent actionEvent) {
+    public void onDeleteAppointmentButtonClick(ActionEvent actionEvent) throws SQLException {
+        Appointment selected = appointmentsTable.getSelectionModel().getSelectedItem();
+        // need to confirm before deleting.
+
+        AppointmentDao appointmentDao = new AppointmentDao();
+        appointmentDao.removeAppointment(selected.getAppointmentId());
+        refreshAppointments();
     }
 
     public void onNewCustomerButtonClick(ActionEvent actionEvent) {

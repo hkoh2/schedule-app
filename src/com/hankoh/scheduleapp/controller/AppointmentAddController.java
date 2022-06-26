@@ -2,6 +2,8 @@ package com.hankoh.scheduleapp.controller;
 
 import com.hankoh.scheduleapp.DAO.AppointmentDao;
 import com.hankoh.scheduleapp.model.Appointment;
+import com.hankoh.scheduleapp.model.Customer;
+import com.hankoh.scheduleapp.model.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -12,6 +14,8 @@ import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Optional;
@@ -48,24 +52,64 @@ public class AppointmentAddController extends AppointmentController {
 
     }
 
-    public void onSaveButtonClick(ActionEvent actionEvent) throws IOException {
+    public void onSaveButtonClick(ActionEvent actionEvent) throws IOException, SQLException {
         String name = nameField.getText();
-        String Title = titleField.getText();
+        String title = titleField.getText();
         String description = descriptionArea.getText();
         String location = locationField.getText();
         String type = typeField.getText();
         LocalDate startDate = startDatePicker.getValue();
-        String startHour = startHourField.getText();
-        String startMinute = startMinuteField.getText();
+        String strStartHour = startHourField.getText();
+        String strStartMinute = startMinuteField.getText();
         LocalDate endDate = endDatePicker.getValue();
-        String endHour = endHourField.getText();
-        String endMinute = endMinuteField.getText();
-        String user = userField.getText();
+        String strEndHour = endHourField.getText();
+        String strEndMinute = endMinuteField.getText();
+        String userName = userField.getText();
 
-        Appointment newAppointment = new Appointment();
+        //int startHour = Integer.parseInt(strStartHour);
+        //int startMinute = Integer.parseInt(strStartMinute);
+        //LocalTime startHourMinute = LocalTime.of(startHour, startMinute);
+        //LocalDateTime startTime = LocalDateTime.of(startDate, startHourMinute);
 
+        //int endHour = Integer.parseInt(strEndHour);
+        //int endMinute = Integer.parseInt(strEndMinute);
+        //LocalTime endHourMinute = LocalTime.of(endHour, endMinute);
+        //LocalDateTime endTime = LocalDateTime.of(endDate, endHourMinute);
+
+        Customer customer = new Customer(
+                0,
+                name,
+                "address",
+                "postal_code",
+                "phone",
+                1234
+        );
+
+        User user = new User(
+                0,
+                userName
+        );
+
+        //Appointment newAppointment = new Appointment(
+        //        title,
+        //        description,
+        //        location,
+        //        type,
+        //        startTime,
+        //        endTime,
+        //        customer,
+        //        user,
+        //        4321
+        //);
+
+        //// USE ZonedDateTime!!!!!!!!!!!!!!!!!!!
+
+        Timestamp s = new Timestamp(System.currentTimeMillis());
+        Timestamp e = new Timestamp(System.currentTimeMillis());
+
+        Appointment test = new Appointment("test title", "test description", "test location", "test type", s, e, 1, 2, 3);
         AppointmentDao appointmentDao = new AppointmentDao();
-        appointmentDao.addAppointment(newAppointment);
+        appointmentDao.addAppointment(test);
     }
 
 }
