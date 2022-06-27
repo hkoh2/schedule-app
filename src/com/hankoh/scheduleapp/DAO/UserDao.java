@@ -86,7 +86,21 @@ public class UserDao {
      *
      * @return the all users
      */
-    public ObservableList<User> getAllUsers() {
+    public ObservableList<User> getAllUsers() throws SQLException {
+        String query = """
+                SELECT * FROM users
+                """;
+        Connection conn = JDBC.getConnection();
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(query);
+        while(rs.next()) {
+            int id = rs.getInt("User_ID");
+            String userName = rs.getString("User_Name");
+
+            User user = new User(id, userName);
+
+            users.add(user);
+        }
         return users;
     }
 }

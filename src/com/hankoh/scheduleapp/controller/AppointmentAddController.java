@@ -1,9 +1,11 @@
 package com.hankoh.scheduleapp.controller;
 
-import com.hankoh.scheduleapp.DAO.AppointmentDao;
-import com.hankoh.scheduleapp.model.Appointment;
+import com.hankoh.scheduleapp.DAO.CustomerDao;
+import com.hankoh.scheduleapp.DAO.UserDao;
 import com.hankoh.scheduleapp.model.Customer;
 import com.hankoh.scheduleapp.model.User;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -22,6 +24,9 @@ import java.util.Optional;
 
 public class AppointmentAddController extends AppointmentController {
 
+    ObservableList<Customer> customers = FXCollections.observableArrayList();
+    ObservableList<User> users = FXCollections.observableArrayList();
+
     public AppointmentAddController() {
         super();
     }
@@ -29,10 +34,28 @@ public class AppointmentAddController extends AppointmentController {
     public void initialize() {
         super.initialize();
 
-        startMerdiemComboBox.getItems().addAll("AM", "PM");
-        startMerdiemComboBox.getSelectionModel().selectFirst();
+        startMeridiemComboBox.getItems().addAll("AM", "PM");
+        startMeridiemComboBox.getSelectionModel().selectFirst();
         endMeridiemComboBox.getItems().addAll("AM", "PM");
         endMeridiemComboBox.getSelectionModel().selectFirst();
+
+        CustomerDao customerDao = new CustomerDao();
+        try {
+            customers = customerDao.getAllCustomers();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        customerComboBox.setItems(customers);
+        customerComboBox.getSelectionModel().selectFirst();
+
+        UserDao userDao = new UserDao();
+        try {
+            users = userDao.getAllUsers();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        userComboBox.setItems(users);
+        userComboBox.getSelectionModel().selectFirst();
 
     }
 
@@ -61,10 +84,35 @@ public class AppointmentAddController extends AppointmentController {
         LocalDate startDate = startDatePicker.getValue();
         String strStartHour = startHourField.getText();
         String strStartMinute = startMinuteField.getText();
+        String startMeridiem = startMeridiemComboBox.getValue();
         LocalDate endDate = endDatePicker.getValue();
         String strEndHour = endHourField.getText();
         String strEndMinute = endMinuteField.getText();
+        String endMeridiem = endMeridiemComboBox.getValue();
         String userName = userField.getText();
+
+        String startHour = startMeridiem == "AM" ? strStartHour : meridiemToMil(strStartHour);
+        String endHour = endMeridiem == "AM" ? strEndHour : meridiemToMil(strEndHour);
+        String st = startDate + " " + startHour + ":" + strStartMinute + ":00";
+        String et = endDate + " " + endHour + ":" + strEndMinute + ":00";
+
+        //Timestamp startTime = Timestamp.valueOf(startDate + " " + startHour + ":" + strStartMinute + ":00");
+        //Timestamp endTime = Timestamp.valueOf(endDate + " " + endHour + ":" + strEndMinute + ":00");
+
+        System.out.println(st);
+        System.out.println(et);
+
+        //Appointment appointment = new Appointment(
+        //        title,
+        //        description,
+        //        location,
+        //        type,
+        //        st,
+        //        et,
+        //        customerId,
+        //        userId,
+        //        contactId
+        //);
 
         //int startHour = Integer.parseInt(strStartHour);
         //int startMinute = Integer.parseInt(strStartMinute);
@@ -76,40 +124,20 @@ public class AppointmentAddController extends AppointmentController {
         //LocalTime endHourMinute = LocalTime.of(endHour, endMinute);
         //LocalDateTime endTime = LocalDateTime.of(endDate, endHourMinute);
 
-        Customer customer = new Customer(
-                0,
-                name,
-                "address",
-                "postal_code",
-                "phone",
-                1234
-        );
 
-        User user = new User(
-                0,
-                userName
-        );
 
-        //Appointment newAppointment = new Appointment(
-        //        title,
-        //        description,
-        //        location,
-        //        type,
-        //        startTime,
-        //        endTime,
-        //        customer,
-        //        user,
-        //        4321
-        //);
+        Timestamp s = Timestamp.valueOf("2020-05-28 8:30:00");
+        Timestamp e = Timestamp.valueOf("2020-05-28 10:30:00");
 
-        //// USE ZonedDateTime!!!!!!!!!!!!!!!!!!!
+        //Appointment test = new Appointment("test title", "test description", "test location", "test type", s, e, 1, 2, 3);
+        //Appointment test2 = new Appointment("updated test title", "updated test description", "updated test location", "test type", s, e, 1, 2, 3);
+        //AppointmentDao appointmentDao = new AppointmentDao();
+        //appointmentDao.addAppointment(test);
+        //appointmentDao.updateAppointment(test2);
+    }
 
-        Timestamp s = new Timestamp(System.currentTimeMillis());
-        Timestamp e = new Timestamp(System.currentTimeMillis());
-
-        Appointment test = new Appointment("test title", "test description", "test location", "test type", s, e, 1, 2, 3);
-        AppointmentDao appointmentDao = new AppointmentDao();
-        appointmentDao.addAppointment(test);
+    private String meridiemToMil(String hour) {
+        return String.valueOf((Integer.parseInt(hour) + 12));
     }
 
 }

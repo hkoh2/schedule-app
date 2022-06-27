@@ -1,5 +1,7 @@
 package com.hankoh.scheduleapp.controller;
 
+import com.hankoh.scheduleapp.model.Customer;
+import com.hankoh.scheduleapp.model.User;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 
@@ -26,13 +28,15 @@ public class AppointmentController extends Internationalizable {
     public TextField locationField;
     public TextField startHourField;
     public TextField startMinuteField;
-    public ComboBox<String> startMerdiemComboBox;
+    public ComboBox<String> startMeridiemComboBox;
     public TextField endHourField;
     public TextField endMinuteField;
     public ComboBox<String> endMeridiemComboBox;
     public Button saveButton;
     public Button exitButton;
     public Label appointmentTitleLabel;
+    public ComboBox<User> userComboBox;
+    public ComboBox<Customer> customerComboBox;
 
     public void initialize() {
         appointmentTitleLabel.setText(msg.getString("appointment.main_title"));

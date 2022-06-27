@@ -61,7 +61,7 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                   </TextField>
-                  <ComboBox fx:id="startMerdiemComboBox" prefWidth="110.0" />
+                  <ComboBox fx:id="startMeridiemComboBox" prefWidth="110.0" />
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="8">

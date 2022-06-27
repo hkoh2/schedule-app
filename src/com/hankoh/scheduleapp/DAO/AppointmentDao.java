@@ -81,7 +81,13 @@ public class AppointmentDao {
     }
 
     public void addAppointment(Appointment appointment) throws SQLException {
-        // build query
+        PreparedStatement conflictStmt = getConflictTimeStatement(appointment);
+        ResultSet rs = conflictStmt.executeQuery();
+        if (!rs.isBeforeFirst()) {
+            System.out.println("No conflicts found!");
+        } else {
+            System.out.println("CONFLICT FOUND!");
+        }
         PreparedStatement stmt = getInsertStatement(appointment);
         int count = stmt.executeUpdate();
         System.out.println(count + " appointment added");
@@ -91,6 +97,61 @@ public class AppointmentDao {
         PreparedStatement stmt = getRemoveStatement(appointmentId);
         int count = stmt.executeUpdate();
         System.out.println(count + " appointment removed");
+    }
+
+    public void updateAppointment(Appointment appointment) throws SQLException {
+        PreparedStatement stmt = getUpdateStatement(appointment);
+        int count = stmt.executeUpdate();
+        System.out.println(count + " appointment updated");
+    }
+
+    private PreparedStatement getConflictTimeStatement(Appointment appointment) throws SQLException {
+        String query = """
+                SELECT * FROM appointments
+                WHERE (start < ? AND end > ?)
+                OR (start < ? AND end > ?)
+                OF (start > ? AND end < ?)
+                """;
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setTimestamp(1, appointment.getStartTime());
+        stmt.setTimestamp(2, appointment.getStartTime());
+        stmt.setTimestamp(3, appointment.getEndTime());
+        stmt.setTimestamp(4, appointment.getEndTime());
+        stmt.setTimestamp(5, appointment.getStartTime());
+        stmt.setTimestamp(6, appointment.getEndTime());
+        System.out.println(stmt);
+
+        return stmt;
+
+    }
+
+    private PreparedStatement getUpdateStatement(Appointment appointment) throws SQLException {
+        String query = """
+                UPDATE appointments
+                SET
+                Title = ?,
+                Description = ?,
+                Location = ?,
+                Type = ?,
+                Start = ?,
+                End = ?,
+                Customer_ID = ?,
+                User_ID = ?,
+                Contact_ID = ?
+                WHERE Appointment_ID = ?
+                """;
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setString(1, appointment.getTitle());
+        stmt.setString(2, appointment.getDescription());
+        stmt.setString(3, appointment.getLocation());
+        stmt.setString(4, appointment.getType());
+        stmt.setTimestamp(5, appointment.getStartTime());
+        stmt.setTimestamp(6, appointment.getEndTime());
+        stmt.setInt(7, appointment.getCustomerId());
+        stmt.setInt(8, appointment.getUserId());
+        stmt.setInt(9, appointment.getContactId());
+        stmt.setInt(10, 9);
+        return stmt;
     }
 
     public PreparedStatement getInsertStatement(Appointment appointment) throws SQLException {
