@@ -43,10 +43,10 @@
             <Label fx:id="descriptionLabel" text="Description" GridPane.rowIndex="4" />
             <TextArea fx:id="descriptionArea" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <Label fx:id="typeLabel" text="Type" GridPane.rowIndex="6" />
-            <Label fx:id="startTimeLabel" text="Date" GridPane.rowIndex="7" />
+            <Label fx:id="dateLabel" text="Date" GridPane.rowIndex="7" />
             <Label fx:id="endTimeLabel" text="End Time" visible="false" GridPane.rowIndex="9" />
             <TextField fx:id="typeField" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-            <DatePicker fx:id="startDatePicker" prefHeight="26.0" prefWidth="333.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+            <DatePicker fx:id="datePicker" prefHeight="26.0" prefWidth="333.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
             <Label fx:id="nameLabel" text="Customer Name" GridPane.rowIndex="2" />
             <Label fx:id="userLabel" text="User" GridPane.rowIndex="11" />
             <Label fx:id="locationLabel" text="Location" GridPane.rowIndex="5" />
@@ -62,11 +62,11 @@
             <Label fx:id="startTimeError" text="label" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="8" />
             <Label fx:id="endTimeError" prefHeight="18.0" prefWidth="26.0" text="label" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="9" />
             <Label fx:id="startDateError" prefHeight="18.0" prefWidth="58.0" text="label" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="7" />
-            <Label text="Time" GridPane.rowIndex="8" />
-            <Label text="Duration" GridPane.rowIndex="9" />
-            <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="10" />
-            <ComboBox prefHeight="26.0" prefWidth="336.0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
-            <ComboBox prefHeight="26.0" prefWidth="335.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+            <Label fx:id="timeLabel" text="Time" GridPane.rowIndex="8" />
+            <Label fx:id="durationLabel" text="Duration" GridPane.rowIndex="9" />
+            <Label fx:id="startEndTimeLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+            <ComboBox fx:id="durationComboBox" prefHeight="26.0" prefWidth="336.0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+            <ComboBox fx:id="timeComboBox" prefHeight="26.0" prefWidth="335.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
          </children>
       </GridPane>
       <ButtonBar layoutX="581.0" layoutY="681.0" prefHeight="40.0" prefWidth="200.0">

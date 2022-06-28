@@ -194,7 +194,7 @@ public class MainController {
 
     public void onNewAppointmentButtonClick(ActionEvent actionEvent) throws IOException {
         System.out.println("Add new appointment");
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/hankoh/scheduleapp/view/appointment-add.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/hankoh/scheduleapp/view/appointment-add2.fxml"));
         Parent root = loader.load();
 
 

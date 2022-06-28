@@ -4,7 +4,10 @@ import com.hankoh.scheduleapp.DAO.AppointmentDao;
 import com.hankoh.scheduleapp.DAO.ContactDao;
 import com.hankoh.scheduleapp.DAO.CustomerDao;
 import com.hankoh.scheduleapp.DAO.UserDao;
-import com.hankoh.scheduleapp.model.*;
+import com.hankoh.scheduleapp.model.Appointment;
+import com.hankoh.scheduleapp.model.Contact;
+import com.hankoh.scheduleapp.model.Customer;
+import com.hankoh.scheduleapp.model.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -20,17 +23,45 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Objects;
 import java.util.Optional;
 
 public class AppointmentAddController extends AppointmentController {
 
-    ObservableList<Customer> customers = FXCollections.observableArrayList();
-    ObservableList<User> users = FXCollections.observableArrayList();
-    ObservableList<Contact> contacts = FXCollections.observableArrayList();
+    private ObservableList<Customer> customers = FXCollections.observableArrayList();
+    private ObservableList<User> users = FXCollections.observableArrayList();
+    private ObservableList<Contact> contacts = FXCollections.observableArrayList();
+
 
     public AppointmentAddController() {
         super();
+    }
+
+    private ObservableList<LocalTime> getAllTime() {
+        LocalTime time = LocalTime.of(8, 0);
+        ObservableList<LocalTime> allTimes = FXCollections.observableArrayList();
+        allTimes.add(time);
+        while(time.isBefore(LocalTime.of(21, 45))) {
+            time = time.plusMinutes(15);
+            allTimes.add(time);
+            System.out.println(time);
+        }
+        return allTimes;
+    }
+
+    private ObservableList<AppointmentDuration> getAllDuration(int max) {
+
+        int time = 0;
+        //AppointmentDuration duration = new AppointmentDuration(time);
+        ObservableList<AppointmentDuration> allDuration = FXCollections.observableArrayList();
+        //allDuration.add(duration);
+        while (time < max) {
+            time += 15;
+            allDuration.add(new AppointmentDuration(time));
+        }
+        return allDuration;
     }
 
     public void initialize() {
@@ -39,10 +70,14 @@ public class AppointmentAddController extends AppointmentController {
         //DataStorage ds = DataStorage.getInstance();
         //ds.setCurrentTab(1);
 
-        startMeridiemComboBox.getItems().addAll("AM", "PM");
-        startMeridiemComboBox.getSelectionModel().selectFirst();
-        endMeridiemComboBox.getItems().addAll("AM", "PM");
-        endMeridiemComboBox.getSelectionModel().selectFirst();
+        // add all available time in increments of 15 minutes from 8am to 10pm
+
+
+        timeComboBox.setItems(getAllTime());
+        //timeComboBox.getSelectionModel().selectFirst();
+
+        int max = 60;
+        durationComboBox.setItems(getAllDuration(max));
 
         CustomerDao customerDao = new CustomerDao();
         try {
@@ -95,15 +130,21 @@ public class AppointmentAddController extends AppointmentController {
         String description = descriptionArea.getText();
         String location = locationField.getText();
         String type = typeField.getText();
-        LocalDate startDate = startDatePicker.getValue();
-        String strStartHour = startHourField.getText();
-        String strStartMinute = startMinuteField.getText();
-        String startMeridiem = startMeridiemComboBox.getValue();
+        LocalDate date = datePicker.getValue();
+        LocalTime time = timeComboBox
+                .getSelectionModel()
+                .getSelectedItem();
+        //String strStartHour = startHourField.getText();
+        //String strStartMinute = startMinuteField.getText();
+        //String startMeridiem = startMeridiemComboBox.getValue();
         //LocalDate endDate = endDatePicker.getValue();
-        String strEndHour = endHourField.getText();
-        String strEndMinute = endMinuteField.getText();
-        String endMeridiem = endMeridiemComboBox.getValue();
+        //String strEndHour = endHourField.getText();
+        //String strEndMinute = endMinuteField.getText();
+        //String endMeridiem = endMeridiemComboBox.getValue();
         //String userName = userField.getText();
+        AppointmentDuration duration = durationComboBox
+                .getSelectionModel()
+                .getSelectedItem();
 
         // validate title
         boolean inputError = false;
@@ -127,15 +168,15 @@ public class AppointmentAddController extends AppointmentController {
             inputError = true;
         }
 
-        if (startDate == null || startDate.toString().isEmpty()) {
-            startDateError.setText(msg.getString("start_date_empty"));
-            inputError = true;
-        }
+        //if (startDate == null || startDate.toString().isEmpty()) {
+        //    startDateError.setText(msg.getString("start_date_empty"));
+        //    inputError = true;
+        //}
 
-        if (strStartHour.isEmpty() || strStartMinute.isEmpty()) {
-            startTimeError.setText(msg.getString("start_time_empty"));
-            inputError = true;
-        }
+        //if (strStartHour.isEmpty() || strStartMinute.isEmpty()) {
+        //    startTimeError.setText(msg.getString("start_time_empty"));
+        //    inputError = true;
+        //}
 
         if (inputError) {
             return;
@@ -143,10 +184,10 @@ public class AppointmentAddController extends AppointmentController {
             clearAllError();
         }
 
-        String startHour = startMeridiem == "AM" ? strStartHour : meridiemToMil(strStartHour);
-        String endHour = endMeridiem == "AM" ? strEndHour : meridiemToMil(strEndHour);
-        String st = startDate + " " + startHour + ":" + strStartMinute + ":00";
-        String et = startDate + " " + endHour + ":" + strEndMinute + ":00";
+        //String startHour = startMeridiem == "AM" ? strStartHour : meridiemToMil(strStartHour);
+        //String endHour = endMeridiem == "AM" ? strEndHour : meridiemToMil(strEndHour);
+        //String st = startDate + " " + startHour + ":" + strStartMinute + ":00";
+        //String et = startDate + " " + endHour + ":" + strEndMinute + ":00";
 
         Customer selectedCustomer = customerComboBox
                 .getSelectionModel()
@@ -158,6 +199,11 @@ public class AppointmentAddController extends AppointmentController {
                 .getSelectionModel()
                 .getSelectedItem();
 
+        LocalDateTime st = LocalDateTime.of(date, time);
+        LocalDateTime et = LocalDateTime.of(
+                date,
+                time.plusMinutes(duration.getDuration())
+        );
         Timestamp startTime = Timestamp.valueOf(st);
         Timestamp endTime = Timestamp.valueOf(et);
 

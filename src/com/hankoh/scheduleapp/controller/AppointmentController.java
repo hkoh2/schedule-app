@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 
 import java.io.IOException;
+import java.time.LocalTime;
 
 public class AppointmentController extends Internationalizable {
     public TextField idField;
@@ -49,6 +50,16 @@ public class AppointmentController extends Internationalizable {
     public Label endTimeError;
 
     public Label typeError;
+    public Label timeLabel;
+    public Label durationLabel;
+    public Label startEndTimeLabel;
+    public ComboBox<AppointmentDuration> durationComboBox;
+    public ComboBox<LocalTime> timeComboBox;
+    public DatePicker datePicker;
+    public Label dateLabel;
+
+    //protected LocalTime businessStartTime = ZonedDateTime.of;
+    //protected ZonedDateTime businessEndTime;
 
     public void initialize() {
         appointmentTitleLabel.setText(msg.getString("appointment.main_title"));
@@ -58,8 +69,8 @@ public class AppointmentController extends Internationalizable {
         descriptionLabel.setText(msg.getString("appointment.description"));
         locationLabel.setText(msg.getString("appointment.location"));
         typeLabel.setText(msg.getString("appointment.type"));
-        startTimeLabel.setText(msg.getString("appointment.start_time"));
-        endTimeLabel.setText(msg.getString("appointment.end_time"));
+        //startTimeLabel.setText(msg.getString("appointment.start_time"));
+        //endTimeLabel.setText(msg.getString("appointment.end_time"));
         userLabel.setText(msg.getString("appointment.user"));
 
         exitButton.setText(msg.getString("exit_button"));
