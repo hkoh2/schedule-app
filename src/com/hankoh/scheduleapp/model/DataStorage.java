@@ -11,6 +11,7 @@ public final class DataStorage {
     private final static DataStorage storage = new DataStorage();
     private Tab currentTab;
     private int currentTabIndex;
+    private Customer currentCustomer;
 
     private DataStorage() {}
 
@@ -45,5 +46,13 @@ public final class DataStorage {
 
     public void setCurrentTabIndex(int currentTabIndex) {
         this.currentTabIndex = currentTabIndex;
+    }
+
+    public void setCurrentCustomer(Customer newVal) {
+        this.currentCustomer = newVal;
+    }
+
+    public Customer getCurrentCustomer() {
+        return currentCustomer;
     }
 }

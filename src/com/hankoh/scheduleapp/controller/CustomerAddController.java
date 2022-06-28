@@ -1,8 +1,6 @@
 package com.hankoh.scheduleapp.controller;
 
-import com.hankoh.scheduleapp.DAO.CountryDao;
 import com.hankoh.scheduleapp.DAO.CustomerDao;
-import com.hankoh.scheduleapp.DAO.DivisionDao;
 import com.hankoh.scheduleapp.model.Country;
 import com.hankoh.scheduleapp.model.Customer;
 import com.hankoh.scheduleapp.model.Division;
@@ -27,8 +25,8 @@ import java.util.stream.Collectors;
 
 public class CustomerAddController extends CustomerController {
 
-    ObservableList<Country> countries = FXCollections.observableArrayList();
-    ObservableList<Division> divisions = FXCollections.observableArrayList();
+    //ObservableList<Country> countries = FXCollections.observableArrayList();
+    //ObservableList<Division> divisions = FXCollections.observableArrayList();
 
     @Override
     public void initialize() {
@@ -37,37 +35,37 @@ public class CustomerAddController extends CustomerController {
         //DataStorage ds = DataStorage.getInstance();
         //ds.setCurrentTab(1);
 
-        CountryDao countryDao = new CountryDao();
-        try {
-            countries = countryDao.getAllCountries();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        //CountryDao countryDao = new CountryDao();
+        //try {
+        //    countries = countryDao.getAllCountries();
+        //} catch (SQLException e) {
+        //    e.printStackTrace();
+        //}
 
-        countryComboBox.setItems(countries);
-        countryComboBox.getSelectionModel().selectFirst();
-        countryComboBox.valueProperty().addListener(
-                (options, newVal, oldVal) -> changeDivision(options, newVal, oldVal)
-        );
+        //countryComboBox.setItems(countries);
+        //countryComboBox.getSelectionModel().selectFirst();
+        //countryComboBox.valueProperty().addListener(
+        //        (options, newVal, oldVal) -> changeDivision(options, newVal, oldVal)
+        //);
 
-        DivisionDao divisionDao = new DivisionDao();
-        try {
-            divisions = divisionDao.getAllDivisions();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        //DivisionDao divisionDao = new DivisionDao();
+        //try {
+        //    divisions = divisionDao.getAllDivisions();
+        //} catch (SQLException e) {
+        //    e.printStackTrace();
+        //}
 
-        int selectedCountryId = countryComboBox
-                .getSelectionModel()
-                .getSelectedItem()
-                .getCountryId();
-        ObservableList<Division> filteredDivision = divisions.stream()
-                .filter(div -> div.getCountryId() == selectedCountryId)
-                .sorted(Comparator.comparing(Division::getDivision))
-                .collect(Collectors.toCollection(FXCollections::observableArrayList));
+        //int selectedCountryId = countryComboBox
+        //        .getSelectionModel()
+        //        .getSelectedItem()
+        //        .getCountryId();
+        //ObservableList<Division> filteredDivision = divisions.stream()
+        //        .filter(div -> div.getCountryId() == selectedCountryId)
+        //        .sorted(Comparator.comparing(Division::getDivision))
+        //        .collect(Collectors.toCollection(FXCollections::observableArrayList));
 
-        divisionComboBox.setItems(filteredDivision);
-        divisionComboBox.getSelectionModel().selectFirst();
+        //divisionComboBox.setItems(filteredDivision);
+        //divisionComboBox.getSelectionModel().selectFirst();
     }
 
     private void changeDivision(ObservableValue<? extends Country> options, Country oldValue, Country newValue) {
@@ -145,12 +143,12 @@ public class CustomerAddController extends CustomerController {
 
 
     }
-    private void moveToMain(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/hankoh/scheduleapp/view/main.fxml")));
-        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        stage.setTitle(msg.getString("main.title"));
-        stage.setScene(new Scene(root));
-        stage.show();
+    //private void moveToMain(ActionEvent actionEvent) throws IOException {
+    //    Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/hankoh/scheduleapp/view/main.fxml")));
+    //    Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+    //    stage.setTitle(msg.getString("main.title"));
+    //    stage.setScene(new Scene(root));
+    //    stage.show();
 
-    }
+    //}
 }

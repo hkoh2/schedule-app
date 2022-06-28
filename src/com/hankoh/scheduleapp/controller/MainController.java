@@ -131,12 +131,30 @@ public class MainController {
         customerPhoneColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
         customersTable.setItems(customers);
 
+        setSelectedTab();
+
+
+        // saves selected customers
+        customersTable
+                .getSelectionModel()
+                .selectedItemProperty()
+                .addListener(((ov, oldVal, newVal) -> setSelectedCustomer(newVal)));
+
+
+
+    }
+
+
+    private void setSelectedCustomer(Customer newVal) {
+        DataStorage ds = DataStorage.getInstance();
+        ds.setCurrentCustomer(newVal);
+    }
+
+    private void setSelectedTab() {
         mainTabPane
                 .getSelectionModel()
                 .selectedItemProperty()
                 .addListener((ov, oldTab, newTab) -> setCurrentTab(newTab));
-
-
     }
 
     private void refreshAppointments() throws SQLException {
@@ -218,7 +236,15 @@ public class MainController {
         stage.show();
     }
 
-    public void onEditCustomerButtonClick(ActionEvent actionEvent) {
+    public void onEditCustomerButtonClick(ActionEvent actionEvent) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/hankoh/scheduleapp/view/customer-edit.fxml"));
+        Parent root = loader.load();
+
+
+        Stage stage = (Stage)((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.setTitle(msg.getString("customer.title"));
+        stage.setScene(new Scene(root));
+        stage.show();
     }
 
     public void onDeleteCustomerButtonClick(ActionEvent actionEvent) {
