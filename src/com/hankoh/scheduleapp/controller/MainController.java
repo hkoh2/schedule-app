@@ -198,7 +198,15 @@ public class MainController {
         refreshAppointments();
     }
 
-    public void onNewCustomerButtonClick(ActionEvent actionEvent) {
+    public void onNewCustomerButtonClick(ActionEvent actionEvent) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/hankoh/scheduleapp/view/customer-add.fxml"));
+        Parent root = loader.load();
+
+
+        Stage stage = (Stage)((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.setTitle(msg.getString("customer.title"));
+        stage.setScene(new Scene(root));
+        stage.show();
     }
 
     public void onEditCustomerButtonClick(ActionEvent actionEvent) {

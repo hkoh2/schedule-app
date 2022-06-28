@@ -80,17 +80,22 @@ public class AppointmentDao {
         return appointments;
     }
 
-    public void addAppointment(Appointment appointment) throws SQLException {
+    public boolean addAppointment(Appointment appointment) throws SQLException {
+
+
+
         PreparedStatement conflictStmt = getConflictTimeStatement(appointment);
         ResultSet rs = conflictStmt.executeQuery();
         if (!rs.isBeforeFirst()) {
             System.out.println("No conflicts found!");
         } else {
             System.out.println("CONFLICT FOUND!");
+            return false;
         }
         PreparedStatement stmt = getInsertStatement(appointment);
         int count = stmt.executeUpdate();
         System.out.println(count + " appointment added");
+        return true;
     }
 
     public void removeAppointment(int appointmentId) throws SQLException {
@@ -108,21 +113,27 @@ public class AppointmentDao {
     private PreparedStatement getConflictTimeStatement(Appointment appointment) throws SQLException {
         String query = """
                 SELECT * FROM appointments
-                WHERE (start < ? AND end > ?)
-                OR (start < ? AND end > ?)
-                OF (start > ? AND end < ?)
+                WHERE Customer_ID = ?
+                AND (Start <= ? AND End > ?)
+                OR (Start < ? AND End >= ?)
+                OR (Start > ? AND End < ?)
                 """;
         PreparedStatement stmt = conn.prepareStatement(query);
-        stmt.setTimestamp(1, appointment.getStartTime());
+        stmt.setInt(1, appointment.getCustomerId());
         stmt.setTimestamp(2, appointment.getStartTime());
-        stmt.setTimestamp(3, appointment.getEndTime());
+        stmt.setTimestamp(3, appointment.getStartTime());
         stmt.setTimestamp(4, appointment.getEndTime());
-        stmt.setTimestamp(5, appointment.getStartTime());
-        stmt.setTimestamp(6, appointment.getEndTime());
+        stmt.setTimestamp(5, appointment.getEndTime());
+        stmt.setTimestamp(6, appointment.getStartTime());
+        stmt.setTimestamp(7, appointment.getEndTime());
         System.out.println(stmt);
 
         return stmt;
 
+    }
+
+    private boolean checkBusinessHours(Timestamp start, Timestamp end) {
+        return false;
     }
 
     private PreparedStatement getUpdateStatement(Appointment appointment) throws SQLException {
