@@ -82,8 +82,6 @@ public class AppointmentDao {
 
     public boolean addAppointment(Appointment appointment) throws SQLException {
 
-
-
         PreparedStatement conflictStmt = getConflictTimeStatement(appointment);
         ResultSet rs = conflictStmt.executeQuery();
         if (!rs.isBeforeFirst()) {

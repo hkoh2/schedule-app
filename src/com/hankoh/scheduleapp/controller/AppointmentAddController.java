@@ -4,10 +4,7 @@ import com.hankoh.scheduleapp.DAO.AppointmentDao;
 import com.hankoh.scheduleapp.DAO.ContactDao;
 import com.hankoh.scheduleapp.DAO.CustomerDao;
 import com.hankoh.scheduleapp.DAO.UserDao;
-import com.hankoh.scheduleapp.model.Appointment;
-import com.hankoh.scheduleapp.model.Contact;
-import com.hankoh.scheduleapp.model.Customer;
-import com.hankoh.scheduleapp.model.User;
+import com.hankoh.scheduleapp.model.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -38,6 +35,9 @@ public class AppointmentAddController extends AppointmentController {
 
     public void initialize() {
         super.initialize();
+
+        //DataStorage ds = DataStorage.getInstance();
+        //ds.setCurrentTab(1);
 
         startMeridiemComboBox.getItems().addAll("AM", "PM");
         startMeridiemComboBox.getSelectionModel().selectFirst();

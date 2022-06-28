@@ -58,6 +58,7 @@ public class MainController {
     public TableColumn<Customer, String> customerPostalColumn;
     public TableColumn<Customer, String> customerPhoneColumn;
     public TableView<Customer> customersTable;
+    public TabPane mainTabPane;
     ResourceBundle msg;
 
     private ObservableList<Appointment> appointments = FXCollections.observableArrayList();
@@ -68,6 +69,9 @@ public class MainController {
                 "com.hankoh.scheduleapp.properties.MessagesBundle",
                 Locale.getDefault()
         );
+
+        DataStorage ds = DataStorage.getInstance();
+        mainTabPane.getSelectionModel().select(ds.getCurrentTabIndex());
 
         String username = DataStorage.getInstance().getUser().getUserName();
         welcomeText.setText(msg.getString("main.welcome") + username);
@@ -126,6 +130,11 @@ public class MainController {
         customerPostalColumn.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
         customerPhoneColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
         customersTable.setItems(customers);
+
+        mainTabPane
+                .getSelectionModel()
+                .selectedItemProperty()
+                .addListener((ov, oldTab, newTab) -> setCurrentTab(newTab));
 
 
     }
@@ -241,5 +250,16 @@ public class MainController {
         if (choice.isPresent() && choice.get() == ButtonType.OK) {
             stage.close();
         }
+    }
+
+    private void setCurrentTab(Tab tab) {
+        DataStorage ds = DataStorage.getInstance();
+        int index = tab
+                .getTabPane()
+                .getSelectionModel()
+                .getSelectedIndex();
+        ds.setCurrentTab(tab);
+        ds.setCurrentTabIndex(index);
+        System.out.println(tab.getText());
     }
 }

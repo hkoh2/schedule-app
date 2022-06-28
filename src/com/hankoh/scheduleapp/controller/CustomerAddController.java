@@ -1,8 +1,10 @@
 package com.hankoh.scheduleapp.controller;
 
 import com.hankoh.scheduleapp.DAO.CountryDao;
+import com.hankoh.scheduleapp.DAO.CustomerDao;
 import com.hankoh.scheduleapp.DAO.DivisionDao;
 import com.hankoh.scheduleapp.model.Country;
+import com.hankoh.scheduleapp.model.Customer;
 import com.hankoh.scheduleapp.model.Division;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -31,6 +33,9 @@ public class CustomerAddController extends CustomerController {
     @Override
     public void initialize() {
         super.initialize();
+
+        //DataStorage ds = DataStorage.getInstance();
+        //ds.setCurrentTab(1);
 
         CountryDao countryDao = new CountryDao();
         try {
@@ -96,7 +101,56 @@ public class CustomerAddController extends CustomerController {
     }
 
     @Override
-    public void onSaveButtonClick(ActionEvent actionEvent) {
-        super.onSaveButtonClick(actionEvent);
+    public void onSaveButtonClick(ActionEvent actionEvent) throws IOException {
+        //super.onSaveButtonClick(actionEvent);
+        String name = nameField.getText();
+        String address = addressField.getText();
+        String postal = postalField.getText();
+        String phone = phoneField.getText();
+        int countryId = countryComboBox
+                .getSelectionModel()
+                .getSelectedItem()
+                .getCountryId();
+        int divisionId = divisionComboBox
+                .getSelectionModel()
+                .getSelectedItem()
+                .getDivisionId();
+
+        Customer customer = new Customer(
+                name,
+                address,
+                postal,
+                phone,
+                divisionId
+        );
+
+        CustomerDao customerDao = new CustomerDao();
+
+        boolean customerAdded = false;
+        try {
+            customerAdded = customerDao.addCustomer(customer);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        if (customerAdded) {
+            //
+            System.out.println("customer added");
+
+            moveToMain(actionEvent);
+
+        } else {
+            System.out.println("DB Error");
+
+        }
+
+
+    }
+    private void moveToMain(ActionEvent actionEvent) throws IOException {
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/hankoh/scheduleapp/view/main.fxml")));
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.setTitle(msg.getString("main.title"));
+        stage.setScene(new Scene(root));
+        stage.show();
+
     }
 }

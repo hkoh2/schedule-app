@@ -46,6 +46,6 @@ public class CustomerController extends Internationalizable {
     public void onCancelButtonClick(ActionEvent actionEvent) throws IOException {
     }
 
-    public void onSaveButtonClick(ActionEvent actionEvent) {
+    public void onSaveButtonClick(ActionEvent actionEvent) throws IOException {
     }
 }

@@ -4,15 +4,14 @@ import com.hankoh.scheduleapp.model.Customer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class CustomerDao {
     private final ObservableList<Customer> customers = FXCollections.observableArrayList();
+    Connection conn;
 
     public CustomerDao() {
+        conn = JDBC.getConnection();
 
     }
 
@@ -46,5 +45,31 @@ public class CustomerDao {
 
             customers.add(customer);
         }
+    }
+
+    public boolean addCustomer(Customer customer) throws SQLException {
+        PreparedStatement stmt = getInsertStatement(customer);
+        int count = stmt.executeUpdate();
+        if (count > 0) {
+            System.out.println(count + " customer added");
+            return true;
+        }
+        return false;
+    }
+
+    private PreparedStatement getInsertStatement(Customer customer) throws SQLException {
+        String query = """
+                INSERT INTO customers
+                (Customer_Name, Address, Postal_Code, Phone, Division_ID)
+                VALUES (?, ?, ?, ?, ?)
+                """;
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setString(1, customer.getName());
+        stmt.setString(2, customer.getAddress());
+        stmt.setString(3, customer.getPostalCode());
+        stmt.setString(4, customer.getPhone());
+        stmt.setInt(5, customer.getDivisionId());
+
+        return stmt;
     }
 }
