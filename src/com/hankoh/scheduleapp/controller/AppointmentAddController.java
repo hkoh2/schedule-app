@@ -21,63 +21,109 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
+import java.util.Comparator;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class AppointmentAddController extends AppointmentController {
 
     private ObservableList<Customer> customers = FXCollections.observableArrayList();
     private ObservableList<User> users = FXCollections.observableArrayList();
     private ObservableList<Contact> contacts = FXCollections.observableArrayList();
+    private ObservableList<Appointment> appointments = FXCollections.observableArrayList();
+    ObservableList<AppointmentDuration> allDuration = FXCollections.observableArrayList();
+
+    private final int MAX_DURATION = 60;
+    final ZoneId businessZoneId = ZoneId.of("US/Eastern");
 
 
     public AppointmentAddController() {
         super();
     }
 
-    private ObservableList<LocalTime> getAllTime() {
-        LocalTime time = LocalTime.of(8, 0);
-        ObservableList<LocalTime> allTimes = FXCollections.observableArrayList();
-        allTimes.add(time);
-        while(time.isBefore(LocalTime.of(21, 45))) {
-            time = time.plusMinutes(15);
-            allTimes.add(time);
-            System.out.println(time);
+    private ObservableList<ZonedDateTime> getAvailTimes(LocalDate date) {
+        if (date == null) {
+            return null;
+        }
+        LocalTime localStart= LocalTime.of(8, 0);
+        LocalTime localEnd = LocalTime.of(21, 45);
+        LocalDateTime startTime = LocalDateTime.of(date, localStart);
+        LocalDateTime endTime = LocalDateTime.of(date, localEnd);
+        ZonedDateTime zonedBusinessStartTime = ZonedDateTime.of(startTime, businessZoneId);
+        ZonedDateTime zonedBusinessEndTime = ZonedDateTime.of(endTime, businessZoneId);
+        //LocalDateTime ldt = LocalDateTime.
+        ObservableList<ZonedDateTime> allTimes = FXCollections.observableArrayList();
+
+        // TODO need to convert eastern time to local time
+
+
+        allTimes.add(zonedBusinessStartTime);
+        while(zonedBusinessStartTime.isBefore(zonedBusinessEndTime)) {
+            zonedBusinessStartTime = zonedBusinessStartTime.plusMinutes(15);
+            allTimes.add(zonedBusinessStartTime);
+            System.out.println(startTime);
         }
         return allTimes;
     }
 
-    private ObservableList<AppointmentDuration> getAllDuration(int max) {
+    //private ObservableList<AppointmentDuration> setAllDuration() {
+    private void setAllDuration() {
+        allDuration.clear();
+
+        int max = getMaxDuration();
 
         int time = 0;
-        //AppointmentDuration duration = new AppointmentDuration(time);
-        ObservableList<AppointmentDuration> allDuration = FXCollections.observableArrayList();
-        //allDuration.add(duration);
         while (time < max) {
             time += 15;
+            //System.out.println("setting time duration");
+            //System.out.println(time);
             allDuration.add(new AppointmentDuration(time));
         }
-        return allDuration;
+    }
+
+    private int getMaxDuration() {
+
+        ZonedDateTime selectedTime = timeComboBox.getSelectionModel().getSelectedItem();
+        if (selectedTime == null) {
+            return 0;
+        }
+
+        Appointment minApt = appointments.stream()
+                .filter(apt -> filterTimeAfter(apt, selectedTime))
+                .peek(apt -> System.out.println(apt.getStartTime()))
+                .min(Comparator.comparing(Appointment::getStartTime))
+                .orElse(null);
+
+        if (minApt == null) {
+            System.out.println("No need to adjust");
+            return MAX_DURATION;
+        }
+
+        LocalDateTime minStart = minApt.getStartTime().toLocalDateTime();
+
+        int maxMinutes = (int) Duration.between(selectedTime, minStart).toMinutes();
+
+        System.out.println("Adjusting DURATION: " + maxMinutes);
+        return maxMinutes > MAX_DURATION ? MAX_DURATION : maxMinutes;
+    }
+
+    private boolean filterTimeAfter(Appointment apt, ZonedDateTime time) {
+        ZonedDateTime startTime = ZonedDateTime.of(apt.getStartTime().toLocalDateTime(), businessZoneId);
+        System.out.println("Selected time: " + time);
+        System.out.println("Appoint time:  " + startTime);
+        if (startTime.isBefore(time)) {
+            System.out.println("Appt before selected time");
+            return false;
+        }
+        return true;
     }
 
     public void initialize() {
         super.initialize();
 
-        //DataStorage ds = DataStorage.getInstance();
-        //ds.setCurrentTab(1);
-
-        // add all available time in increments of 15 minutes from 8am to 10pm
-
-
-        timeComboBox.setItems(getAllTime());
-        //timeComboBox.getSelectionModel().selectFirst();
-
         int max = 60;
-        durationComboBox.setItems(getAllDuration(max));
 
         CustomerDao customerDao = new CustomerDao();
         try {
@@ -106,7 +152,85 @@ public class AppointmentAddController extends AppointmentController {
         contactComboBox.setItems(contacts);
         contactComboBox.getSelectionModel().selectFirst();
 
+        datePicker.valueProperty()
+                .addListener((ov, oldVal, newVal) -> filterAvailableTime(newVal));
+
+        customerComboBox.valueProperty()
+                .addListener((ov, oldVal, newVal) -> clearDatePicker());
+
+        timeComboBox.setItems(getAvailTimes(datePicker.getValue()));
+        durationComboBox.setItems(allDuration);
+        timeComboBox.valueProperty()
+                .addListener((ov, oldVal, newVal) -> setAllDuration());
     }
+
+    public void clearDatePicker() {
+        datePicker.setValue(null);
+    }
+
+    public void filterAvailableTime(LocalDate date) {
+        System.out.println(date);
+        if (date == null) {
+            datePicker.setValue(null);
+            return;
+        }
+
+        // get all appointments on date for customer and user
+        // for the selected date
+        AppointmentDao appointmentDao = new AppointmentDao();
+        try {
+            // gets all appointments in selected date
+            appointments = appointmentDao.getAppointmentsByDate(date);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        // availTimes is open time slots
+        ObservableList<ZonedDateTime> availTimes = getAvailTimes(date);
+        ObservableList<ZonedDateTime> filteredAvailableTimes = availTimes.stream()
+                // filter needs to return true if time is not conflicting
+                // with other appointments
+                .filter(time -> getValidTimes(time))
+                .collect(Collectors.toCollection(FXCollections::observableArrayList));
+
+        //appointments.forEach(apt -> System.out.println(("start and end: " + apt.getStartTime() + " " + apt.getEndTime())));
+
+        timeComboBox.setItems(filteredAvailableTimes);
+
+
+        // force user to pick date when customer is changed
+        // get all appointments on the date for customer or user
+        // if time overlaps
+
+    }
+
+    private boolean getValidTimes(ZonedDateTime time) {
+        //appointments.forEach(apt -> System.out.println(("start and end: " + apt.getStartTime() + " " + apt.getEndTime())));
+        if (appointments.isEmpty()) {
+            System.out.println("Appointment Empty!!!");
+            return true;
+        }
+        //appointments.forEach(apt -> System.out.println(apt.getStartTime()));
+        boolean isNotValidTime = appointments.stream().anyMatch(apt -> {
+            ZonedDateTime aptStartTime = ZonedDateTime.of(apt.getStartTime().toLocalDateTime(), businessZoneId);
+            ZonedDateTime aptEndTime = ZonedDateTime.of(apt.getEndTime().toLocalDateTime(), businessZoneId);
+            //System.out.println("------------------------------------");
+            //System.out.println("Apt Start: " + aptStartTime);
+            //System.out.println("Time btwn: " + time);
+            //System.out.println("Apt End:   " + aptEndTime);
+            if (!time.isBefore(aptStartTime) && time.isBefore(aptEndTime)) {
+                System.out.println(time + " invalid time found!!!!!!");
+                return true;
+            }
+            //System.out.println(time + " valid time");
+            return false;
+        });
+        //System.out.println("Time in exclude time: " + time);
+        //System.out.println("isNotValidTime: " + isNotValidTime);
+
+        return !isNotValidTime;
+    }
+
 
     public void onExitButtonClick(ActionEvent actionEvent) throws IOException {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -131,17 +255,9 @@ public class AppointmentAddController extends AppointmentController {
         String location = locationField.getText();
         String type = typeField.getText();
         LocalDate date = datePicker.getValue();
-        LocalTime time = timeComboBox
+        ZonedDateTime time = timeComboBox
                 .getSelectionModel()
                 .getSelectedItem();
-        //String strStartHour = startHourField.getText();
-        //String strStartMinute = startMinuteField.getText();
-        //String startMeridiem = startMeridiemComboBox.getValue();
-        //LocalDate endDate = endDatePicker.getValue();
-        //String strEndHour = endHourField.getText();
-        //String strEndMinute = endMinuteField.getText();
-        //String endMeridiem = endMeridiemComboBox.getValue();
-        //String userName = userField.getText();
         AppointmentDuration duration = durationComboBox
                 .getSelectionModel()
                 .getSelectedItem();
@@ -168,26 +284,16 @@ public class AppointmentAddController extends AppointmentController {
             inputError = true;
         }
 
-        //if (startDate == null || startDate.toString().isEmpty()) {
-        //    startDateError.setText(msg.getString("start_date_empty"));
-        //    inputError = true;
-        //}
-
-        //if (strStartHour.isEmpty() || strStartMinute.isEmpty()) {
-        //    startTimeError.setText(msg.getString("start_time_empty"));
-        //    inputError = true;
-        //}
+        if (date == null || date.toString().isEmpty()) {
+            startDateError.setText(msg.getString("start_date_empty"));
+            inputError = true;
+        }
 
         if (inputError) {
             return;
         } else {
             clearAllError();
         }
-
-        //String startHour = startMeridiem == "AM" ? strStartHour : meridiemToMil(strStartHour);
-        //String endHour = endMeridiem == "AM" ? strEndHour : meridiemToMil(strEndHour);
-        //String st = startDate + " " + startHour + ":" + strStartMinute + ":00";
-        //String et = startDate + " " + endHour + ":" + strEndMinute + ":00";
 
         Customer selectedCustomer = customerComboBox
                 .getSelectionModel()
@@ -199,53 +305,6 @@ public class AppointmentAddController extends AppointmentController {
                 .getSelectionModel()
                 .getSelectedItem();
 
-        LocalDateTime st = LocalDateTime.of(date, time);
-        LocalDateTime et = LocalDateTime.of(
-                date,
-                time.plusMinutes(duration.getDuration())
-        );
-        Timestamp startTime = Timestamp.valueOf(st);
-        Timestamp endTime = Timestamp.valueOf(et);
-
-        //System.out.println(st);
-        //System.out.println(et);
-
-        Appointment appointment = new Appointment(
-                title,
-                description,
-                location,
-                type,
-                startTime,
-                endTime,
-                selectedCustomer.getCustomerId(),
-                selectedUser.getUserId(),
-                selectedContact.getId()
-        );
-
-        //int startHour = Integer.parseInt(strStartHour);
-        //int startMinute = Integer.parseInt(strStartMinute);
-        //LocalTime startHourMinute = LocalTime.of(startHour, startMinute);
-        //LocalDateTime startTime = LocalDateTime.of(startDate, startHourMinute);
-
-        //int endHour = Integer.parseInt(strEndHour);
-        //int endMinute = Integer.parseInt(strEndMinute);
-        //LocalTime endHourMinute = LocalTime.of(endHour, endMinute);
-        //LocalDateTime endTime = LocalDateTime.of(endDate, endHourMinute);
-
-
-
-        //Timestamp s = Timestamp.valueOf("2020-05-28 8:30:00");
-        //Timestamp e = Timestamp.valueOf("2020-05-28 10:30:00");
-
-        //Appointment test = new Appointment("test title", "test description", "test location", "test type", s, e, 1, 2, 3);
-        //Appointment test2 = new Appointment("updated test title", "updated test description", "updated test location", "test type", s, e, 1, 2, 3);
-        AppointmentDao appointmentDao = new AppointmentDao();
-        appointmentDao.addAppointment(appointment);
-        //appointmentDao.updateAppointment(test2);
-    }
-
-    private String meridiemToMil(String hour) {
-        return String.valueOf((Integer.parseInt(hour) + 12));
     }
 
     private boolean isEmpty(String input) {
@@ -257,10 +316,6 @@ public class AppointmentAddController extends AppointmentController {
         descriptionError.setText("");
         locationError.setText("");
         typeError.setText("");
-        startTimeError.setText("");
-        startDateError.setText("");
-        endTimeError.setText("");
-        //endDateError.setText("");
     }
 
 }

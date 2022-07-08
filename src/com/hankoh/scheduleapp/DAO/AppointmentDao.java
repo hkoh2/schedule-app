@@ -5,9 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.sql.*;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 
 public class AppointmentDao {
 
@@ -19,8 +17,6 @@ public class AppointmentDao {
     }
 
     public ObservableList<Appointment> getAllAppointments() throws SQLException {
-        //String query = "SELECT * FROM appointments INNER JOIN customers ON appointments.Customer_ID = customers.Customer_ID INNER JOIN users ON appointments.User_ID = users.User_ID";
-        //String query = "SELECT * FROM appointments INNER JOIN customers ON appointments.Customer_ID = customers.Customer_ID INNER JOIN users ON appointments.User_ID = users.User_ID INNER JOIN contacts ON appointments.Contact_ID = contacts.Contact_ID";
         String query = """
                 SELECT * 
                 FROM appointments 
@@ -62,8 +58,8 @@ public class AppointmentDao {
                     description,
                     location,
                     type,
-                    start,
-                    end,
+                    zonedStart,
+                    zonedEnd,
                     customerId,
                     customerName,
                     userId,
@@ -78,6 +74,46 @@ public class AppointmentDao {
 
         //System.out.println("Appointment size - " + appointments.size());
         return appointments;
+    }
+
+    public ObservableList<Appointment> getAppointmentsByDate(LocalDate date) throws SQLException {
+        String query = """
+        SELECT Appointment_ID, Start, End
+        FROM appointments
+        WHERE Start >= ? AND End <= ?
+        """;
+        PreparedStatement stmt = conn.prepareStatement(query);
+        LocalTime startTimeLocal = LocalTime.of(0, 1);
+        LocalTime endTimeLocal = LocalTime.of(23, 59);
+        LocalDateTime startDate = LocalDateTime.of(date, startTimeLocal);
+        LocalDateTime endDate = LocalDateTime.of(date, endTimeLocal);
+
+        Timestamp startStamp = Timestamp.valueOf(startDate);
+        Timestamp endStamp = Timestamp.valueOf(endDate);
+        stmt.setTimestamp(1, startStamp);
+        stmt.setTimestamp(2, endStamp);
+        ResultSet rs = stmt.executeQuery();
+        while(rs.next()) {
+            int id = rs.getInt("Appointment_ID");
+            Timestamp startTime = rs.getTimestamp("Start");
+            Timestamp endTime = rs.getTimestamp("End");
+            ZonedDateTime zonedStart = startTime.toInstant().atZone(ZoneId.systemDefault());
+            ZonedDateTime zonedEnd = endTime.toInstant().atZone(ZoneId.systemDefault());
+
+            LocalDateTime st = startTime.toLocalDateTime();
+            LocalDateTime et = endTime.toLocalDateTime();
+
+            Appointment appointment = new Appointment(
+                    id,
+                    zonedStart,
+                    zonedEnd
+            );
+
+            appointments.add(appointment);
+        }
+
+        return appointments;
+
     }
 
     public boolean addAppointment(Appointment appointment) throws SQLException {
@@ -117,14 +153,20 @@ public class AppointmentDao {
                 OR (Start > ? AND End < ?)
                 """;
         PreparedStatement stmt = conn.prepareStatement(query);
+        Timestamp startTime = Timestamp.valueOf(
+                appointment.getStartTime().toLocalDateTime()
+        );
+        Timestamp endTime = Timestamp.valueOf(
+                appointment.getEndTime().toLocalDateTime()
+        );
         stmt.setInt(1, appointment.getCustomerId());
-        stmt.setTimestamp(2, appointment.getStartTime());
-        stmt.setTimestamp(3, appointment.getStartTime());
-        stmt.setTimestamp(4, appointment.getEndTime());
-        stmt.setTimestamp(5, appointment.getEndTime());
-        stmt.setTimestamp(6, appointment.getStartTime());
-        stmt.setTimestamp(7, appointment.getEndTime());
-        System.out.println(stmt);
+        stmt.setTimestamp(2, startTime);
+        stmt.setTimestamp(3, startTime);
+        stmt.setTimestamp(4, endTime);
+        stmt.setTimestamp(5, endTime);
+        stmt.setTimestamp(6, startTime);
+        stmt.setTimestamp(7, endTime);
+        //System.out.println(stmt);
 
         return stmt;
 
@@ -154,8 +196,10 @@ public class AppointmentDao {
         stmt.setString(2, appointment.getDescription());
         stmt.setString(3, appointment.getLocation());
         stmt.setString(4, appointment.getType());
-        stmt.setTimestamp(5, appointment.getStartTime());
-        stmt.setTimestamp(6, appointment.getEndTime());
+
+
+        stmt.setTimestamp(5, appointment.getStartTimestamp());
+        stmt.setTimestamp(6, appointment.getEndTimestamp());
         stmt.setInt(7, appointment.getCustomerId());
         stmt.setInt(8, appointment.getUserId());
         stmt.setInt(9, appointment.getContactId());
@@ -174,8 +218,8 @@ public class AppointmentDao {
         stmt.setString(2, appointment.getDescription());
         stmt.setString(3, appointment.getLocation());
         stmt.setString(4, appointment.getType());
-        stmt.setTimestamp(5, appointment.getStartTime());
-        stmt.setTimestamp(6, appointment.getEndTime());
+        stmt.setTimestamp(5, appointment.getStartTimestamp());
+        stmt.setTimestamp(6, appointment.getEndTimestamp());
         stmt.setInt(7, appointment.getCustomerId());
         stmt.setInt(8, appointment.getUserId());
         stmt.setInt(9, appointment.getContactId());

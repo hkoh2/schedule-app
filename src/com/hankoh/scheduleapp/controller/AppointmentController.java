@@ -7,7 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 
 import java.io.IOException;
-import java.time.LocalTime;
+import java.time.ZonedDateTime;
 
 public class AppointmentController extends Internationalizable {
     public TextField idField;
@@ -54,7 +54,7 @@ public class AppointmentController extends Internationalizable {
     public Label durationLabel;
     public Label startEndTimeLabel;
     public ComboBox<AppointmentDuration> durationComboBox;
-    public ComboBox<LocalTime> timeComboBox;
+    public ComboBox<ZonedDateTime> timeComboBox;
     public DatePicker datePicker;
     public Label dateLabel;
 

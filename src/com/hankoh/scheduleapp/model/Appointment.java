@@ -1,6 +1,7 @@
 package com.hankoh.scheduleapp.model;
 
 import java.sql.Timestamp;
+import java.time.ZonedDateTime;
 
 public class Appointment {
     private int appointmentId;
@@ -9,8 +10,8 @@ public class Appointment {
     private String location;
     private String type;
     // Store time as UTC and convert time to zone before displaying
-    private Timestamp startTime;
-    private Timestamp endTime;
+    private ZonedDateTime startTime;
+    private ZonedDateTime endTime;
     private int customerId;
     private String customerName;
     private int userId;
@@ -18,6 +19,15 @@ public class Appointment {
     private int contactId;
     private String contactName;
     private String contactEmail;
+    public Appointment(
+            int appointmentId,
+            ZonedDateTime startTime,
+            ZonedDateTime endTime
+    ) {
+        this.appointmentId = appointmentId;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
 
     public Appointment(
             int appointmentId,
@@ -25,8 +35,8 @@ public class Appointment {
             String description,
             String location,
             String type,
-            Timestamp startTime,
-            Timestamp endTime,
+            ZonedDateTime startTime,
+            ZonedDateTime endTime,
             int customerId,
             String customerName,
             int userId,
@@ -55,8 +65,8 @@ public class Appointment {
             String description,
             String location,
             String type,
-            Timestamp startTime,
-            Timestamp endTime,
+            ZonedDateTime startTime,
+            ZonedDateTime endTime,
             int customerId,
             int userId,
             int contactId
@@ -111,19 +121,27 @@ public class Appointment {
         this.type = type;
     }
 
-    public Timestamp getStartTime() {
+    public ZonedDateTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Timestamp startTime) {
+    public Timestamp getStartTimestamp() {
+        return Timestamp.valueOf(startTime.toLocalDateTime());
+    }
+
+    public void setStartTime(ZonedDateTime startTime) {
         this.startTime = startTime;
     }
 
-    public Timestamp getEndTime() {
+    public ZonedDateTime getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Timestamp endTime) {
+    public Timestamp getEndTimestamp() {
+        return Timestamp.valueOf(endTime.toLocalDateTime());
+    }
+
+    public void setEndTime(ZonedDateTime endTime) {
         this.endTime = endTime;
     }
 
