@@ -81,6 +81,29 @@ public class Appointment {
         this.userId = userId;
         this.contactId = contactId;
     }
+    public Appointment(
+            int id,
+            String title,
+            String description,
+            String location,
+            String type,
+            ZonedDateTime startTime,
+            ZonedDateTime endTime,
+            int customerId,
+            int userId,
+            int contactId
+    ) {
+        this.appointmentId = id;
+        this.title = title;
+        this.description = description;
+        this.location = location;
+        this.type = type;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.customerId = customerId;
+        this.userId = userId;
+        this.contactId = contactId;
+    }
     public int getAppointmentId() {
         return appointmentId;
     }

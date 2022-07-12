@@ -12,11 +12,20 @@ public final class DataStorage {
     private Tab currentTab;
     private int currentTabIndex;
     private Customer currentCustomer;
+    private Appointment currentAppointment;
 
     private DataStorage() {}
 
     public static DataStorage getInstance() {
         return storage;
+    }
+
+    public Appointment getCurrentAppointment() {
+        return currentAppointment;
+    }
+
+    public void setCurrentAppointment(Appointment currentAppointment) {
+        this.currentAppointment = currentAppointment;
     }
 
     public void setUser(User user) {

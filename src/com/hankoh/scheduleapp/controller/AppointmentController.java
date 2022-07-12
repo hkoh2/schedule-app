@@ -1,8 +1,14 @@
 package com.hankoh.scheduleapp.controller;
 
+import com.hankoh.scheduleapp.DAO.ContactDao;
+import com.hankoh.scheduleapp.DAO.CustomerDao;
+import com.hankoh.scheduleapp.DAO.UserDao;
+import com.hankoh.scheduleapp.model.Appointment;
 import com.hankoh.scheduleapp.model.Contact;
 import com.hankoh.scheduleapp.model.Customer;
 import com.hankoh.scheduleapp.model.User;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -12,7 +18,8 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.time.ZonedDateTime;
+import java.sql.SQLException;
+import java.time.*;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -69,6 +76,13 @@ public class AppointmentController extends Internationalizable {
 
     //protected LocalTime businessStartTime = ZonedDateTime.of;
     //protected ZonedDateTime businessEndTime;
+    protected ObservableList<Customer> customers = FXCollections.observableArrayList();
+    protected ObservableList<User> users = FXCollections.observableArrayList();
+    protected ObservableList<Contact> contacts = FXCollections.observableArrayList();
+    protected ObservableList<Appointment> appointments = FXCollections.observableArrayList();
+    protected ObservableList<AppointmentDuration> allDuration = FXCollections.observableArrayList();
+    protected final ZoneId businessZoneId = ZoneId.of("US/Eastern");
+    protected final int MAX_DURATION = 60;
 
     public void initialize() {
         appointmentTitleLabel.setText(msg.getString("appointment.main_title"));
@@ -84,6 +98,55 @@ public class AppointmentController extends Internationalizable {
 
         exitButton.setText(msg.getString("exit_button"));
         saveButton.setText(msg.getString("save_button"));
+
+
+        CustomerDao customerDao = new CustomerDao();
+        try {
+            customers = customerDao.getAllCustomers();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        customerComboBox.setItems(customers);
+
+        UserDao userDao = new UserDao();
+        try {
+            users = userDao.getAllUsers();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        userComboBox.setItems(users);
+
+        ContactDao contactDao = new ContactDao();
+        try {
+            contacts = contactDao.getAllContacts();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        contactComboBox.setItems(contacts);
+    }
+
+     protected ObservableList<ZonedDateTime> getAvailTimes(LocalDate date) {
+
+        if (date == null) {
+            return null;
+        }
+        LocalTime localStart= LocalTime.of(8, 0);
+        LocalTime localEnd = LocalTime.of(21, 45);
+        LocalDateTime startTime = LocalDateTime.of(date, localStart);
+        LocalDateTime endTime = LocalDateTime.of(date, localEnd);
+        ZonedDateTime zonedBusinessStartTime = ZonedDateTime.of(startTime, businessZoneId);
+        ZonedDateTime zonedBusinessEndTime = ZonedDateTime.of(endTime, businessZoneId);
+        ZonedDateTime zonedStartTimeLocal = zonedBusinessStartTime.withZoneSameInstant(ZoneId.systemDefault());
+        ZonedDateTime zonedEndTimeLocal = zonedBusinessEndTime.withZoneSameInstant(ZoneId.systemDefault());
+        ObservableList<ZonedDateTime> allTimes = FXCollections.observableArrayList();
+        allTimes.add(zonedStartTimeLocal);
+
+        while(zonedStartTimeLocal.isBefore(zonedEndTimeLocal)) {
+            zonedStartTimeLocal = zonedStartTimeLocal.plusMinutes(DURATION_INC);
+            allTimes.add(zonedStartTimeLocal);
+            //System.out.println(zonedBusinessStartTime);
+        }
+        return allTimes;
     }
 
     public void onExitButtonClick(ActionEvent actionEvent) throws IOException {
@@ -103,5 +166,14 @@ public class AppointmentController extends Internationalizable {
 
     public void clearDatePicker() {
         datePicker.setValue(null);
+    }
+
+    protected void returnToMain(ActionEvent actionEvent) throws IOException {
+
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/hankoh/scheduleapp/view/main.fxml")));
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.setTitle(msg.getString("main.title"));
+        stage.setScene(new Scene(root));
+        stage.show();
     }
 }

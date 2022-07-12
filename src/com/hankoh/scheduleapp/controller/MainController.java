@@ -205,8 +205,14 @@ public class MainController {
     }
 
     public void onEditAppointmentButtonClick(ActionEvent actionEvent) throws IOException {
+        DataStorage ds = DataStorage.getInstance();
+        Appointment appointment = appointmentsTable.getSelectionModel().getSelectedItem();
+        if (appointment == null) {
+            return;
+        }
+        ds.setCurrentAppointment(appointment);
         System.out.println("Modify new appointment");
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/hankoh/scheduleapp/view/appointment-edit.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/hankoh/scheduleapp/view/appointment-edit2.fxml"));
         Parent root = loader.load();
 
 

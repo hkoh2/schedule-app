@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane prefHeight="735.0" prefWidth="795.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hankoh.scheduleapp.controller.AppointmentAddController">
+<AnchorPane prefHeight="735.0" prefWidth="795.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hankoh.scheduleapp.controller.AppointmentEditController">
    <children>
       <GridPane layoutX="31.0" layoutY="100.0" prefHeight="544.0" prefWidth="712.0">
         <columnConstraints>

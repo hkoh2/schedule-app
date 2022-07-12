@@ -1,9 +1,6 @@
 package com.hankoh.scheduleapp.controller;
 
 import com.hankoh.scheduleapp.DAO.AppointmentDao;
-import com.hankoh.scheduleapp.DAO.ContactDao;
-import com.hankoh.scheduleapp.DAO.CustomerDao;
-import com.hankoh.scheduleapp.DAO.UserDao;
 import com.hankoh.scheduleapp.model.Appointment;
 import com.hankoh.scheduleapp.model.Contact;
 import com.hankoh.scheduleapp.model.Customer;
@@ -11,60 +8,54 @@ import com.hankoh.scheduleapp.model.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.time.*;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZonedDateTime;
 import java.util.Comparator;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class AppointmentAddController extends AppointmentController {
 
-    private ObservableList<Customer> customers = FXCollections.observableArrayList();
-    private ObservableList<User> users = FXCollections.observableArrayList();
-    private ObservableList<Contact> contacts = FXCollections.observableArrayList();
-    private ObservableList<Appointment> appointments = FXCollections.observableArrayList();
-    ObservableList<AppointmentDuration> allDuration = FXCollections.observableArrayList();
+    //private ObservableList<Customer> customers = FXCollections.observableArrayList();
+    //private ObservableList<User> users = FXCollections.observableArrayList();
+    //private ObservableList<Contact> contacts = FXCollections.observableArrayList();
+    //private ObservableList<Appointment> appointments = FXCollections.observableArrayList();
+    //private ObservableList<AppointmentDuration> allDuration = FXCollections.observableArrayList();
 
-    private final int MAX_DURATION = 60;
-    final ZoneId businessZoneId = ZoneId.of("US/Eastern");
+    //protected final int MAX_DURATION = 60;
+    //final ZoneId businessZoneId = ZoneId.of("US/Eastern");
 
 
     public AppointmentAddController() {
         super();
     }
 
-    private ObservableList<ZonedDateTime> getAvailTimes(LocalDate date) {
-        if (date == null) {
-            return null;
-        }
-        LocalTime localStart= LocalTime.of(8, 0);
-        LocalTime localEnd = LocalTime.of(21, 45);
-        LocalDateTime startTime = LocalDateTime.of(date, localStart);
-        LocalDateTime endTime = LocalDateTime.of(date, localEnd);
-        ZonedDateTime zonedBusinessStartTime = ZonedDateTime.of(startTime, businessZoneId);
-        ZonedDateTime zonedBusinessEndTime = ZonedDateTime.of(endTime, businessZoneId);
-        ZonedDateTime zonedStartTimeLocal = zonedBusinessStartTime.withZoneSameInstant(ZoneId.systemDefault());
-        ZonedDateTime zonedEndTimeLocal = zonedBusinessEndTime.withZoneSameInstant(ZoneId.systemDefault());
-        ObservableList<ZonedDateTime> allTimes = FXCollections.observableArrayList();
-
-        // TODO need to convert eastern time to local time
-
-
-        allTimes.add(zonedStartTimeLocal);
-        while(zonedStartTimeLocal.isBefore(zonedEndTimeLocal)) {
-            zonedStartTimeLocal = zonedStartTimeLocal.plusMinutes(DURATION_INC);
-            allTimes.add(zonedStartTimeLocal);
-            System.out.println(zonedBusinessStartTime);
-        }
-        return allTimes;
-    }
+    //private ObservableList<ZonedDateTime> getAvailTimes(LocalDate date) {
+    //    if (date == null) {
+    //        return null;
+    //    }
+    //    LocalTime localStart= LocalTime.of(8, 0);
+    //    LocalTime localEnd = LocalTime.of(21, 45);
+    //    LocalDateTime startTime = LocalDateTime.of(date, localStart);
+    //    LocalDateTime endTime = LocalDateTime.of(date, localEnd);
+    //    ZonedDateTime zonedBusinessStartTime = ZonedDateTime.of(startTime, businessZoneId);
+    //    ZonedDateTime zonedBusinessEndTime = ZonedDateTime.of(endTime, businessZoneId);
+    //    ZonedDateTime zonedStartTimeLocal = zonedBusinessStartTime.withZoneSameInstant(ZoneId.systemDefault());
+    //    ZonedDateTime zonedEndTimeLocal = zonedBusinessEndTime.withZoneSameInstant(ZoneId.systemDefault());
+    //    ObservableList<ZonedDateTime> allTimes = FXCollections.observableArrayList();
+    //    allTimes.add(zonedStartTimeLocal);
+    //
+    //    while(zonedStartTimeLocal.isBefore(zonedEndTimeLocal)) {
+    //        zonedStartTimeLocal = zonedStartTimeLocal.plusMinutes(DURATION_INC);
+    //        allTimes.add(zonedStartTimeLocal);
+    //        //System.out.println(zonedBusinessStartTime);
+    //    }
+    //    return allTimes;
+    //}
 
     //private ObservableList<AppointmentDuration> setAllDuration() {
     private void setAllDuration() {
@@ -135,33 +126,31 @@ public class AppointmentAddController extends AppointmentController {
     public void initialize() {
         super.initialize();
 
-        int max = 60;
-
-        CustomerDao customerDao = new CustomerDao();
-        try {
-            customers = customerDao.getAllCustomers();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        customerComboBox.setItems(customers);
+        //CustomerDao customerDao = new CustomerDao();
+        //try {
+        //    customers = customerDao.getAllCustomers();
+        //} catch (SQLException e) {
+        //    e.printStackTrace();
+        //}
+        //customerComboBox.setItems(customers);
         customerComboBox.getSelectionModel().selectFirst();
 
-        UserDao userDao = new UserDao();
-        try {
-            users = userDao.getAllUsers();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        userComboBox.setItems(users);
+        //UserDao userDao = new UserDao();
+        //try {
+        //    users = userDao.getAllUsers();
+        //} catch (SQLException e) {
+        //    e.printStackTrace();
+        //}
+        //userComboBox.setItems(users);
         userComboBox.getSelectionModel().selectFirst();
 
-        ContactDao contactDao = new ContactDao();
-        try {
-            contacts = contactDao.getAllContacts();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        contactComboBox.setItems(contacts);
+        //ContactDao contactDao = new ContactDao();
+        //try {
+        //    contacts = contactDao.getAllContacts();
+        //} catch (SQLException e) {
+        //    e.printStackTrace();
+        //}
+        //contactComboBox.setItems(contacts);
         contactComboBox.getSelectionModel().selectFirst();
 
         datePicker.valueProperty()
@@ -170,7 +159,7 @@ public class AppointmentAddController extends AppointmentController {
         customerComboBox.valueProperty()
                 .addListener((ov, oldVal, newVal) -> clearDatePicker());
 
-        timeComboBox.setItems(getAvailTimes(datePicker.getValue()));
+        //timeComboBox.setItems(getAvailTimes(datePicker.getValue()));
         durationComboBox.setItems(allDuration);
         timeComboBox.valueProperty()
                 .addListener((ov, oldVal, newVal) -> setAllDuration());
@@ -312,11 +301,12 @@ public class AppointmentAddController extends AppointmentController {
 
         AppointmentDao appointmentDao = new AppointmentDao();
         appointmentDao.addAppointment(appointment);
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/hankoh/scheduleapp/view/main.fxml")));
-        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        stage.setTitle(msg.getString("main.title"));
-        stage.setScene(new Scene(root));
-        stage.show();
+        returnToMain(actionEvent);
+        //Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/hankoh/scheduleapp/view/main.fxml")));
+        //Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        //stage.setTitle(msg.getString("main.title"));
+        //stage.setScene(new Scene(root));
+        //stage.show();
     }
 
     private boolean isEmpty(String input) {

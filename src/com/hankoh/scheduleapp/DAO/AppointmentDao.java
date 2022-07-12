@@ -140,6 +140,7 @@ public class AppointmentDao {
 
     public void updateAppointment(Appointment appointment) throws SQLException {
         PreparedStatement stmt = getUpdateStatement(appointment);
+        System.out.println(stmt);
         int count = stmt.executeUpdate();
         System.out.println(count + " appointment updated");
     }
@@ -203,7 +204,7 @@ public class AppointmentDao {
         stmt.setInt(7, appointment.getCustomerId());
         stmt.setInt(8, appointment.getUserId());
         stmt.setInt(9, appointment.getContactId());
-        stmt.setInt(10, 9);
+        stmt.setInt(10, appointment.getAppointmentId());
         return stmt;
     }
 
