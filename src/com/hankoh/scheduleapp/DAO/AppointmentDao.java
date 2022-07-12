@@ -213,6 +213,7 @@ public class AppointmentDao {
                 (Title, Description, Location, Type, Start, End, Customer_ID, User_ID, Contact_ID)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """;
+
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setString(1, appointment.getTitle());
         stmt.setString(2, appointment.getDescription());

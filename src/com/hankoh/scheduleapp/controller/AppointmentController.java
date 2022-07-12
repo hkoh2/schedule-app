@@ -4,10 +4,17 @@ import com.hankoh.scheduleapp.model.Contact;
 import com.hankoh.scheduleapp.model.Customer;
 import com.hankoh.scheduleapp.model.User;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.time.ZonedDateTime;
+import java.util.Objects;
+import java.util.Optional;
 
 public class AppointmentController extends Internationalizable {
     public TextField idField;
@@ -58,6 +65,8 @@ public class AppointmentController extends Internationalizable {
     public DatePicker datePicker;
     public Label dateLabel;
 
+    protected final int DURATION_INC = 15;
+
     //protected LocalTime businessStartTime = ZonedDateTime.of;
     //protected ZonedDateTime businessEndTime;
 
@@ -78,5 +87,21 @@ public class AppointmentController extends Internationalizable {
     }
 
     public void onExitButtonClick(ActionEvent actionEvent) throws IOException {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle(msg.getString("logout"));
+        alert.setHeaderText(msg.getString("logout"));
+        alert.setContentText(msg.getString("logout_msg"));
+        Optional<ButtonType> choice = alert.showAndWait();
+        if (choice.isPresent() && choice.get() == ButtonType.OK) {
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/hankoh/scheduleapp/view/main.fxml")));
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            stage.setTitle(msg.getString("login.title"));
+            stage.setScene(new Scene(root));
+            stage.show();
+        }
+    }
+
+    public void clearDatePicker() {
+        datePicker.setValue(null);
     }
 }
