@@ -6,6 +6,8 @@ import com.hankoh.scheduleapp.model.Appointment;
 import com.hankoh.scheduleapp.model.Customer;
 import com.hankoh.scheduleapp.model.DataStorage;
 import com.hankoh.scheduleapp.model.User;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -20,7 +22,8 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.sql.Time;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
@@ -44,7 +47,7 @@ public class MainController {
     public ComboBox<String> appointmentFilterCombo;
     public TableColumn<Appointment, String> appointmentUserColumn;
     public TableColumn<Appointment, String> appointmentCustomerColumn;
-    public TableColumn<Appointment, Time> appointmentEndColumn;
+    public TableColumn<Appointment, String> appointmentEndColumn;
     public TableColumn<Appointment, String> appointmentStartColumn;
     public TableColumn<Appointment, String> appointmentTypeColumn;
     public TableColumn<Appointment, String> appointmentLocationColumn;
@@ -111,12 +114,12 @@ public class MainController {
         appointmentDescriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         appointmentLocationColumn.setCellValueFactory(new PropertyValueFactory<>("location"));
         appointmentTypeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
-        appointmentStartColumn.setCellValueFactory(new PropertyValueFactory<>("startTime"));
-        appointmentEndColumn.setCellValueFactory(new PropertyValueFactory<>("endTime"));
+        //appointmentStartColumn.setCellValueFactory(new PropertyValueFactory<>("startTime"));
+        //appointmentEndColumn.setCellValueFactory(new PropertyValueFactory<>("endTime"));
         appointmentCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("customerName"));
-        //appointmentCustomerColumn.setCellFactory(column -> customerCell());
         appointmentUserColumn.setCellValueFactory(new PropertyValueFactory<>("userName"));;
-        //appointmentUserColumn.setCellFactory(column -> userCell());
+        appointmentStartColumn.setCellValueFactory(cellData -> startFormatter(cellData));
+        appointmentEndColumn.setCellValueFactory(cellData -> endFormatter(cellData));
 
         appointmentsTable.setItems(appointments);
 
@@ -133,16 +136,34 @@ public class MainController {
 
         setSelectedTab();
 
-
         // saves selected customers
         customersTable
                 .getSelectionModel()
                 .selectedItemProperty()
                 .addListener(((ov, oldVal, newVal) -> setSelectedCustomer(newVal)));
 
-
-
     }
+
+    private ObservableValue<String> startFormatter(TableColumn.CellDataFeatures<Appointment, String> val) {
+        return new SimpleStringProperty(
+                val.getValue()
+                   .getStartTime()
+                   .format(dateTimeFormatter())
+        );
+    }
+    private ObservableValue<String> endFormatter(TableColumn.CellDataFeatures<Appointment, String> val) {
+        return new SimpleStringProperty(
+                val.getValue()
+                   .getEndTime()
+                   .format(dateTimeFormatter())
+        );
+    }
+
+    private DateTimeFormatter dateTimeFormatter() {
+        return DateTimeFormatter .ofLocalizedDateTime(FormatStyle.MEDIUM)
+                .withLocale(Locale.getDefault());
+    }
+
 
 
     private void setSelectedCustomer(Customer newVal) {
