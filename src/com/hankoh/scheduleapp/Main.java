@@ -19,14 +19,12 @@ public class Main extends Application {
     public static void main(String[] args) {
 
         // Test location
-        Locale.setDefault(new Locale("fr"));
+        //Locale.setDefault(new Locale("fr"));
 
-        System.out.println("Hello world!");
         System.out.println(LocalDateTime.now());
         LocalDateTime now = LocalDateTime.now();
         System.out.println(now);
         Locale current = Locale.getDefault();
-        //String displayCountry = current.getDisplayCountry();
         String displayCountry = current.getDisplayLanguage();
 
         String country = current.getCountry();

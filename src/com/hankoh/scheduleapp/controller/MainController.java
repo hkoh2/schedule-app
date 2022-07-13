@@ -5,8 +5,6 @@ import com.hankoh.scheduleapp.DAO.CustomerDao;
 import com.hankoh.scheduleapp.model.Appointment;
 import com.hankoh.scheduleapp.model.Customer;
 import com.hankoh.scheduleapp.model.DataStorage;
-import com.hankoh.scheduleapp.model.User;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -22,12 +20,13 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.Month;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
+
+import static java.util.stream.Collectors.*;
 
 public class MainController {
     public Tab appointmentsTab;
@@ -47,8 +46,8 @@ public class MainController {
     public ComboBox<String> appointmentFilterCombo;
     public TableColumn<Appointment, String> appointmentUserColumn;
     public TableColumn<Appointment, String> appointmentCustomerColumn;
-    public TableColumn<Appointment, String> appointmentEndColumn;
-    public TableColumn<Appointment, String> appointmentStartColumn;
+    public TableColumn<Appointment, ZonedDateTime> appointmentEndColumn;
+    public TableColumn<Appointment, ZonedDateTime> appointmentStartColumn;
     public TableColumn<Appointment, String> appointmentTypeColumn;
     public TableColumn<Appointment, String> appointmentLocationColumn;
     public TableColumn<Appointment, String> appointmentDescriptionColumn;
@@ -62,8 +61,9 @@ public class MainController {
     public TableColumn<Customer, String> customerPhoneColumn;
     public TableView<Customer> customersTable;
     public TabPane mainTabPane;
-    ResourceBundle msg;
-
+    public ComboBox<String> monthFilterComboBox;
+    public ComboBox<String> weekFilterComboBox;
+    protected ResourceBundle msg;
     private ObservableList<Appointment> appointments = FXCollections.observableArrayList();
     private ObservableList<Customer> customers = FXCollections.observableArrayList();
 
@@ -85,15 +85,6 @@ public class MainController {
         editAppointmentButton.setText(msg.getString("edit"));
         deleteAppointmentButton.setText(msg.getString("delete"));
 
-        String strAll = msg.getString("appointment.all");
-        String strMonth = msg.getString("appointment.month");
-        String strWeek = msg.getString("appointment.week");
-        appointmentFilterCombo
-                .getItems()
-                .addAll(strAll, strMonth, strWeek);
-        appointmentFilterCombo
-                .getSelectionModel()
-                .select(strAll);
 
         customersTab.setText(msg.getString("main.customers"));
         customersLabel.setText(msg.getString("main.customers"));
@@ -104,28 +95,36 @@ public class MainController {
         logoutButton.setText(msg.getString("logout"));
         exitButton.setText(msg.getString("exit_button"));
 
+        // Table column text
+        appointmentIdColumn.setText(msg.getString("appointment.column.id"));
+        appointmentTitleColumn.setText(msg.getString("appointment.column.title"));
+        appointmentDescriptionColumn.setText(msg.getString("appointment.column.description"));
+        appointmentLocationColumn.setText(msg.getString("appointment.column.type"));
+        appointmentStartColumn.setText(msg.getString("appointment.column.start"));
+        appointmentEndColumn.setText(msg.getString("appointment.column.end"));
+        appointmentCustomerColumn.setText(msg.getString("appointment.column.customer"));
+        appointmentUserColumn.setText(msg.getString("appointment.column.user"));
+
 
         AppointmentDao appointmentDao = new AppointmentDao();
         appointments = appointmentDao.getAllAppointments();
-        //appointments.forEach(appt -> System.out.println(appt.getAppointmentId()));
 
         appointmentIdColumn.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
         appointmentTitleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         appointmentDescriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         appointmentLocationColumn.setCellValueFactory(new PropertyValueFactory<>("location"));
         appointmentTypeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
-        //appointmentStartColumn.setCellValueFactory(new PropertyValueFactory<>("startTime"));
-        //appointmentEndColumn.setCellValueFactory(new PropertyValueFactory<>("endTime"));
         appointmentCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("customerName"));
         appointmentUserColumn.setCellValueFactory(new PropertyValueFactory<>("userName"));;
-        appointmentStartColumn.setCellValueFactory(cellData -> startFormatter(cellData));
-        appointmentEndColumn.setCellValueFactory(cellData -> endFormatter(cellData));
+        appointmentStartColumn.setCellValueFactory(new PropertyValueFactory<>("startTime"));
+        appointmentStartColumn.setCellFactory(column -> formatStart(column));
+        appointmentEndColumn.setCellValueFactory(new PropertyValueFactory<>("endTime"));
+        appointmentEndColumn.setCellFactory(column -> formatStart(column));
 
         appointmentsTable.setItems(appointments);
 
         CustomerDao customerDao = new CustomerDao();
         customers = customerDao.getAllCustomers();
-        //customers.forEach(cust -> System.out.println(cust.getName()));
 
         customerIdColumn.setCellValueFactory(new PropertyValueFactory<>("customerId"));
         customerNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -142,29 +141,96 @@ public class MainController {
                 .selectedItemProperty()
                 .addListener(((ov, oldVal, newVal) -> setSelectedCustomer(newVal)));
 
+        // Sort by descending start time
+        appointmentsTable.getSortOrder().add(appointmentStartColumn);
+        appointmentStartColumn.setComparator(
+                appointmentStartColumn.getComparator().reversed()
+        );
+
+        String strAll = msg.getString("appointment.all");
+        String strMonth = msg.getString("appointment.month");
+        String strWeek = msg.getString("appointment.week");
+
+        appointmentFilterCombo
+                .getItems()
+                .addAll(strAll, strMonth, strWeek);
+        appointmentFilterCombo
+                .getSelectionModel()
+                .select(strAll);
+
+        appointmentFilterCombo.valueProperty()
+                        .addListener((ov, oldVal, newVal) -> filterAppointments(ov, oldVal, newVal));
+                        //.addListener(this::filterAppointments);
+
+
+        groupingTest();
     }
 
-    private ObservableValue<String> startFormatter(TableColumn.CellDataFeatures<Appointment, String> val) {
-        return new SimpleStringProperty(
-                val.getValue()
-                   .getStartTime()
-                   .format(dateTimeFormatter())
-        );
+    private void filterAppointments(ObservableValue<? extends String> ov, String oldVal, String newVal) {
+        System.out.println("Changing appointment filter: " + newVal);
+        String all = msg.getString("appointment.all");
+        String month = msg.getString("appointment.month");
+        String week = msg.getString("appointment.week");
+
+        if (newVal.equals(all)) {
+            monthFilterComboBox.setVisible(false);
+            weekFilterComboBox.setVisible(false);
+            // TODO show all appointments.
+            return;
+        }
+
+        if (newVal.equals(month)) {
+            monthFilterComboBox.setVisible(true);
+            weekFilterComboBox.setVisible(false);
+            // TODO show months
+            return;
+        }
+
+        if (newVal.equals(week)) {
+            monthFilterComboBox.setVisible(false);
+            weekFilterComboBox.setVisible(true);
+            // TODO show weeks
+            return;
+        }
+
     }
-    private ObservableValue<String> endFormatter(TableColumn.CellDataFeatures<Appointment, String> val) {
-        return new SimpleStringProperty(
-                val.getValue()
-                   .getEndTime()
-                   .format(dateTimeFormatter())
+
+    public Map groupingTest() {
+        Map<Month, List<Appointment>> a = appointments.stream().collect(groupingBy(
+                appointment -> getDate(appointment),
+                mapping(appointment -> appointment, toCollection(FXCollections::observableArrayList))
+        ));
+        a.entrySet().stream().forEach(
+                entry -> {
+                    System.out.println(entry.getKey());
+                    entry.getValue().stream().forEach(System.out::println);
+                }
         );
+        return a;
+
+    }
+    public Month getDate(Appointment appointment) {
+        return appointment.getStartTime().toLocalDate().getMonth();
+    }
+
+    private TableCell<Appointment, ZonedDateTime> formatStart(TableColumn<Appointment, ZonedDateTime> zdt) {
+        return new TableCell<>() {
+            @Override
+            protected void updateItem(ZonedDateTime time, boolean empty) {
+                super.updateItem(time, empty);
+                if (empty) {
+                    setText("");
+                } else {
+                    setText(time.format(dateTimeFormatter()));
+                }
+            }
+        };
     }
 
     private DateTimeFormatter dateTimeFormatter() {
-        return DateTimeFormatter .ofLocalizedDateTime(FormatStyle.MEDIUM)
+        return DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
                 .withLocale(Locale.getDefault());
     }
-
-
 
     private void setSelectedCustomer(Customer newVal) {
         DataStorage ds = DataStorage.getInstance();
@@ -184,41 +250,9 @@ public class MainController {
         appointmentsTable.setItems(appointments);
     }
 
-    private TableCell<Appointment, Customer> customerCell() {
-        return new TableCell<>() {
-            @Override
-            protected void updateItem(Customer customer, boolean b) {
-                super.updateItem(customer, b);
-                if (customer == null || b) {
-                    setText("");
-                } else {
-                    setText(customer.getName());
-                }
-            }
-        };
-    }
-
-    private TableCell<Appointment, User> userCell() {
-        return new TableCell<>() {
-            @Override
-            protected void updateItem(User user, boolean b) {
-                super.updateItem(user, b);
-                if (user == null || b) {
-                    setText("");
-                } else {
-                    setText(user.getUserName());
-                }
-            }
-        };
-    }
-
-
     public void onNewAppointmentButtonClick(ActionEvent actionEvent) throws IOException {
-        System.out.println("Add new appointment");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/hankoh/scheduleapp/view/appointment-add2.fxml"));
         Parent root = loader.load();
-
-
         Stage stage = (Stage)((Node) actionEvent.getSource()).getScene().getWindow();
         stage.setTitle(msg.getString("appointment.main_title"));
         stage.setScene(new Scene(root));
@@ -232,21 +266,16 @@ public class MainController {
             return;
         }
         ds.setCurrentAppointment(appointment);
-        System.out.println("Modify new appointment");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/hankoh/scheduleapp/view/appointment-edit2.fxml"));
         Parent root = loader.load();
-
-
         Stage stage = (Stage)((Node) actionEvent.getSource()).getScene().getWindow();
-        stage.setTitle("Modify Appointment");
+        stage.setTitle(msg.getString("modify.title"));
         stage.setScene(new Scene(root));
         stage.show();
     }
 
     public void onDeleteAppointmentButtonClick(ActionEvent actionEvent) throws SQLException {
         Appointment selected = appointmentsTable.getSelectionModel().getSelectedItem();
-        // need to confirm before deleting.
-
         AppointmentDao appointmentDao = new AppointmentDao();
         appointmentDao.removeAppointment(selected.getAppointmentId());
         refreshAppointments();
@@ -255,8 +284,6 @@ public class MainController {
     public void onNewCustomerButtonClick(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/hankoh/scheduleapp/view/customer-add.fxml"));
         Parent root = loader.load();
-
-
         Stage stage = (Stage)((Node) actionEvent.getSource()).getScene().getWindow();
         stage.setTitle(msg.getString("customer.title"));
         stage.setScene(new Scene(root));
@@ -266,8 +293,6 @@ public class MainController {
     public void onEditCustomerButtonClick(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/hankoh/scheduleapp/view/customer-edit.fxml"));
         Parent root = loader.load();
-
-
         Stage stage = (Stage)((Node) actionEvent.getSource()).getScene().getWindow();
         stage.setTitle(msg.getString("customer.title"));
         stage.setScene(new Scene(root));

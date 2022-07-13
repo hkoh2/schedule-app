@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="700.0" maxWidth="1162.0" minHeight="574.0" minWidth="1100.0" prefHeight="574.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hankoh.scheduleapp.controller.MainController">
+<AnchorPane maxHeight="700.0" maxWidth="1162.0" minHeight="574.0" minWidth="1100.0" prefHeight="574.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hankoh.scheduleapp.controller.MainController">
    <children>
       <Text fx:id="mainTitleLabel" layoutX="50.0" layoutY="41.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Schedule App">
          <font>
@@ -38,6 +46,8 @@
                         </ButtonBar>
                         <Label fx:id="appointmentsLabel" layoutX="14.0" layoutY="14.0" text="Appointments" />
                         <ComboBox fx:id="appointmentFilterCombo" layoutX="809.0" layoutY="10.0" prefHeight="26.0" prefWidth="190.0" />
+                        <ComboBox fx:id="monthFilterComboBox" layoutX="644.0" layoutY="11.0" prefWidth="150.0" visible="false" />
+                        <ComboBox fx:id="weekFilterComboBox" layoutX="644.0" layoutY="11.0" prefWidth="150.0" visible="false" />
                      </children>
                   </AnchorPane>
             </content>
