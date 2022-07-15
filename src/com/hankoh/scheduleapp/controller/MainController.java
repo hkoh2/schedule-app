@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.Month;
+import java.time.YearMonth;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
@@ -62,12 +63,12 @@ public class MainController {
     public TableColumn<Customer, String> customerPhoneColumn;
     public TableView<Customer> customersTable;
     public TabPane mainTabPane;
-    public ComboBox<String> monthFilterComboBox;
+    public ComboBox<YearMonth> monthFilterComboBox;
     public ComboBox<String> weekFilterComboBox;
     protected ResourceBundle msg;
     private ObservableList<Appointment> appointments = FXCollections.observableArrayList();
     private ObservableList<Customer> customers = FXCollections.observableArrayList();
-
+    Map<YearMonth, List<Appointment>> appointmentsByMonth;
     public void initialize() throws SQLException {
         msg = ResourceBundle.getBundle(
                 "com.hankoh.scheduleapp.properties.MessagesBundle",
@@ -167,10 +168,15 @@ public class MainController {
                                 throw new RuntimeException(e);
                             }
                         });
+        monthFilterComboBox.valueProperty()
+                .addListener((ov, oldVal, newVal) -> {
+                    ObservableList<Appointment> filteredApt = FXCollections.observableArrayList(appointmentsByMonth.get(monthFilterComboBox.getSelectionModel().getSelectedItem()));
+                    appointmentsTable.setItems(filteredApt);
+                });
                         //.addListener(this::filterAppointments);
 
 
-        groupingTest();
+        //groupingTest();
     }
 
     private void filterAppointments(ObservableValue<? extends String> ov, String oldVal, String newVal) throws SQLException {
@@ -186,6 +192,7 @@ public class MainController {
             monthFilterComboBox.setVisible(false);
             weekFilterComboBox.setVisible(false);
             // TODO show all appointments.
+            appointmentsTable.setItems(appointments);
             return;
         }
 
@@ -194,12 +201,13 @@ public class MainController {
             weekFilterComboBox.setVisible(false);
             // TODO *only* set months in combobox.
             // the appointments will update when a month is picked
-            Map<String, List<Appointment>> appointmentsByMonth = groupingByMonth();
-            appointmentsByMonth.keySet().stream().sorted().forEach(
+            //Map<YearMonth, List<Appointment>> appointmentsByMonth = groupingByMonth();
+            appointmentsByMonth = groupingByMonth();
+            appointmentsByMonth.keySet().stream().sorted(Comparator.reverseOrder()).forEach(
                     key -> monthFilterComboBox.getItems().add(key)
             );
-            ObservableList<Appointment> aptList = FXCollections.observableArrayList(appointmentsByMonth.get("2022 7"));
-            appointmentsTable.setItems(aptList);
+            //ObservableList<Appointment> aptList = FXCollections.observableArrayList(appointmentsByMonth.get("2022 7"));
+            //appointmentsTable.setItems(aptList);
 
             return;
         }
@@ -214,7 +222,7 @@ public class MainController {
     }
 
     public Map groupingByMonth() {
-        Map<String, List<Appointment>> appointmentMap = appointments.stream()
+        Map<YearMonth, List<Appointment>> appointmentMap = appointments.stream()
                 .collect(groupingBy(
                 appointment -> getYearMonth(appointment),
                 mapping(appointment -> appointment, toCollection(FXCollections::observableArrayList))
@@ -223,24 +231,25 @@ public class MainController {
 
     }
 
-    public Map groupingTest() {
-        Map<Month, List<Appointment>> a = appointments.stream().collect(groupingBy(
-                appointment -> getDate(appointment),
-                mapping(appointment -> appointment, toCollection(FXCollections::observableArrayList))
-        ));
-        a.entrySet().stream().forEach(
-                entry -> {
-                    System.out.println(entry.getKey());
-                    entry.getValue().stream().forEach(System.out::println);
-                }
-        );
-        return a;
+    //public Map groupingTest() {
+    //    Map<YearMonth, List<Appointment>> a = appointments.stream().collect(groupingBy(
+    //            appointment -> getDate(appointment),
+    //            mapping(appointment -> appointment, toCollection(FXCollections::observableArrayList))
+    //    ));
+    //    a.entrySet().stream().forEach(
+    //            entry -> {
+    //                System.out.println(entry.getKey());
+    //                entry.getValue().stream().forEach(System.out::println);
+    //            }
+    //    );
+    //    return a;
 
-    }
+    //}
 
-    public String getYearMonth(Appointment apt) {
+    public YearMonth getYearMonth(Appointment apt) {
         LocalDate start = apt.getStartTime().toLocalDate();
-        return start.getYear() + " " + start.getMonthValue();
+        //YearMonth startYearMont = YearMonth.from(start);
+        return YearMonth.from(start);
     }
 
 
