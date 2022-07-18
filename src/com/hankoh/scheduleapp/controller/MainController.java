@@ -5,7 +5,6 @@ import com.hankoh.scheduleapp.DAO.CustomerDao;
 import com.hankoh.scheduleapp.model.Appointment;
 import com.hankoh.scheduleapp.model.Customer;
 import com.hankoh.scheduleapp.model.DataStorage;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -61,13 +60,13 @@ public class MainController {
     public TableView<Customer> customersTable;
     public TabPane mainTabPane;
     public ComboBox<YearMonth> monthFilterComboBox;
-    public ComboBox<String> weekFilterComboBox;
+    public ComboBox<YearWeek> weekFilterComboBox;
     protected ResourceBundle msg;
-    private ObservableList<Appointment> appointments = FXCollections.observableArrayList();
+    private ObservableList<Appointment> appointments; //= FXCollections.observableArrayList();
     private ObservableList<Customer> customers = FXCollections.observableArrayList();
     Map<YearMonth, List<Appointment>> appointmentsByMonth;
     //Map<>
-    Map<String, List<Appointment>> appointmentsByWeek;
+    Map<YearWeek, List<Appointment>> appointmentsByWeek;
     public void initialize() throws SQLException {
         msg = ResourceBundle.getBundle(
                 "com.hankoh.scheduleapp.properties.MessagesBundle",
@@ -143,10 +142,11 @@ public class MainController {
                 .addListener(((ov, oldVal, newVal) -> setSelectedCustomer(newVal)));
 
         // Sort by descending start time
-        appointmentsTable.getSortOrder().add(appointmentStartColumn);
-        appointmentStartColumn.setComparator(
-                appointmentStartColumn.getComparator().reversed()
-        );
+        //appointmentsTable.getSortOrder().add(appointmentStartColumn);
+        //appointmentStartColumn.setComparator(
+        //        appointmentStartColumn.getComparator().reversed()
+        //);
+
 
         String strAll = msg.getString("appointment.all");
         String strMonth = msg.getString("appointment.month");
@@ -162,34 +162,56 @@ public class MainController {
         appointmentFilterCombo.valueProperty()
                         .addListener((ov, oldVal, newVal) -> {
                             try {
-                                filterAppointments(ov, oldVal, newVal);
+                                filterAppointments(newVal);
                             } catch (SQLException e) {
                                 throw new RuntimeException(e);
                             }
                         });
         monthFilterComboBox.valueProperty()
                 .addListener((ov, oldVal, newVal) -> {
-                    ObservableList<Appointment> filteredApt = FXCollections.observableArrayList(appointmentsByMonth.get(monthFilterComboBox.getSelectionModel().getSelectedItem()));
-                    appointmentsTable.setItems(filteredApt);
+                    YearMonth selectedMonth = monthFilterComboBox.getSelectionModel().getSelectedItem();
+                    List<Appointment> filteredApt = appointmentsByMonth.get(selectedMonth);
+                    if (appointmentsByMonth.get(selectedMonth) == null) {
+                        return;
+                    }
+                    if (selectedMonth != null) {
+                        //filteredApt = FXCollections.observableArrayList(appointmentsByMonth.get(selectedMonth));
+                        //appointmentsTable.setItems(filteredApt);
+                        appointments = FXCollections.observableArrayList(filteredApt);
+                        appointmentsTable.setItems(appointments);
+                    } else {
+                        appointmentsTable.setItems(null);
+                    }
                 });
-                        //.addListener(this::filterAppointments);
         weekFilterComboBox.valueProperty()
                 .addListener((ov, oldVal, newVal) -> {
-                    ObservableList<Appointment> filteredApt = FXCollections.observableArrayList(appointmentsByWeek.get(weekFilterComboBox.getSelectionModel().getSelectedItem()));
-                    appointmentsTable.setItems(filteredApt);
+                    YearWeek selectedWeek = weekFilterComboBox.getSelectionModel().getSelectedItem();
+                    List<Appointment> filteredApt = appointmentsByWeek.get(selectedWeek);
+                    if (appointmentsByWeek.get(selectedWeek) == null) {
+                        return;
+                    }
+                    if (selectedWeek != null && filteredApt != null) {
+                        //filteredApt = FXCollections.observableArrayList(appointmentsByWeek.get(selectedWeek));
+                        //appointmentsTable.setItems(filteredApt);
+                        appointments = FXCollections.observableArrayList(filteredApt);
+                        appointmentsTable.setItems(appointments);
+                    } else {
+                        appointmentsTable.setItems(null);
+                    }
                 });
 
-
-        //groupingTest();
-        //groupingByWeek();
     }
 
-    private void filterAppointments(ObservableValue<? extends String> ov, String oldVal, String newVal) throws SQLException {
+    private void filterAppointments(String newVal) throws SQLException {
         System.out.println("Changing appointment filter: " + newVal);
         String all = msg.getString("appointment.all");
         String month = msg.getString("appointment.month");
         String week = msg.getString("appointment.week");
 
+        //AppointmentDao appointmentDao = new AppointmentDao();
+        //appointments = appointmentDao.getAllAppointments();
+        monthFilterComboBox.getItems().clear();
+        weekFilterComboBox.getItems().clear();
         AppointmentDao appointmentDao = new AppointmentDao();
         appointments = appointmentDao.getAllAppointments();
 
@@ -208,7 +230,6 @@ public class MainController {
             appointmentsByMonth.keySet().stream().sorted(Comparator.reverseOrder()).forEach(
                     key -> monthFilterComboBox.getItems().add(key)
             );
-
             return;
         }
 
@@ -217,7 +238,8 @@ public class MainController {
             weekFilterComboBox.setVisible(true);
             // TODO show weeks
             appointmentsByWeek = groupingByWeek();
-            appointmentsByWeek.keySet().stream().sorted(Comparator.reverseOrder()).forEach(
+            //appointmentsByWeek.keySet().stream().sorted(Comparator.reverseOrder()).forEach(
+            appointmentsByWeek.keySet().stream().sorted().forEach(
                     key -> weekFilterComboBox.getItems().add(key)
             );
             return;
@@ -235,7 +257,7 @@ public class MainController {
     }
 
     private Map groupingByWeek() {
-        Map<String, List<Appointment>> appointmentMap = appointments.stream()
+        Map<YearWeek, List<Appointment>> appointmentMap = appointments.stream()
                 .collect(groupingBy(
                         appointment -> getWeekRange(appointment),
                         mapping(appointment -> appointment, toCollection(FXCollections::observableArrayList))
@@ -243,14 +265,16 @@ public class MainController {
         return appointmentMap;
     }
 
-    public String getWeekRange(Appointment apt) {
+    public YearWeek getWeekRange(Appointment apt) {
         ZonedDateTime startTime = apt.getStartTime();
         ZonedDateTime weekStart = startTime.with(DayOfWeek.MONDAY);
         ZonedDateTime weekEnd = weekStart.plusDays(4);
         LocalDate start = weekStart.toLocalDate();
         LocalDate end = weekEnd.toLocalDate();
+        YearWeek weekRange = new YearWeek(start, end);
+
         //System.out.println(start + " --- " + end);
-        return start + " - " + end;
+        return weekRange;
     }
 
 
@@ -296,11 +320,6 @@ public class MainController {
                 .addListener((ov, oldTab, newTab) -> setCurrentTab(newTab));
     }
 
-    private void refreshAppointments() throws SQLException {
-        AppointmentDao appointmentDao = new AppointmentDao();
-        appointments = appointmentDao.getAllAppointments();
-        appointmentsTable.setItems(appointments);
-    }
 
     public void onNewAppointmentButtonClick(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/hankoh/scheduleapp/view/appointment-add2.fxml"));
@@ -328,9 +347,24 @@ public class MainController {
 
     public void onDeleteAppointmentButtonClick(ActionEvent actionEvent) throws SQLException {
         Appointment selected = appointmentsTable.getSelectionModel().getSelectedItem();
+
         AppointmentDao appointmentDao = new AppointmentDao();
-        appointmentDao.removeAppointment(selected.getAppointmentId());
-        refreshAppointments();
+        if (appointmentDao.removeAppointment(selected.getAppointmentId())) {
+            appointments.remove(selected);
+            appointments = appointmentDao.getAllAppointments();
+            appointmentsByMonth = groupingByMonth();
+            appointmentsByWeek = groupingByWeek();
+            //refreshAppointments();
+        } else {
+            System.out.println("Failed to remove Appointment");
+        }
+
+    }
+
+    private void refreshAppointments() throws SQLException {
+        //AppointmentDao appointmentDao = new AppointmentDao();
+        //appointments = appointmentDao.getAllAppointments();
+        appointmentsTable.setItems(appointments);
     }
 
     public void onNewCustomerButtonClick(ActionEvent actionEvent) throws IOException {

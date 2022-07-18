@@ -132,10 +132,14 @@ public class AppointmentDao {
         return true;
     }
 
-    public void removeAppointment(int appointmentId) throws SQLException {
+    public boolean removeAppointment(int appointmentId) throws SQLException {
         PreparedStatement stmt = getRemoveStatement(appointmentId);
         int count = stmt.executeUpdate();
-        System.out.println(count + " appointment removed");
+        if (count > 0) {
+            System.out.println(count + " appointment removed");
+            return true;
+        }
+        return false;
     }
 
     public void updateAppointment(Appointment appointment) throws SQLException {
