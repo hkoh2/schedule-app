@@ -104,4 +104,27 @@ public class CustomerDao {
 
         return stmt;
     }
+
+    public boolean deleteCustomerById(int id) throws SQLException {
+        PreparedStatement stmt = getDeleteStatement(id);
+        int count = 0;
+        try {
+            count = stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        if (count > 0) {
+            System.out.println(count + " customer deleted");
+            return true;
+        }
+        return false;
+    }
+    private PreparedStatement getDeleteStatement(int id) throws SQLException {
+        String query = """
+                DELETE FROM customers WHERE Customer_ID = ?
+                """;
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setInt(1, id);
+        return stmt;
+    }
 }

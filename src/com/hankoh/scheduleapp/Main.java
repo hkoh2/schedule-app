@@ -19,7 +19,7 @@ public class Main extends Application {
     public static void main(String[] args) {
 
         // Test location
-        //Locale.setDefault(new Locale("fr"));
+        Locale.setDefault(new Locale("fr"));
 
         System.out.println(LocalDateTime.now());
         LocalDateTime now = LocalDateTime.now();

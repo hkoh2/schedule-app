@@ -385,7 +385,30 @@ public class MainController {
         stage.show();
     }
 
-    public void onDeleteCustomerButtonClick(ActionEvent actionEvent) {
+    public void onDeleteCustomerButtonClick(ActionEvent actionEvent) throws SQLException, IOException {
+        Customer selectedCustomer = customersTable.getSelectionModel().getSelectedItem();
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle(msg.getString("customer.delete.title"));
+        alert.setHeaderText(msg.getString("customer.delete.header"));
+        alert.setContentText(msg.getString("customer.delete.context") + ", " + selectedCustomer.getName() + "?");
+        Optional<ButtonType> choice = alert.showAndWait();
+        if (choice.isPresent() && choice.get() == ButtonType.OK) {
+            CustomerDao customerDao = new CustomerDao();
+            if (customerDao.deleteCustomerById(selectedCustomer.getCustomerId())) {
+                System.out.println("Customer deleted");
+                customers.remove(selectedCustomer);
+                return;
+            }
+            System.out.println("Error");
+            Alert errorAlert = new Alert(Alert.AlertType.WARNING);
+            errorAlert.setTitle(msg.getString("customer.error.title"));
+            errorAlert.setHeaderText(msg.getString("customer.error.header"));
+            errorAlert.setContentText(msg.getString("customer.error.context"));
+            errorAlert.showAndWait();
+        }
+
+
     }
 
     public void onLogoutButtonClick(ActionEvent actionEvent) throws IOException {
