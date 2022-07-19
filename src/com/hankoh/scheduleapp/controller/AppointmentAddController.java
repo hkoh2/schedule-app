@@ -126,31 +126,8 @@ public class AppointmentAddController extends AppointmentController {
     public void initialize() {
         super.initialize();
 
-        //CustomerDao customerDao = new CustomerDao();
-        //try {
-        //    customers = customerDao.getAllCustomers();
-        //} catch (SQLException e) {
-        //    e.printStackTrace();
-        //}
-        //customerComboBox.setItems(customers);
         customerComboBox.getSelectionModel().selectFirst();
-
-        //UserDao userDao = new UserDao();
-        //try {
-        //    users = userDao.getAllUsers();
-        //} catch (SQLException e) {
-        //    e.printStackTrace();
-        //}
-        //userComboBox.setItems(users);
         userComboBox.getSelectionModel().selectFirst();
-
-        //ContactDao contactDao = new ContactDao();
-        //try {
-        //    contacts = contactDao.getAllContacts();
-        //} catch (SQLException e) {
-        //    e.printStackTrace();
-        //}
-        //contactComboBox.setItems(contacts);
         contactComboBox.getSelectionModel().selectFirst();
 
         datePicker.valueProperty()
@@ -164,10 +141,6 @@ public class AppointmentAddController extends AppointmentController {
         timeComboBox.valueProperty()
                 .addListener((ov, oldVal, newVal) -> setAllDuration());
     }
-
-    //public void clearDatePicker() {
-    //    datePicker.setValue(null);
-    //}
 
     public void filterAvailableTime(LocalDate date) {
         System.out.println(date);

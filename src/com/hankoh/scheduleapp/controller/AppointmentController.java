@@ -16,6 +16,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -123,6 +124,8 @@ public class AppointmentController extends Internationalizable {
             e.printStackTrace();
         }
         contactComboBox.setItems(contacts);
+
+        datePicker.setDayCellFactory(disableWeekends());
     }
 
      protected ObservableList<ZonedDateTime> getAvailTimes(LocalDate date) {
@@ -147,6 +150,20 @@ public class AppointmentController extends Internationalizable {
             //System.out.println(zonedBusinessStartTime);
         }
         return allTimes;
+    }
+
+    private Callback<DatePicker, DateCell> disableWeekends() {
+        final Callback<DatePicker, DateCell> weekendCellFactory = (final DatePicker datePicker) -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item.getDayOfWeek() == DayOfWeek.SATURDAY || item.getDayOfWeek() == DayOfWeek.SUNDAY) {
+                    setDisable(true);
+                    setStyle("-fx-background-color: #808080;");
+                }
+            }
+        };
+        return weekendCellFactory;
     }
 
     public void onExitButtonClick(ActionEvent actionEvent) throws IOException {

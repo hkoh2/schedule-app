@@ -142,10 +142,10 @@ public class MainController {
                 .addListener(((ov, oldVal, newVal) -> setSelectedCustomer(newVal)));
 
         // Sort by descending start time
-        //appointmentsTable.getSortOrder().add(appointmentStartColumn);
-        //appointmentStartColumn.setComparator(
-        //        appointmentStartColumn.getComparator().reversed()
-        //);
+        appointmentsTable.getSortOrder().add(appointmentStartColumn);
+        appointmentStartColumn.setComparator(
+                appointmentStartColumn.getComparator().reversed()
+        );
 
 
         String strAll = msg.getString("appointment.all");
@@ -426,4 +426,5 @@ public class MainController {
         ds.setCurrentTabIndex(index);
         System.out.println(tab.getText());
     }
+
 }
