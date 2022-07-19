@@ -23,7 +23,14 @@ public class CustomerDao {
     private void getCustomersDB() throws SQLException {
 
         Connection conn = JDBC.getConnection();
-        String query = "SELECT * FROM customers";
+        //String query = "SELECT * FROM customers";
+        String query = """
+                SELECT * FROM customers
+                INNER JOIN first_level_divisions
+                ON customers.Division_ID = first_level_divisions.Division_ID
+                INNER JOIN countries
+                ON first_level_divisions.COUNTRY_ID = countries.Country_ID
+                """;
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery(query);
         while(rs.next()) {
@@ -32,6 +39,8 @@ public class CustomerDao {
             String address = rs.getString("Address");
             String postalCode = rs.getString("Postal_Code");
             String phone = rs.getString("Phone");
+            String division = rs.getString("Division");
+            String country = rs.getString("Country");
             int divisionId = rs.getInt("Division_ID");
 
             Customer customer = new Customer(
@@ -40,10 +49,13 @@ public class CustomerDao {
                     address,
                     postalCode,
                     phone,
+                    division,
+                    country,
                     divisionId
             );
 
             customers.add(customer);
+
         }
     }
 

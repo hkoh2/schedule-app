@@ -61,6 +61,7 @@ public class MainController {
     public TabPane mainTabPane;
     public ComboBox<YearMonth> monthFilterComboBox;
     public ComboBox<YearWeek> weekFilterComboBox;
+    public TableColumn<Customer, String> customerCountryColumn;
     protected ResourceBundle msg;
     private ObservableList<Appointment> appointments; //= FXCollections.observableArrayList();
     private ObservableList<Customer> customers = FXCollections.observableArrayList();
@@ -128,9 +129,11 @@ public class MainController {
 
         customerIdColumn.setCellValueFactory(new PropertyValueFactory<>("customerId"));
         customerNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        customerAddressColumn.setCellValueFactory(new PropertyValueFactory<>("address"));
+        customerAddressColumn.setCellValueFactory(new PropertyValueFactory<>("fullAddress"));
+        //customerAddressColumn.setCellFactory(column -> formatAddress(column));
         customerPostalColumn.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
         customerPhoneColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
+        customerCountryColumn.setCellValueFactory(new PropertyValueFactory<>("country"));
         customersTable.setItems(customers);
 
         setSelectedTab();
@@ -167,6 +170,7 @@ public class MainController {
                                 throw new RuntimeException(e);
                             }
                         });
+
         monthFilterComboBox.valueProperty()
                 .addListener((ov, oldVal, newVal) -> {
                     YearMonth selectedMonth = monthFilterComboBox.getSelectionModel().getSelectedItem();
@@ -175,8 +179,6 @@ public class MainController {
                         return;
                     }
                     if (selectedMonth != null) {
-                        //filteredApt = FXCollections.observableArrayList(appointmentsByMonth.get(selectedMonth));
-                        //appointmentsTable.setItems(filteredApt);
                         appointments = FXCollections.observableArrayList(filteredApt);
                         appointmentsTable.setItems(appointments);
                     } else {
@@ -191,8 +193,6 @@ public class MainController {
                         return;
                     }
                     if (selectedWeek != null && filteredApt != null) {
-                        //filteredApt = FXCollections.observableArrayList(appointmentsByWeek.get(selectedWeek));
-                        //appointmentsTable.setItems(filteredApt);
                         appointments = FXCollections.observableArrayList(filteredApt);
                         appointmentsTable.setItems(appointments);
                     } else {
@@ -200,6 +200,22 @@ public class MainController {
                     }
                 });
 
+    }
+
+    private TableCell<Customer, String> formatAddress(TableColumn<Customer, String> column) {
+        return new TableCell<>() {
+
+            @Override
+            protected void updateItem(String address, boolean empty) {
+
+                super.updateItem(address, empty);
+                if (empty) {
+                    setText("");
+                } else {
+                    setText("");
+                }
+            }
+        };
     }
 
     private void filterAppointments(String newVal) throws SQLException {

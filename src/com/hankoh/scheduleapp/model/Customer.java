@@ -6,6 +6,8 @@ public class Customer {
     private String address;
     private String postalCode;
     private String phone;
+    private String division;
+    private String country;
     private int divisionId;
 
     public Customer(int customerId, String name, String address, String postalCode, String phone, int divisionId) {
@@ -21,6 +23,17 @@ public class Customer {
         this.address = address;
         this.postalCode = postalCode;
         this.phone = phone;
+        this.divisionId = divisionId;
+    }
+
+    public Customer(int customerId, String name, String address, String postalCode, String phone, String division, String country, int divisionId) {
+        this.customerId = customerId;
+        this.name = name;
+        this.address = address;
+        this.postalCode = postalCode;
+        this.phone = phone;
+        this.division = division;
+        this.country = country;
         this.divisionId = divisionId;
     }
 
@@ -42,6 +55,26 @@ public class Customer {
 
     public String getAddress() {
         return address;
+    }
+
+    public String getFullAddress() {
+        return address + ", " + division;
+    }
+
+    public String getDivision() {
+        return division;
+    }
+
+    public void setDivision(String division) {
+        this.division = division;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public void setAddress(String address) {
