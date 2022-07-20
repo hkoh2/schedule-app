@@ -202,7 +202,6 @@ public class AppointmentAddController extends AppointmentController {
     //}
 
     public void onSaveButtonClick(ActionEvent actionEvent) throws IOException, SQLException {
-        //String name = nameField.getText();
         String title = titleField.getText();
         String description = descriptionArea.getText();
         String location = locationField.getText();

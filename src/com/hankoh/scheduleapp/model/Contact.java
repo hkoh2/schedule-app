@@ -1,6 +1,6 @@
 package com.hankoh.scheduleapp.model;
 
-public class Contact {
+public class Contact implements Comparable<Contact> {
     private int id;
     private String name;
     private String email;
@@ -37,6 +37,11 @@ public class Contact {
 
     @Override
     public String toString() {
-        return id + " - " + name + " " + email;
+        return id + " - " + name + " - " + email;
+    }
+
+    @Override
+    public int compareTo(Contact o) {
+        return name.compareTo(o.getName());
     }
 }

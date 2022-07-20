@@ -1,12 +1,13 @@
 package com.hankoh.scheduleapp.controller;
 
 import com.hankoh.scheduleapp.DAO.AppointmentDao;
+import com.hankoh.scheduleapp.DAO.ContactDao;
 import com.hankoh.scheduleapp.DAO.CustomerDao;
-import com.hankoh.scheduleapp.model.Appointment;
-import com.hankoh.scheduleapp.model.Customer;
-import com.hankoh.scheduleapp.model.DataStorage;
+import com.hankoh.scheduleapp.model.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -23,6 +24,7 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.*;
 
@@ -62,6 +64,28 @@ public class MainController {
     public ComboBox<YearMonth> monthFilterComboBox;
     public ComboBox<YearWeek> weekFilterComboBox;
     public TableColumn<Customer, String> customerCountryColumn;
+    public Tab contactsReportTab;
+    public TableView<Appointment> contactsReportTableView;
+    public TableColumn<Appointment, Integer> contactReportId;
+    public TableColumn<Appointment, String> contactReportTitle;
+    public TableColumn<Appointment, String> contactReportType;
+    public TableColumn<Appointment, String> contactReportDescription;
+    public TableColumn<Appointment, ZonedDateTime> contactReportStart;
+    public TableColumn<Appointment, ZonedDateTime> contactReportEnd;
+    public TableColumn<Contact, Integer> contactReportCustomerId;
+    public ComboBox<Contact> contactsComboBox;
+    public Tab typeMonthReportTab;
+    public TableView typeMonthTableView;
+    public TableColumn monthTypeColumn;
+    public TableColumn monthTypeTotalColumn;
+    public Tab customersReportTab;
+    public TableView<CustomerTotal> byCustomerTableView;
+    public TableColumn byCustomerId;
+    public TableColumn byCustomerName;
+    public TableColumn byCustomerTotal;
+    public TableColumn byTotalTime;
+    public TableColumn byAverageTime;
+    public ComboBox<String> typeComboBox;
     protected ResourceBundle msg;
     private ObservableList<Appointment> appointments; //= FXCollections.observableArrayList();
     private ObservableList<Customer> customers = FXCollections.observableArrayList();
@@ -200,6 +224,151 @@ public class MainController {
                     }
                 });
 
+        // reports
+
+        initializeContactReport();
+        initializeTypeMonthReport();
+        initializeCustomerReport();
+
+    }
+
+    private void initializeCustomerReport() throws SQLException {
+        //byCustomerId.setText(msg.getString("report.customer.id"));
+        //byCustomerName.setText(msg.getString("report.customer.name"));
+        //byCustomerTotal.setText(msg.getString("report.customer.total"));
+        //byTotalTime.setText(msg.getString("report.customer.total_time"));
+        //byAverageTime.setText(msg.getString("report.customer.avaerage_time"));
+
+        byCustomerId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        byCustomerName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        byCustomerTotal.setCellValueFactory(new PropertyValueFactory<>("total"));
+        byTotalTime.setCellValueFactory(new PropertyValueFactory<>("totalTime"));
+        byAverageTime.setCellValueFactory(new PropertyValueFactory<>("averageTime"));
+
+        //byCustomerTableView
+        ObservableList<CustomerTotal> customerTotals = FXCollections.observableArrayList();
+
+        getAllCustomers();
+        getAllAppointments();
+        customers.stream().forEach(customer -> {
+            //Stream<Appointment> appointmentStream = appointments.stream()
+            //        .filter(appointment ->
+            //                appointment.getCustomerId() == customer.getCustomerId());
+            ObservableList<Appointment> filteredAppointments = appointments.stream()
+                    .filter(appointment ->
+                            appointment.getCustomerId() == customer.getCustomerId())
+                    .collect(Collectors.toCollection(FXCollections::observableArrayList));
+
+            long total = filteredAppointments.size();
+            long totalTime = filteredAppointments.stream().mapToLong(
+                            appointment -> Duration.between(
+                                    appointment.getStartTime(),
+                                    appointment.getEndTime()).toMinutes())
+                    .sum();
+            customerTotals.add(new CustomerTotal(customer, (int) total, (int) totalTime));
+        });
+        byCustomerTableView.setItems(customerTotals);
+
+    }
+
+    private void getAllCustomers() throws SQLException {
+        CustomerDao customerDao = new CustomerDao();
+        customers = customerDao.getAllCustomers();
+    }
+
+
+    private void initializeTypeMonthReport() throws SQLException {
+        monthTypeColumn.setText(msg.getString("report.month_type"));
+        monthTypeTotalColumn.setText(msg.getString("report.total"));
+
+        monthTypeColumn.setCellValueFactory(new PropertyValueFactory<>("month"));
+        monthTypeTotalColumn.setCellValueFactory(new PropertyValueFactory<>("total"));
+        //customerPostalColumn.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
+
+        //monthTypeColumn.setCellValueFactory();
+
+        getAllAppointments();
+
+        HashSet<String> allTypesSet = new HashSet<String>(appointments.stream()
+                .map(Appointment::getType)
+                .collect(Collectors.toCollection(HashSet::new)));
+        ObservableList<String> allTypes = FXCollections.observableArrayList(allTypesSet);
+        typeComboBox.setItems(allTypes);
+
+        typeComboBox.valueProperty().addListener((ov, oldVal, newVal) -> getTypeMonthTotal(newVal));
+    }
+
+    private void getTypeMonthTotal(String newVal) {
+        //HashSet<MonthTotal> typeTotal = new HashSet<>();
+        Map<Month, List<Appointment>> appointmentsByMonth = appointments.stream()
+                .filter(apt -> apt.getType().equals(newVal))
+                .collect(groupingBy(
+                        apt -> apt.getStartTime().getMonth(),
+                        mapping(apt -> apt, toCollection(FXCollections::observableArrayList))));
+
+        ObservableList<MonthTotal> typeMonths = FXCollections.observableArrayList();
+        //System.out.println(appointmentsByMonth);
+        appointmentsByMonth.forEach((key, val) -> {
+            int total = val.size();
+            typeMonths.add(new MonthTotal(newVal, key, total));
+        });
+        typeMonthTableView.setItems(typeMonths);
+    }
+
+    private void getAllAppointments() throws SQLException {
+        AppointmentDao appointmentDao = new AppointmentDao();
+        appointments = appointmentDao.getAllAppointments();
+    }
+
+    private void initializeContactReport() {
+
+        contactReportId.setText(msg.getString("appointment.column.id"));
+        contactReportTitle.setText(msg.getString("appointment.column.title"));
+        contactReportDescription.setText(msg.getString("appointment.column.description"));
+        contactReportStart.setText(msg.getString("appointment.column.start"));
+        contactReportEnd.setText(msg.getString("appointment.column.end"));
+        contactReportCustomerId.setText(msg.getString("appointment.column.customer"));
+
+        contactReportId.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
+        contactReportTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
+        contactReportDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
+        contactReportType.setCellValueFactory(new PropertyValueFactory<>("type"));
+        contactReportCustomerId.setCellValueFactory(new PropertyValueFactory<>("customerName"));
+        contactReportStart.setCellValueFactory(new PropertyValueFactory<>("startTime"));
+        contactReportStart.setCellFactory(column -> formatStart(column));
+        contactReportEnd.setCellValueFactory(new PropertyValueFactory<>("endTime"));
+        contactReportEnd.setCellFactory(column -> formatStart(column));
+
+        FilteredList<Appointment> filteredList= new FilteredList<>(appointments);
+        SortedList<Appointment> sortedList = new SortedList<>(filteredList);
+        sortedList.comparatorProperty().bind(contactsReportTableView.comparatorProperty());
+
+        contactsReportTableView.setItems(sortedList);
+        contactsComboBox.valueProperty().addListener((ov, oldVal, newVal) -> {
+            if (newVal == null) {
+                filteredList.setPredicate(s -> true);
+            } else {
+                filteredList.setPredicate(s -> s.getContactId() == newVal.getId());
+            }
+        });
+        try {
+            setContacts();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setContacts() throws SQLException {
+        ObservableList<Contact> allContacts = getAllContacts();
+        contactsComboBox.setItems(allContacts);
+    }
+
+
+    private ObservableList<Contact> getAllContacts() throws SQLException {
+        ContactDao contactDao = new ContactDao();
+        return contactDao.getAllContacts().stream()
+                .sorted()
+                .collect(toCollection(FXCollections::observableArrayList));
     }
 
     private TableCell<Customer, String> formatAddress(TableColumn<Customer, String> column) {

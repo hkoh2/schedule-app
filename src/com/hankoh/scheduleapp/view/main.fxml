@@ -47,7 +47,7 @@
                         <Label fx:id="appointmentsLabel" layoutX="14.0" layoutY="14.0" text="Appointments" />
                         <ComboBox fx:id="appointmentFilterCombo" layoutX="809.0" layoutY="10.0" prefHeight="26.0" prefWidth="190.0" />
                         <ComboBox fx:id="monthFilterComboBox" layoutX="644.0" layoutY="11.0" prefWidth="150.0" visible="false" />
-                        <ComboBox fx:id="weekFilterComboBox" layoutX="644.0" layoutY="11.0" prefWidth="150.0" visible="false" />
+                        <ComboBox fx:id="weekFilterComboBox" layoutX="564.0" layoutY="11.0" prefHeight="26.0" prefWidth="230.0" visible="false" />
                      </children>
                   </AnchorPane>
             </content>
@@ -78,14 +78,67 @@
                   </AnchorPane>
             </content>
           </Tab>
-            <Tab text="Users">
-               <content>
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="83.0" prefWidth="62.0" />
-               </content>
-            </Tab>
             <Tab text="Reports">
                <content>
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="83.0" prefWidth="62.0" />
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="83.0" prefWidth="62.0">
+                     <children>
+                        <TabPane layoutY="14.0" prefHeight="400.0" prefWidth="1000.0" tabClosingPolicy="UNAVAILABLE">
+                          <tabs>
+                            <Tab fx:id="contactsReportTab" text="By Contacts">
+                                 <content>
+                                    <AnchorPane>
+                                       <children>
+                                          <TableView fx:id="contactsReportTableView" layoutY="47.0" prefHeight="326.0" prefWidth="1000.0">
+                                            <columns>
+                                              <TableColumn fx:id="contactReportId" prefWidth="75.0" text="ID" />
+                                              <TableColumn fx:id="contactReportTitle" prefWidth="117.59998321533203" text="Title" />
+                                                <TableColumn fx:id="contactReportType" prefWidth="124.0" text="Type" />
+                                                <TableColumn fx:id="contactReportDescription" prefWidth="211.19992065429688" text="Description" />
+                                                <TableColumn fx:id="contactReportStart" prefWidth="120.0" text="Start" />
+                                                <TableColumn fx:id="contactReportEnd" prefWidth="125.5999755859375" text="End" />
+                                                <TableColumn fx:id="contactReportCustomerId" prefWidth="226.4000244140625" text="Customer ID" />
+                                            </columns>
+                                          </TableView>
+                                          <ComboBox fx:id="contactsComboBox" layoutX="765.0" layoutY="14.0" prefHeight="26.0" prefWidth="234.0" promptText="Select Contacts" />
+                                       </children>
+                                    </AnchorPane>
+                                 </content>
+                              </Tab>
+                            <Tab fx:id="typeMonthReportTab" text="By Type and Month">
+                                 <content>
+                                    <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                       <children>
+                                          <TableView fx:id="typeMonthTableView" layoutY="48.0" prefHeight="326.0" prefWidth="1008.0">
+                                            <columns>
+                                              <TableColumn fx:id="monthTypeColumn" prefWidth="209.59998321533203" text="Type and Month" />
+                                              <TableColumn fx:id="monthTypeTotalColumn" minWidth="0.0" prefWidth="128.0" text="Total" />
+                                            </columns>
+                                          </TableView>
+                                          <ComboBox fx:id="typeComboBox" layoutX="818.0" layoutY="14.0" prefHeight="26.0" prefWidth="182.0" promptText="Select Type" />
+                                       </children>
+                                    </AnchorPane>
+                                 </content>
+                              </Tab>
+                              <Tab fx:id="customersReportTab" text="By Customer">
+                                 <content>
+                                    <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                       <children>
+                                          <TableView fx:id="byCustomerTableView" prefHeight="374.0" prefWidth="1008.0">
+                                             <columns>
+                                                <TableColumn fx:id="byCustomerId" prefWidth="75.99993896484375" text="ID" />
+                                                <TableColumn fx:id="byCustomerName" minWidth="0.0" prefWidth="143.19995880126953" text="Customer" />
+                                                <TableColumn fx:id="byCustomerTotal" minWidth="0.0" prefWidth="143.19995880126953" text="Total" />
+                                                <TableColumn fx:id="byTotalTime" minWidth="0.0" prefWidth="143.19995880126953" text="Total Time" />
+                                                <TableColumn fx:id="byAverageTime" minWidth="0.0" prefWidth="143.19995880126953" text="Average Time" />
+                                             </columns>
+                                          </TableView>
+                                       </children>
+                                    </AnchorPane>
+                                 </content>
+                              </Tab>
+                          </tabs>
+                        </TabPane>
+                     </children></AnchorPane>
                </content>
             </Tab>
         </tabs>
