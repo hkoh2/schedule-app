@@ -9,7 +9,6 @@ public class Appointment {
     private String description;
     private String location;
     private String type;
-    // Store time as UTC and convert time to zone before displaying
     private ZonedDateTime startTime;
     private ZonedDateTime endTime;
     private int customerId;

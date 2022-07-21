@@ -63,7 +63,6 @@ public class AppointmentController extends Internationalizable {
     public Label startTimeError;
     public Label endDateError;
     public Label endTimeError;
-
     public Label typeError;
     public Label timeLabel;
     public Label durationLabel;
@@ -72,11 +71,7 @@ public class AppointmentController extends Internationalizable {
     public ComboBox<ZonedDateTime> timeComboBox;
     public DatePicker datePicker;
     public Label dateLabel;
-
     protected final int DURATION_INC = 15;
-
-    //protected LocalTime businessStartTime = ZonedDateTime.of;
-    //protected ZonedDateTime businessEndTime;
     protected ObservableList<Customer> customers = FXCollections.observableArrayList();
     protected ObservableList<User> users = FXCollections.observableArrayList();
     protected ObservableList<Contact> contacts = FXCollections.observableArrayList();
@@ -147,7 +142,6 @@ public class AppointmentController extends Internationalizable {
         while(zonedStartTimeLocal.isBefore(zonedEndTimeLocal)) {
             zonedStartTimeLocal = zonedStartTimeLocal.plusMinutes(DURATION_INC);
             allTimes.add(zonedStartTimeLocal);
-            //System.out.println(zonedBusinessStartTime);
         }
         return allTimes;
     }
@@ -186,7 +180,6 @@ public class AppointmentController extends Internationalizable {
     }
 
     protected void returnToMain(ActionEvent actionEvent) throws IOException {
-
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/hankoh/scheduleapp/view/main.fxml")));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.setTitle(msg.getString("main.title"));

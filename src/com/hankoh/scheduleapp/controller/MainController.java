@@ -75,22 +75,21 @@ public class MainController {
     public TableColumn<Contact, Integer> contactReportCustomerId;
     public ComboBox<Contact> contactsComboBox;
     public Tab typeMonthReportTab;
-    public TableView typeMonthTableView;
-    public TableColumn monthTypeColumn;
-    public TableColumn monthTypeTotalColumn;
+    public TableView<MonthTotal> typeMonthTableView;
+    public TableColumn<MonthTotal, Month> monthTypeColumn;
+    public TableColumn<MonthTotal, Integer> monthTypeTotalColumn;
     public Tab customersReportTab;
     public TableView<CustomerTotal> byCustomerTableView;
-    public TableColumn byCustomerId;
-    public TableColumn byCustomerName;
-    public TableColumn byCustomerTotal;
-    public TableColumn byTotalTime;
-    public TableColumn byAverageTime;
+    public TableColumn<CustomerTotal, Integer> byCustomerId;
+    public TableColumn<CustomerTotal, String> byCustomerName;
+    public TableColumn<CustomerTotal, Integer> byCustomerTotal;
+    public TableColumn<CustomerTotal, Integer> byTotalTime;
+    public TableColumn<CustomerTotal, Double> byAverageTime;
     public ComboBox<String> typeComboBox;
     protected ResourceBundle msg;
-    private ObservableList<Appointment> appointments; //= FXCollections.observableArrayList();
+    private ObservableList<Appointment> appointments;
     private ObservableList<Customer> customers = FXCollections.observableArrayList();
     Map<YearMonth, List<Appointment>> appointmentsByMonth;
-    //Map<>
     Map<YearWeek, List<Appointment>> appointmentsByWeek;
     public void initialize() throws SQLException {
         msg = ResourceBundle.getBundle(
@@ -120,7 +119,6 @@ public class MainController {
         logoutButton.setText(msg.getString("logout"));
         exitButton.setText(msg.getString("exit_button"));
 
-        // Table column text
         appointmentIdColumn.setText(msg.getString("appointment.column.id"));
         appointmentTitleColumn.setText(msg.getString("appointment.column.title"));
         appointmentDescriptionColumn.setText(msg.getString("appointment.column.description"));
@@ -130,9 +128,7 @@ public class MainController {
         appointmentCustomerColumn.setText(msg.getString("appointment.column.customer"));
         appointmentUserColumn.setText(msg.getString("appointment.column.user"));
 
-
-        AppointmentDao appointmentDao = new AppointmentDao();
-        appointments = appointmentDao.getAllAppointments();
+        getAllAppointments();
 
         appointmentIdColumn.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
         appointmentTitleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
@@ -142,19 +138,16 @@ public class MainController {
         appointmentCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("customerName"));
         appointmentUserColumn.setCellValueFactory(new PropertyValueFactory<>("userName"));;
         appointmentStartColumn.setCellValueFactory(new PropertyValueFactory<>("startTime"));
-        appointmentStartColumn.setCellFactory(column -> formatStart(column));
+        appointmentStartColumn.setCellFactory(this::formatStart);
         appointmentEndColumn.setCellValueFactory(new PropertyValueFactory<>("endTime"));
-        appointmentEndColumn.setCellFactory(column -> formatStart(column));
-
+        appointmentEndColumn.setCellFactory(this::formatStart);
         appointmentsTable.setItems(appointments);
 
-        CustomerDao customerDao = new CustomerDao();
-        customers = customerDao.getAllCustomers();
+        getAllCustomers();
 
         customerIdColumn.setCellValueFactory(new PropertyValueFactory<>("customerId"));
         customerNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         customerAddressColumn.setCellValueFactory(new PropertyValueFactory<>("fullAddress"));
-        //customerAddressColumn.setCellFactory(column -> formatAddress(column));
         customerPostalColumn.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
         customerPhoneColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
         customerCountryColumn.setCellValueFactory(new PropertyValueFactory<>("country"));
@@ -232,6 +225,16 @@ public class MainController {
 
     }
 
+    private void getAllAppointments() throws SQLException {
+        AppointmentDao appointmentDao = new AppointmentDao();
+        appointments = appointmentDao.getAllAppointments();
+    }
+
+    private void getAllCustomers() throws SQLException {
+        CustomerDao customerDao = new CustomerDao();
+        customers = customerDao.getAllCustomers();
+    }
+
     private void initializeCustomerReport() throws SQLException {
         //byCustomerId.setText(msg.getString("report.customer.id"));
         //byCustomerName.setText(msg.getString("report.customer.name"));
@@ -251,9 +254,6 @@ public class MainController {
         getAllCustomers();
         getAllAppointments();
         customers.stream().forEach(customer -> {
-            //Stream<Appointment> appointmentStream = appointments.stream()
-            //        .filter(appointment ->
-            //                appointment.getCustomerId() == customer.getCustomerId());
             ObservableList<Appointment> filteredAppointments = appointments.stream()
                     .filter(appointment ->
                             appointment.getCustomerId() == customer.getCustomerId())
@@ -271,10 +271,6 @@ public class MainController {
 
     }
 
-    private void getAllCustomers() throws SQLException {
-        CustomerDao customerDao = new CustomerDao();
-        customers = customerDao.getAllCustomers();
-    }
 
 
     private void initializeTypeMonthReport() throws SQLException {
@@ -283,9 +279,6 @@ public class MainController {
 
         monthTypeColumn.setCellValueFactory(new PropertyValueFactory<>("month"));
         monthTypeTotalColumn.setCellValueFactory(new PropertyValueFactory<>("total"));
-        //customerPostalColumn.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
-
-        //monthTypeColumn.setCellValueFactory();
 
         getAllAppointments();
 
@@ -299,7 +292,6 @@ public class MainController {
     }
 
     private void getTypeMonthTotal(String newVal) {
-        //HashSet<MonthTotal> typeTotal = new HashSet<>();
         Map<Month, List<Appointment>> appointmentsByMonth = appointments.stream()
                 .filter(apt -> apt.getType().equals(newVal))
                 .collect(groupingBy(
@@ -307,7 +299,6 @@ public class MainController {
                         mapping(apt -> apt, toCollection(FXCollections::observableArrayList))));
 
         ObservableList<MonthTotal> typeMonths = FXCollections.observableArrayList();
-        //System.out.println(appointmentsByMonth);
         appointmentsByMonth.forEach((key, val) -> {
             int total = val.size();
             typeMonths.add(new MonthTotal(newVal, key, total));
@@ -315,10 +306,6 @@ public class MainController {
         typeMonthTableView.setItems(typeMonths);
     }
 
-    private void getAllAppointments() throws SQLException {
-        AppointmentDao appointmentDao = new AppointmentDao();
-        appointments = appointmentDao.getAllAppointments();
-    }
 
     private void initializeContactReport() {
 
@@ -393,12 +380,11 @@ public class MainController {
         String month = msg.getString("appointment.month");
         String week = msg.getString("appointment.week");
 
-        //AppointmentDao appointmentDao = new AppointmentDao();
-        //appointments = appointmentDao.getAllAppointments();
         monthFilterComboBox.getItems().clear();
         weekFilterComboBox.getItems().clear();
-        AppointmentDao appointmentDao = new AppointmentDao();
-        appointments = appointmentDao.getAllAppointments();
+        //AppointmentDao appointmentDao = new AppointmentDao();
+        //appointments = appointmentDao.getAllAppointments();
+        getAllAppointments();
 
         if (newVal.equals(all)) {
             monthFilterComboBox.setVisible(false);
@@ -429,7 +415,6 @@ public class MainController {
             );
             return;
         }
-
     }
 
     private Map groupingByMonth() {
@@ -457,15 +442,12 @@ public class MainController {
         LocalDate start = weekStart.toLocalDate();
         LocalDate end = weekEnd.toLocalDate();
         YearWeek weekRange = new YearWeek(start, end);
-
-        //System.out.println(start + " --- " + end);
         return weekRange;
     }
 
 
     public YearMonth getYearMonth(Appointment apt) {
         LocalDate start = apt.getStartTime().toLocalDate();
-        //YearMonth startYearMont = YearMonth.from(start);
         return YearMonth.from(start);
     }
 
@@ -539,17 +521,10 @@ public class MainController {
             appointments = appointmentDao.getAllAppointments();
             appointmentsByMonth = groupingByMonth();
             appointmentsByWeek = groupingByWeek();
-            //refreshAppointments();
         } else {
             System.out.println("Failed to remove Appointment");
         }
 
-    }
-
-    private void refreshAppointments() throws SQLException {
-        //AppointmentDao appointmentDao = new AppointmentDao();
-        //appointments = appointmentDao.getAllAppointments();
-        appointmentsTable.setItems(appointments);
     }
 
     public void onNewCustomerButtonClick(ActionEvent actionEvent) throws IOException {

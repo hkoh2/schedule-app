@@ -7,11 +7,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.time.LocalDateTime;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -21,9 +16,6 @@ public class Main extends Application {
         // Test location
         Locale.setDefault(new Locale("fr"));
 
-        System.out.println(LocalDateTime.now());
-        LocalDateTime now = LocalDateTime.now();
-        System.out.println(now);
         Locale current = Locale.getDefault();
         String displayCountry = current.getDisplayLanguage();
 
@@ -31,20 +23,6 @@ public class Main extends Application {
         System.out.println("country - " + country + " " + displayCountry);
         JDBC.makeConnection();
 
-        String query = "SELECT * FROM users";
-
-        try {
-            Connection conn = JDBC.getConnection();
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(query);
-            while (rs.next()) {
-                System.out.println("Username: " + rs.getString("User_Name"));
-                System.out.println("PW: " + rs.getString("Password"));
-                System.out.println("Time stamp: " + rs.getTimestamp("Create_Date"));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
         launch(args);
     }
 
@@ -56,6 +34,4 @@ public class Main extends Application {
         stage.setScene(new Scene(root));
         stage.show();
     }
-
-
 }

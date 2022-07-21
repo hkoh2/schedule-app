@@ -31,41 +31,6 @@ public class CustomerAddController extends CustomerController {
     @Override
     public void initialize() {
         super.initialize();
-
-        //DataStorage ds = DataStorage.getInstance();
-        //ds.setCurrentTab(1);
-
-        //CountryDao countryDao = new CountryDao();
-        //try {
-        //    countries = countryDao.getAllCountries();
-        //} catch (SQLException e) {
-        //    e.printStackTrace();
-        //}
-
-        //countryComboBox.setItems(countries);
-        //countryComboBox.getSelectionModel().selectFirst();
-        //countryComboBox.valueProperty().addListener(
-        //        (options, newVal, oldVal) -> changeDivision(options, newVal, oldVal)
-        //);
-
-        //DivisionDao divisionDao = new DivisionDao();
-        //try {
-        //    divisions = divisionDao.getAllDivisions();
-        //} catch (SQLException e) {
-        //    e.printStackTrace();
-        //}
-
-        //int selectedCountryId = countryComboBox
-        //        .getSelectionModel()
-        //        .getSelectedItem()
-        //        .getCountryId();
-        //ObservableList<Division> filteredDivision = divisions.stream()
-        //        .filter(div -> div.getCountryId() == selectedCountryId)
-        //        .sorted(Comparator.comparing(Division::getDivision))
-        //        .collect(Collectors.toCollection(FXCollections::observableArrayList));
-
-        //divisionComboBox.setItems(filteredDivision);
-        //divisionComboBox.getSelectionModel().selectFirst();
     }
 
     private void changeDivision(ObservableValue<? extends Country> options, Country oldValue, Country newValue) {
@@ -79,7 +44,6 @@ public class CustomerAddController extends CustomerController {
                 .filter(div -> div.getCountryId() == countryId)
                 .sorted(Comparator.comparing(Division::getDivision))
                 .collect(Collectors.toCollection(FXCollections::observableArrayList));
-
     }
 
     @Override
@@ -100,7 +64,6 @@ public class CustomerAddController extends CustomerController {
 
     @Override
     public void onSaveButtonClick(ActionEvent actionEvent) throws IOException {
-        //super.onSaveButtonClick(actionEvent);
         String name = nameField.getText();
         String address = addressField.getText();
         String postal = postalField.getText();
@@ -131,24 +94,10 @@ public class CustomerAddController extends CustomerController {
             e.printStackTrace();
         }
         if (customerAdded) {
-            //
-            System.out.println("customer added");
-
             moveToMain(actionEvent);
 
         } else {
             System.out.println("DB Error");
-
         }
-
-
     }
-    //private void moveToMain(ActionEvent actionEvent) throws IOException {
-    //    Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/hankoh/scheduleapp/view/main.fxml")));
-    //    Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-    //    stage.setTitle(msg.getString("main.title"));
-    //    stage.setScene(new Scene(root));
-    //    stage.show();
-
-    //}
 }

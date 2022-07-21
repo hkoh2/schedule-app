@@ -23,12 +23,8 @@ public class CustomerEditController extends CustomerController {
         addressField.setText(customer.getAddress());
         phoneField.setText(customer.getPhone());
         postalField.setText(customer.getPostalCode());
-        //countryComboBox.getSelectionModel().select
 
         int divisionId = customer.getDivisionId();
-
-
-
 
         Division division = divisions.stream()
                 .filter(div -> div.getDivisionId() == customer.getDivisionId())
@@ -41,15 +37,11 @@ public class CustomerEditController extends CustomerController {
 
         countryComboBox.getSelectionModel().select(country);
         divisionComboBox.getSelectionModel().select(division);
-
-
-
     }
 
     @Override
     public void onCancelButtonClick(ActionEvent actionEvent) throws IOException {
         moveToMain(actionEvent);
-
     }
 
     @Override

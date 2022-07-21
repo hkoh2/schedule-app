@@ -171,8 +171,6 @@ public class AppointmentDao {
         stmt.setTimestamp(5, endTime);
         stmt.setTimestamp(6, startTime);
         stmt.setTimestamp(7, endTime);
-        //System.out.println(stmt);
-
         return stmt;
 
     }

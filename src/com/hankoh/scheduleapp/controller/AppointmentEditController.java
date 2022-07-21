@@ -22,7 +22,6 @@ public class AppointmentEditController extends AppointmentController {
 
     public void initialize() {
         super.initialize();
-        System.out.println("Appointment modify loaded");
         DataStorage ds = DataStorage.getInstance();
         Appointment selectedAppointment = ds.getCurrentAppointment();
 
@@ -59,14 +58,13 @@ public class AppointmentEditController extends AppointmentController {
         int id = selectedAppointment.getAppointmentId();
 
         datePicker.setValue(startDate);
-        filterAvailableTime(startDate, id); //, selectedAppointment.getAppointmentId());
+        filterAvailableTime(startDate, id);
         setAllDuration();
         timeComboBox.getSelectionModel().select(startDateTime);
 
         AppointmentDuration currentDuration = new AppointmentDuration(
                 (int) Duration.between(startDateTime, endDateTime).toMinutes()
         );
-
 
         durationComboBox.setItems(allDuration);
         setAllDuration();
@@ -80,8 +78,6 @@ public class AppointmentEditController extends AppointmentController {
 
         timeComboBox.valueProperty()
                 .addListener((ov, oldVal, newVal) -> setAllDuration());
-
-
     }
 
     private void setAllDuration() {
@@ -99,11 +95,9 @@ public class AppointmentEditController extends AppointmentController {
 
     private int getMaxDuration() {
 
-
         ZonedDateTime selectedTime = timeComboBox.getSelectionModel().getSelectedItem();
         LocalDate endDate = datePicker.getValue();
         ZonedDateTime businessEndTime = ZonedDateTime.of(endDate, LocalTime.of(22, 0), businessZoneId);
-
 
         if (selectedTime == null) {
             return 0;
@@ -118,25 +112,16 @@ public class AppointmentEditController extends AppointmentController {
         int durationToEnd = (int) Duration.between(selectedTime, businessEndTime).toMinutes();
 
         if (minApt == null) {
-            System.out.println("duration to end: " + durationToEnd);
             return Math.min(MAX_DURATION, durationToEnd);
         }
 
-        //LocalDateTime minStart = minApt.getStartTime().toLocalDateTime();
         ZonedDateTime minStart = minApt.getStartTime();
-
         int nextAppointmentMinutes = (int) Duration.between(selectedTime, minStart).toMinutes();
-        System.out.println("business end time: " + businessEndTime);
-        System.out.println("selected time to end time: " + durationToEnd);
-
         int maxMinutes = Math.min(nextAppointmentMinutes, durationToEnd);
-
-        //System.out.println("Adjusting DURATION: " + maxMinutes);
         return maxMinutes > MAX_DURATION ? MAX_DURATION : maxMinutes;
     }
 
     private boolean filterTimeAfter(Appointment apt, ZonedDateTime time) {
-        //ZonedDateTime startTime = ZonedDateTime.of(apt.getStartTime().toLocalDateTime(), businessZoneId);
         ZonedDateTime startTime = apt.getStartTime();
         if (startTime.isBefore(time)) {
             return false;
