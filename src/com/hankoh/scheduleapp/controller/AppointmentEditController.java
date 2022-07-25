@@ -96,12 +96,14 @@ public class AppointmentEditController extends AppointmentController {
     private int getMaxDuration() {
 
         ZonedDateTime selectedTime = timeComboBox.getSelectionModel().getSelectedItem();
-        LocalDate endDate = datePicker.getValue();
-        ZonedDateTime businessEndTime = ZonedDateTime.of(endDate, LocalTime.of(22, 0), businessZoneId);
 
         if (selectedTime == null) {
             return 0;
         }
+
+        LocalDate endDate = datePicker.getValue();
+        ZonedDateTime businessEndTime = ZonedDateTime.of(endDate, LocalTime.of(22, 0), businessZoneId);
+
 
         Appointment minApt = appointments.stream()
                 .filter(apt -> filterTimeAfter(apt, selectedTime))
@@ -130,7 +132,15 @@ public class AppointmentEditController extends AppointmentController {
     }
 
     public void filterAvailableTime(LocalDate date, int id) {
-        System.out.println(date);
+        // Need to reset time and duration
+        //timeComboBox.getSelectionModel().clearSelection();
+        //timeComboBox.setItems(null);
+        //durationComboBox.getSelectionModel().clearSelection();
+        //durationComboBox.getItems().clear();
+        //durationComboBox.setItems(null);
+        timeComboBox.setValue(null);
+        timeComboBox.setItems(null);
+        durationComboBox.setValue(null);
         if (date == null) {
             datePicker.setValue(null);
             return;
@@ -190,16 +200,6 @@ public class AppointmentEditController extends AppointmentController {
         AppointmentDuration duration = durationComboBox
                 .getSelectionModel()
                 .getSelectedItem();
-        Customer selectedCustomer = customerComboBox
-                .getSelectionModel()
-                .getSelectedItem();
-        User selectedUser = userComboBox
-                .getSelectionModel()
-                .getSelectedItem();
-        Contact selectedContact = contactComboBox
-                .getSelectionModel()
-                .getSelectedItem();
-        ZonedDateTime endTime = time.plusMinutes(duration.getDuration());
 
 
 
@@ -258,12 +258,16 @@ public class AppointmentEditController extends AppointmentController {
             return;
         }
 
-
-
-
-
-
-
+        Customer selectedCustomer = customerComboBox
+                .getSelectionModel()
+                .getSelectedItem();
+        User selectedUser = userComboBox
+                .getSelectionModel()
+                .getSelectedItem();
+        Contact selectedContact = contactComboBox
+                .getSelectionModel()
+                .getSelectedItem();
+        ZonedDateTime endTime = time.plusMinutes(duration.getDuration());
 
         DataStorage ds = DataStorage.getInstance();
         Appointment selectedAppointment = ds.getCurrentAppointment();

@@ -129,7 +129,7 @@ public class AppointmentController extends Internationalizable {
         });
 
         final StringConverter<LocalDate> defaultConverter = datePicker.getConverter();
-        datePicker.setConverter(new StringConverter<LocalDate>() {
+        datePicker.setConverter(new StringConverter<>() {
 
             @Override
             public String toString(LocalDate localDate) {
