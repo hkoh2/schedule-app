@@ -201,6 +201,70 @@ public class AppointmentEditController extends AppointmentController {
                 .getSelectedItem();
         ZonedDateTime endTime = time.plusMinutes(duration.getDuration());
 
+
+
+        boolean titleIsValid = fieldIsValid(
+                title,
+                titleError,
+                "title_empty"
+        );
+        boolean descriptionIsValid = fieldIsValid(
+                description,
+                descriptionError,
+                "description_empty"
+        );
+        boolean locationIsValid = fieldIsValid(
+                location,
+                locationError,
+                "location_empty"
+        );
+        boolean typeIsValid = fieldIsValid(
+                type,
+                typeError,
+                "type_empty"
+        );
+
+        //if (date == null || date.toString().isEmpty()) {
+        //    startDateError.setText(msg.getString("start_date_empty"));
+        //    inputError = true;
+        //}
+        boolean dateIsValid = fieldIsValid(
+                date,
+                startDateError,
+                "start_date_empty"
+        );
+
+        boolean timeIsValid = timeFieldIsValid(
+                time,
+                startTimeError,
+                "time_error"
+        );
+
+        boolean durationIsValid = comboBoxIsValid(
+                duration,
+                endTimeError,
+                "duration_error"
+        );
+
+
+        if (!titleIsValid ||
+                !descriptionIsValid ||
+                !locationIsValid ||
+                !typeIsValid ||
+                !timeIsValid ||
+                !durationIsValid ||
+                !dateIsValid) {
+            System.out.println("Field error");
+            return;
+        }
+
+
+
+
+
+
+
+
         DataStorage ds = DataStorage.getInstance();
         Appointment selectedAppointment = ds.getCurrentAppointment();
         int id = selectedAppointment.getAppointmentId();

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.ComboBox?>
@@ -51,22 +52,43 @@
             <Label fx:id="userLabel" text="User" GridPane.rowIndex="11" />
             <Label fx:id="locationLabel" text="Location" GridPane.rowIndex="5" />
             <TextField fx:id="locationField" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <ComboBox fx:id="customerComboBox" prefHeight="26.0" prefWidth="330.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <ComboBox fx:id="userComboBox" prefHeight="26.0" prefWidth="331.0" GridPane.columnIndex="1" GridPane.rowIndex="11" />
+            <ComboBox fx:id="customerComboBox" prefHeight="26.0" prefWidth="330.0" promptText="Select Customer" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <ComboBox fx:id="userComboBox" prefHeight="26.0" prefWidth="331.0" promptText="Select User" GridPane.columnIndex="1" GridPane.rowIndex="11" />
             <Label fx:id="contactLabel" text="Contact" GridPane.rowIndex="12" />
-            <ComboBox fx:id="contactComboBox" prefHeight="26.0" prefWidth="332.0" GridPane.columnIndex="1" GridPane.rowIndex="12" />
-            <Label fx:id="titleError" text="label" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-            <Label fx:id="descriptionError" text="label" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-            <Label fx:id="locationError" text="label" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="5" />
-            <Label fx:id="typeError" text="label" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="6" />
-            <Label fx:id="startTimeError" text="label" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="8" />
-            <Label fx:id="endTimeError" prefHeight="18.0" prefWidth="26.0" text="label" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="9" />
-            <Label fx:id="startDateError" prefHeight="18.0" prefWidth="58.0" text="label" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="7" />
+            <ComboBox fx:id="contactComboBox" prefHeight="26.0" prefWidth="332.0" promptText="Select Contact" GridPane.columnIndex="1" GridPane.rowIndex="12" />
+            <Label fx:id="titleError" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="3">
+               <GridPane.margin>
+                  <Insets left="5.0" />
+               </GridPane.margin></Label>
+            <Label fx:id="descriptionError" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="4">
+               <GridPane.margin>
+                  <Insets left="5.0" />
+               </GridPane.margin></Label>
+            <Label fx:id="locationError" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="5">
+               <GridPane.margin>
+                  <Insets left="5.0" />
+               </GridPane.margin></Label>
+            <Label fx:id="typeError" prefHeight="18.0" prefWidth="179.0" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="6">
+               <GridPane.margin>
+                  <Insets left="5.0" />
+               </GridPane.margin></Label>
+            <Label fx:id="startTimeError" prefHeight="18.0" prefWidth="203.0" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="8">
+               <GridPane.margin>
+                  <Insets left="5.0" />
+               </GridPane.margin></Label>
+            <Label fx:id="endTimeError" prefHeight="18.0" prefWidth="206.0" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="9">
+               <GridPane.margin>
+                  <Insets left="5.0" />
+               </GridPane.margin></Label>
+            <Label fx:id="startDateError" prefHeight="18.0" prefWidth="181.0" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="7">
+               <GridPane.margin>
+                  <Insets left="5.0" />
+               </GridPane.margin></Label>
             <Label fx:id="timeLabel" text="Time" GridPane.rowIndex="8" />
             <Label fx:id="durationLabel" text="Duration" GridPane.rowIndex="9" />
-            <Label fx:id="startEndTimeLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="10" />
-            <ComboBox fx:id="durationComboBox" prefHeight="26.0" prefWidth="336.0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
-            <ComboBox fx:id="timeComboBox" prefHeight="26.0" prefWidth="335.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+            <Label fx:id="startEndTimeLabel" text="Label" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+            <ComboBox fx:id="durationComboBox" prefHeight="26.0" prefWidth="336.0" promptText="Select Duration" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+            <ComboBox fx:id="timeComboBox" prefHeight="26.0" prefWidth="335.0" promptText="Select Time" GridPane.columnIndex="1" GridPane.rowIndex="8" />
          </children>
       </GridPane>
       <ButtonBar layoutX="581.0" layoutY="681.0" prefHeight="40.0" prefWidth="200.0">

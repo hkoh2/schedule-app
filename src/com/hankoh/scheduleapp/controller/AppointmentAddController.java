@@ -165,36 +165,61 @@ public class AppointmentAddController extends AppointmentController {
 
         // validate title
         boolean inputError = false;
-        if (title.isEmpty()) {
-            titleError.setText(msg.getString("title_empty"));
-            inputError = true;
-        }
+        boolean titleIsValid = fieldIsValid(
+                title,
+                titleError,
+                "title_empty"
+        );
+        boolean descriptionIsValid = fieldIsValid(
+                description,
+                descriptionError,
+                "description_empty"
+        );
+        boolean locationIsValid = fieldIsValid(
+                location,
+                locationError,
+                "location_empty"
+        );
+        boolean typeIsValid = fieldIsValid(
+                type,
+                typeError,
+                "type_empty"
+        );
 
-        if (description.isEmpty()) {
-            descriptionError.setText(msg.getString("description_empty"));
-            inputError = true;
-        }
+        //if (date == null || date.toString().isEmpty()) {
+        //    startDateError.setText(msg.getString("start_date_empty"));
+        //    inputError = true;
+        //}
+        boolean dateIsValid = fieldIsValid(
+                date,
+                startDateError,
+                "start_date_empty"
+        );
 
-        if (location.isEmpty()) {
-            locationError.setText(msg.getString("location_empty"));
-            inputError = true;
-        }
+        boolean timeIsValid = timeFieldIsValid(
+                time,
+                startTimeError,
+                "time_error"
+        );
 
-        if (type.isEmpty()) {
-            typeError.setText(msg.getString("type_empty"));
-            inputError = true;
-        }
+        boolean durationIsValid = comboBoxIsValid(
+                duration,
+                endTimeError,
+                "duration_error"
+        );
 
-        if (date == null || date.toString().isEmpty()) {
-            startDateError.setText(msg.getString("start_date_empty"));
-            inputError = true;
-        }
 
-        if (inputError) {
+        if (!titleIsValid ||
+                !descriptionIsValid ||
+                !locationIsValid ||
+                !typeIsValid ||
+                !timeIsValid ||
+                !durationIsValid ||
+                !dateIsValid) {
+            System.out.println("Field error");
             return;
-        } else {
-            clearAllError();
         }
+
 
         Customer selectedCustomer = customerComboBox
                 .getSelectionModel()

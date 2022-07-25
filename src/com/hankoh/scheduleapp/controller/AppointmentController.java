@@ -17,6 +17,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import javafx.util.StringConverter;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -79,6 +80,7 @@ public class AppointmentController extends Internationalizable {
     protected ObservableList<AppointmentDuration> allDuration = FXCollections.observableArrayList();
     protected final ZoneId businessZoneId = ZoneId.of("US/Eastern");
     protected final int MAX_DURATION = 60;
+    private boolean dateError = false;
 
     public void initialize() {
         appointmentTitleLabel.setText(msg.getString("appointment.main_title"));
@@ -88,8 +90,6 @@ public class AppointmentController extends Internationalizable {
         descriptionLabel.setText(msg.getString("appointment.description"));
         locationLabel.setText(msg.getString("appointment.location"));
         typeLabel.setText(msg.getString("appointment.type"));
-        //startTimeLabel.setText(msg.getString("appointment.start_time"));
-        //endTimeLabel.setText(msg.getString("appointment.end_time"));
         userLabel.setText(msg.getString("appointment.user"));
 
         exitButton.setText(msg.getString("exit_button"));
@@ -121,6 +121,35 @@ public class AppointmentController extends Internationalizable {
         contactComboBox.setItems(contacts);
 
         datePicker.setDayCellFactory(disableWeekends());
+        datePicker.valueProperty().addListener((ov, oldVal, newVal) -> {
+            System.out.println("new Val: " + newVal);
+            if (newVal == null) {
+                System.out.println("NULL!!!!!!");
+            }
+        });
+
+        final StringConverter<LocalDate> defaultConverter = datePicker.getConverter();
+        datePicker.setConverter(new StringConverter<LocalDate>() {
+
+            @Override
+            public String toString(LocalDate localDate) {
+                return defaultConverter.toString(localDate);
+            }
+
+            @Override
+            public LocalDate fromString(String s) {
+                try {
+                    startDateError.setText("");
+                    dateError = false;
+                    return defaultConverter.fromString(s);
+                } catch (DateTimeException ex) {
+                    dateError = true;
+                    startDateError.setText(msg.getString("start_date_error"));
+                    ex.printStackTrace();
+                    throw ex;
+                }
+            }
+        });
     }
 
      protected ObservableList<ZonedDateTime> getAvailTimes(LocalDate date) {
@@ -174,6 +203,47 @@ public class AppointmentController extends Internationalizable {
             stage.show();
         }
     }
+
+    protected boolean fieldIsValid(String title, Label label, String message) {
+        if (title == null || title.isBlank()) {
+            label.setText(msg.getString(message));
+            return false;
+        }
+        label.setText("");
+        return true;
+    }
+
+    protected boolean fieldIsValid(LocalDate date, Label label, String message) {
+        if (dateError) {
+            return false;
+        }
+        if (date == null || date.toString().isEmpty()) {
+            startDateError.setText(msg.getString("start_date_empty"));
+            return false;
+        }
+        label.setText("");
+        return true;
+    }
+
+    protected boolean timeFieldIsValid(ZonedDateTime time, Label label, String message) {
+        if (time == null) {
+            label.setText(msg.getString(message));
+            return false;
+        }
+        label.setText("");
+        return true;
+    }
+    protected boolean comboBoxIsValid(AppointmentDuration duration, Label label, String message) {
+        if (duration == null) {
+            label.setText(msg.getString(message));
+            return false;
+        }
+        label.setText("");
+        return true;
+    }
+
+
+
 
     public void clearDatePicker() {
         datePicker.setValue(null);
