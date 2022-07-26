@@ -130,6 +130,14 @@ public class MainController {
         appointmentCustomerColumn.setText(msg.getString("appointment.column.customer"));
         appointmentUserColumn.setText(msg.getString("appointment.column.user"));
 
+        customerIdColumn.setText(msg.getString("customer.column.id"));
+        customerNameColumn.setText(msg.getString("customer.column.name"));
+        customerAddressColumn.setText(msg.getString("customer.column.address"));
+        customerCountryColumn.setText(msg.getString("customer.column.country"));
+        customerPostalColumn.setText(msg.getString("customer.column.postal"));
+        customerPhoneColumn.setText(msg.getString("customer.column.phone"));
+
+
         getAllAppointments();
 
         appointmentIdColumn.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
@@ -239,6 +247,16 @@ public class MainController {
     }
 
     private void initializeCustomerReport() throws SQLException {
+
+        contactsReportTab.setText(msg.getString("report.by_contacts"));
+        typeMonthReportTab.setText(msg.getString("report.by_type_month"));
+        customersReportTab.setText(msg.getString("report.by_customer"));
+
+        byCustomerId.setText(msg.getString("report.id"));
+        byCustomerName.setText(msg.getString("report.name"));
+        byCustomerTotal.setText(msg.getString("report.total"));
+        byTotalTime.setText(msg.getString("report.total_time"));
+        byAverageTime.setText(msg.getString("report.average_time"));
 
         byCustomerId.setCellValueFactory(new PropertyValueFactory<>("id"));
         byCustomerName.setCellValueFactory(new PropertyValueFactory<>("name"));
