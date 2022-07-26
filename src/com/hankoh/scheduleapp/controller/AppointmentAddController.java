@@ -77,6 +77,8 @@ public class AppointmentAddController extends AppointmentController {
     public void initialize() {
         super.initialize();
 
+        idField.setText(msg.getString("appointment.id_auto"));
+
         customerComboBox.getSelectionModel().selectFirst();
         userComboBox.getSelectionModel().selectFirst();
         contactComboBox.getSelectionModel().selectFirst();
