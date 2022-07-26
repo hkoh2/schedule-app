@@ -209,6 +209,7 @@ public class MainController {
                     YearWeek selectedWeek = weekFilterComboBox.getSelectionModel().getSelectedItem();
                     List<Appointment> filteredApt = appointmentsByWeek.get(selectedWeek);
                     if (appointmentsByWeek.get(selectedWeek) == null) {
+                        appointments = FXCollections.observableArrayList();
                         return;
                     }
                     if (selectedWeek != null && filteredApt != null) {
@@ -238,11 +239,6 @@ public class MainController {
     }
 
     private void initializeCustomerReport() throws SQLException {
-        //byCustomerId.setText(msg.getString("report.customer.id"));
-        //byCustomerName.setText(msg.getString("report.customer.name"));
-        //byCustomerTotal.setText(msg.getString("report.customer.total"));
-        //byTotalTime.setText(msg.getString("report.customer.total_time"));
-        //byAverageTime.setText(msg.getString("report.customer.avaerage_time"));
 
         byCustomerId.setCellValueFactory(new PropertyValueFactory<>("id"));
         byCustomerName.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -377,21 +373,17 @@ public class MainController {
     }
 
     private void filterAppointments(String newVal) throws SQLException {
-        System.out.println("Changing appointment filter: " + newVal);
         String all = msg.getString("appointment.all");
         String month = msg.getString("appointment.month");
         String week = msg.getString("appointment.week");
 
         monthFilterComboBox.getItems().clear();
         weekFilterComboBox.getItems().clear();
-        //AppointmentDao appointmentDao = new AppointmentDao();
-        //appointments = appointmentDao.getAllAppointments();
         getAllAppointments();
 
         if (newVal.equals(all)) {
             monthFilterComboBox.setVisible(false);
             weekFilterComboBox.setVisible(false);
-            // TODO show all appointments.
             appointmentsTable.setItems(appointments);
             return;
         }
@@ -409,9 +401,7 @@ public class MainController {
         if (newVal.equals(week)) {
             monthFilterComboBox.setVisible(false);
             weekFilterComboBox.setVisible(true);
-            // TODO show weeks
             appointmentsByWeek = groupingByWeek();
-            //appointmentsByWeek.keySet().stream().sorted(Comparator.reverseOrder()).forEach(
             appointmentsByWeek.keySet().stream().sorted().forEach(
                     key -> weekFilterComboBox.getItems().add(key)
             );
@@ -451,11 +441,6 @@ public class MainController {
     public YearMonth getYearMonth(Appointment apt) {
         LocalDate start = apt.getStartTime().toLocalDate();
         return YearMonth.from(start);
-    }
-
-
-    public Month getDate(Appointment appointment) {
-        return appointment.getStartTime().toLocalDate().getMonth();
     }
 
     private TableCell<Appointment, ZonedDateTime> formatStart(TableColumn<Appointment, ZonedDateTime> zdt) {
@@ -517,16 +502,35 @@ public class MainController {
     public void onDeleteAppointmentButtonClick(ActionEvent actionEvent) throws SQLException {
         Appointment selected = appointmentsTable.getSelectionModel().getSelectedItem();
 
-        AppointmentDao appointmentDao = new AppointmentDao();
-        if (appointmentDao.removeAppointment(selected.getAppointmentId())) {
-            appointments.remove(selected);
-            appointments = appointmentDao.getAllAppointments();
-            appointmentsByMonth = groupingByMonth();
-            appointmentsByWeek = groupingByWeek();
-        } else {
-            System.out.println("Failed to remove Appointment");
-        }
 
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle(msg.getString("appointment.delete.title"));
+        alert.setHeaderText(msg.getString("appointment.delete.header"));
+        alert.setContentText(msg.getString("appointment.delete.context") + ", " + selected.getTitle() + "?");
+        Optional<ButtonType> choice = alert.showAndWait();
+        if (choice.isPresent() && choice.get() == ButtonType.OK) {
+            AppointmentDao appointmentDao = new AppointmentDao();
+            if (appointmentDao.removeAppointment(selected.getAppointmentId())) {
+                appointments = appointmentDao.getAllAppointments();
+                appointmentsTable.setItems(appointments);
+                appointmentsByMonth = groupingByMonth();
+                appointmentsByWeek = groupingByWeek();
+                monthFilterComboBox.getItems().clear();
+                weekFilterComboBox.getItems().clear();
+                appointmentsByWeek.keySet().stream().sorted().forEach(
+                        key -> weekFilterComboBox.getItems().add(key)
+                );
+                appointmentsByMonth.keySet().stream().sorted(Comparator.reverseOrder()).forEach(
+                        key -> monthFilterComboBox.getItems().add(key)
+                );
+                return;
+            }
+            Alert errorAlert = new Alert(Alert.AlertType.WARNING);
+            errorAlert.setTitle(msg.getString("appointment.error.title"));
+            errorAlert.setHeaderText(msg.getString("appointment.error.header"));
+            errorAlert.setContentText(msg.getString("appointment.error.context"));
+            errorAlert.showAndWait();
+        }
     }
 
     public void onNewCustomerButtonClick(ActionEvent actionEvent) throws IOException {
@@ -539,6 +543,11 @@ public class MainController {
     }
 
     public void onEditCustomerButtonClick(ActionEvent actionEvent) throws IOException {
+        Customer selectedCustomer = customersTable.getSelectionModel().getSelectedItem();
+        if (selectedCustomer == null) {
+            return;
+        }
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/hankoh/scheduleapp/view/customer-edit.fxml"));
         Parent root = loader.load();
         Stage stage = (Stage)((Node) actionEvent.getSource()).getScene().getWindow();
@@ -549,6 +558,9 @@ public class MainController {
 
     public void onDeleteCustomerButtonClick(ActionEvent actionEvent) throws SQLException, IOException {
         Customer selectedCustomer = customersTable.getSelectionModel().getSelectedItem();
+        if (selectedCustomer == null) {
+            return;
+        }
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle(msg.getString("customer.delete.title"));
@@ -558,19 +570,15 @@ public class MainController {
         if (choice.isPresent() && choice.get() == ButtonType.OK) {
             CustomerDao customerDao = new CustomerDao();
             if (customerDao.deleteCustomerById(selectedCustomer.getCustomerId())) {
-                System.out.println("Customer deleted");
-                customers.remove(selectedCustomer);
+                customersTable.setItems(customerDao.getAllCustomers());
                 return;
             }
-            System.out.println("Error");
             Alert errorAlert = new Alert(Alert.AlertType.WARNING);
             errorAlert.setTitle(msg.getString("customer.error.title"));
             errorAlert.setHeaderText(msg.getString("customer.error.header"));
             errorAlert.setContentText(msg.getString("customer.error.context"));
             errorAlert.showAndWait();
         }
-
-
     }
 
     public void onLogoutButtonClick(ActionEvent actionEvent) throws IOException {
@@ -611,5 +619,4 @@ public class MainController {
         ds.setCurrentTabIndex(index);
         System.out.println(tab.getText());
     }
-
 }
