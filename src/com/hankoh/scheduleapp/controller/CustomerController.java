@@ -92,6 +92,15 @@ public class CustomerController extends Internationalizable {
 
     }
 
+    protected boolean fieldIsValid(String val, Label label, String message) {
+        if (val == null || val.isBlank()) {
+            label.setText(msg.getString(message));
+            return false;
+        }
+        label.setText("");
+        return true;
+    }
+
     public void onCancelButtonClick(ActionEvent actionEvent) throws IOException {
     }
 

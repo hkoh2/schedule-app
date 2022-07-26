@@ -249,16 +249,4 @@ public class AppointmentAddController extends AppointmentController {
         appointmentDao.addAppointment(appointment);
         returnToMain(actionEvent);
     }
-
-    private boolean isEmpty(String input) {
-        return input == "";
-    }
-
-    private void clearAllError() {
-        titleError.setText("");
-        descriptionError.setText("");
-        locationError.setText("");
-        typeError.setText("");
-    }
-
 }

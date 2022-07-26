@@ -40,22 +40,22 @@
             <TextField fx:id="postalField" GridPane.columnIndex="1" GridPane.rowIndex="5" />
             <TextField fx:id="phoneField" GridPane.columnIndex="1" GridPane.rowIndex="6" />
             <ComboBox fx:id="divisionComboBox" prefHeight="26.0" prefWidth="292.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <Label fx:id="nameErrorLabel" text="Label" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="1">
+            <Label fx:id="nameErrorLabel" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="1">
                <GridPane.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </GridPane.margin>
             </Label>
-            <Label fx:id="addressErrorLabel" text="Label" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="2">
+            <Label fx:id="addressErrorLabel" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="2">
                <GridPane.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </GridPane.margin>
             </Label>
-            <Label fx:id="postalErrorLabel" text="Label" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="5">
+            <Label fx:id="postalErrorLabel" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="5">
                <GridPane.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </GridPane.margin>
             </Label>
-            <Label fx:id="phoneErrorLabel" text="Label" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="6">
+            <Label fx:id="phoneErrorLabel" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="6">
                <GridPane.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </GridPane.margin>

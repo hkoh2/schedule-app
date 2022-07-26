@@ -6,6 +6,7 @@ import com.hankoh.scheduleapp.model.Customer;
 import com.hankoh.scheduleapp.model.DataStorage;
 import com.hankoh.scheduleapp.model.Division;
 import javafx.event.ActionEvent;
+import javafx.scene.control.Alert;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -59,6 +60,38 @@ public class CustomerEditController extends CustomerController {
         String postal = postalField.getText();
         String phone = phoneField.getText();
 
+
+        boolean nameIsValid = fieldIsValid(
+                name,
+                nameErrorLabel,
+                "name_error"
+        );
+
+        boolean addressIsValid = fieldIsValid(
+                address,
+                addressErrorLabel,
+                "address_error"
+        );
+
+        boolean postalIsValid = fieldIsValid(
+                postal,
+                postalErrorLabel,
+                "postal_error"
+        );
+
+        boolean phoneIsValid = fieldIsValid(
+                phone,
+                phoneErrorLabel,
+                "phone_error"
+        );
+
+        if (!nameIsValid ||
+                !addressIsValid ||
+                !postalIsValid ||
+                !phoneIsValid) {
+            return;
+        }
+
         Customer customer = new Customer(
                 id,
                 name,
@@ -69,10 +102,21 @@ public class CustomerEditController extends CustomerController {
         );
 
         CustomerDao customerDao = new CustomerDao();
+        boolean customerEdited = false;
         try {
-            customerDao.editCustomer(customer);
+            customerEdited = customerDao.editCustomer(customer);
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+        if (customerEdited) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle(msg.getString("customer.updated.title"));
+            alert.setHeaderText(msg.getString("customer.updated.header"));
+            //alert.set
+            alert.showAndWait();
+            moveToMain(actionEvent);
+        } else {
+            System.out.println("Customer update error");
         }
     }
 }

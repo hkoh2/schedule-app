@@ -77,6 +77,38 @@ public class CustomerAddController extends CustomerController {
                 .getSelectedItem()
                 .getDivisionId();
 
+
+        boolean nameIsValid = fieldIsValid(
+                name,
+                nameErrorLabel,
+                "name_error"
+        );
+
+        boolean addressIsValid = fieldIsValid(
+                address,
+                addressErrorLabel,
+                "address_error"
+        );
+
+        boolean postalIsValid = fieldIsValid(
+                postal,
+                postalErrorLabel,
+                "postal_error"
+        );
+
+        boolean phoneIsValid = fieldIsValid(
+                phone,
+                phoneErrorLabel,
+                "phone_error"
+        );
+
+        if (!nameIsValid ||
+                !addressIsValid ||
+                !postalIsValid ||
+                !phoneIsValid) {
+            return;
+        }
+
         Customer customer = new Customer(
                 name,
                 address,
@@ -94,8 +126,8 @@ public class CustomerAddController extends CustomerController {
             e.printStackTrace();
         }
         if (customerAdded) {
-            moveToMain(actionEvent);
 
+            moveToMain(actionEvent);
         } else {
             System.out.println("DB Error");
         }
