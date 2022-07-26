@@ -97,6 +97,8 @@ public class MainController {
                 Locale.getDefault()
         );
 
+        mainTitleLabel.setText(msg.getString("title"));
+
         DataStorage ds = DataStorage.getInstance();
         mainTabPane.getSelectionModel().select(ds.getCurrentTabIndex());
 
