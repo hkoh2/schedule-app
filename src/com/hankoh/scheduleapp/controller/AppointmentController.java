@@ -126,12 +126,12 @@ public class AppointmentController extends Internationalizable {
         contactComboBox.setItems(contacts);
 
         datePicker.setDayCellFactory(disableWeekends());
-        datePicker.valueProperty().addListener((ov, oldVal, newVal) -> {
-            System.out.println("new Val: " + newVal);
-            if (newVal == null) {
-                System.out.println("NULL!!!!!!");
-            }
-        });
+        //datePicker.valueProperty().addListener((ov, oldVal, newVal) -> {
+        //    System.out.println("new Val: " + newVal);
+        //    if (newVal == null) {
+        //        System.out.println("NULL!!!!!!");
+        //    }
+        //});
 
         final StringConverter<LocalDate> defaultConverter = datePicker.getConverter();
         datePicker.setConverter(new StringConverter<>() {
@@ -155,6 +155,27 @@ public class AppointmentController extends Internationalizable {
                 }
             }
         });
+
+        timeComboBox.setCellFactory(time -> timeFormat());
+
+
+    }
+
+    private ListCell<ZonedDateTime> timeFormat() {
+        return new ListCell<>() {
+            @Override
+            protected void updateItem(ZonedDateTime time, boolean b) {
+                super.updateItem(time, b);
+                if (b || time == null) {
+                    setText(null);
+                } else {
+                    setText(time.toLocalTime().toString());
+                }
+
+            }
+        };
+
+
     }
 
      protected ObservableList<ZonedDateTime> getAvailTimes(LocalDate date) {

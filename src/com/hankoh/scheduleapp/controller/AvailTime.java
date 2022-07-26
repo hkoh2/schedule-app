@@ -15,7 +15,6 @@ public class AvailTime {
         this.end = end;
     }
 
-
     public ObservableList<AppointmentDuration> getDurations() {
         return durations;
     }

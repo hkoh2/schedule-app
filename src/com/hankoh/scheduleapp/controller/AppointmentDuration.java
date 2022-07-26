@@ -1,6 +1,6 @@
 package com.hankoh.scheduleapp.controller;
 
-public class AppointmentDuration {
+public class AppointmentDuration extends Internationalizable {
     private int duration;
 
     public AppointmentDuration(int duration) {
@@ -9,7 +9,7 @@ public class AppointmentDuration {
 
     @Override
     public String toString() {
-        return duration + " minutes";
+        return duration + " " + msg.getString("minutes");
     }
 
     public int getDuration() {
