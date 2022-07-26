@@ -87,8 +87,8 @@
             <Label fx:id="timeLabel" text="Time" GridPane.rowIndex="8" />
             <Label fx:id="durationLabel" text="Duration" GridPane.rowIndex="9" />
             <Label fx:id="startEndTimeLabel" text="Label" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="10" />
-            <ComboBox fx:id="durationComboBox" prefHeight="26.0" prefWidth="336.0" promptText="Select Duration" GridPane.columnIndex="1" GridPane.rowIndex="9" />
-            <ComboBox fx:id="timeComboBox" prefHeight="26.0" prefWidth="335.0" promptText="Select Time" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+            <ComboBox fx:id="durationComboBox" prefHeight="26.0" prefWidth="336.0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+            <ComboBox fx:id="timeComboBox" prefHeight="26.0" prefWidth="335.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
          </children>
       </GridPane>
       <ButtonBar layoutX="581.0" layoutY="681.0" prefHeight="40.0" prefWidth="200.0">

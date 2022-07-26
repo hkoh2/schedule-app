@@ -92,7 +92,9 @@ public class AppointmentController extends Internationalizable {
         typeLabel.setText(msg.getString("appointment.type"));
         userLabel.setText(msg.getString("appointment.user"));
         timeLabel.setText(msg.getString("appointment.start_time"));
+        timeComboBox.setPromptText(msg.getString("appointment.prompt_time"));
         durationLabel.setText(msg.getString("appointment.duration"));
+        durationComboBox.setPromptText(msg.getString("appointment.prompt_duration"));
         contactLabel.setText(msg.getString("appointment.contact"));
 
         exitButton.setText(msg.getString("exit_button"));
