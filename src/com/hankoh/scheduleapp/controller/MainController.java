@@ -302,6 +302,7 @@ public class MainController {
                 .map(Appointment::getType)
                 .collect(Collectors.toCollection(HashSet::new)));
         ObservableList<String> allTypes = FXCollections.observableArrayList(allTypesSet);
+        typeComboBox.setPromptText(msg.getString("report.type_month.combo"));
         typeComboBox.setItems(allTypes);
 
         typeComboBox.valueProperty().addListener((ov, oldVal, newVal) -> getTypeMonthTotal(newVal));
@@ -347,6 +348,7 @@ public class MainController {
         sortedList.comparatorProperty().bind(contactsReportTableView.comparatorProperty());
 
         contactsReportTableView.setItems(sortedList);
+        contactsComboBox.setPromptText(msg.getString("report.contacts.select"));
         contactsComboBox.valueProperty().addListener((ov, oldVal, newVal) -> {
             if (newVal == null) {
                 filteredList.setPredicate(s -> true);
