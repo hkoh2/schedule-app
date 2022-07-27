@@ -24,24 +24,57 @@ import java.util.ResourceBundle;
 
 /**
  * Login controller. Validates user credentials for login.
- *
+ * <p>
  * Display language is set based on display language and local.
- *
+ * <p>
  * Lambda - Instead of attaching an event handler to the button, a lambda
  * function was used to terminate the application.
  */
 public class LoginController {
+    /**
+     * The Title text.
+     */
     public Text titleText;
+    /**
+     * The Exit button.
+     */
     public Button exitButton;
+    /**
+     * The Login button.
+     */
     public Button loginButton;
+    /**
+     * The Login error text.
+     */
     public Text loginErrorText;
+    /**
+     * The Password label.
+     */
     public Label passwordLabel;
+    /**
+     * The Username label.
+     */
     public Label usernameLabel;
+    /**
+     * The Language combo.
+     */
     public ComboBox<String> languageCombo;
+    /**
+     * The Dev login button.
+     */
     public Button devLoginButton;
+    /**
+     * The Password.
+     */
     public TextField password;
+    /**
+     * The Username.
+     */
     public TextField username;
 
+    /**
+     * Initialize.
+     */
     public void initialize() {
 
         // Resource Bundle for i18n
@@ -60,6 +93,13 @@ public class LoginController {
         exitButton.setOnAction(event -> Platform.exit());
     }
 
+    /**
+     * On login button click.
+     *
+     * @param actionEvent the action event
+     * @throws SQLException the sql exception
+     * @throws IOException  the io exception
+     */
     public void onLoginButtonClick(ActionEvent actionEvent) throws SQLException, IOException {
         UserDao userDao = new UserDao();
 
@@ -75,6 +115,12 @@ public class LoginController {
         }
     }
 
+    /**
+     * Logs user in to main screen.
+     *
+     * @param actionEvent
+     * @throws IOException
+     */
     private void loginUser(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/hankoh/scheduleapp/view/main.fxml")));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
@@ -83,6 +129,11 @@ public class LoginController {
         stage.show();
     }
 
+    /**
+     * On language select.
+     *
+     * @param actionEvent the action event
+     */
     public void onLanguageSelect(ActionEvent actionEvent) {
         String langVal = languageCombo.getValue();
         switch (langVal) {
@@ -93,6 +144,12 @@ public class LoginController {
         }
     }
 
+    /**
+     * On dev login click.
+     *
+     * @param actionEvent the action event
+     * @throws IOException the io exception
+     */
     public void onDevLoginClick(ActionEvent actionEvent) throws IOException {
         DataStorage.getInstance().setUser(new User(9999, "dev"));
         loginUser(actionEvent);

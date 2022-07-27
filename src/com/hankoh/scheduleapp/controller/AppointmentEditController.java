@@ -15,7 +15,13 @@ import java.time.ZonedDateTime;
 import java.util.Comparator;
 import java.util.stream.Collectors;
 
+/**
+ * Controller for updating existing appointments.
+ */
 public class AppointmentEditController extends AppointmentController {
+    /**
+     * Instantiates a new Appointment edit controller.
+     */
     public AppointmentEditController() {
         super();
     }
@@ -78,6 +84,9 @@ public class AppointmentEditController extends AppointmentController {
                 .addListener((ov, oldVal, newVal) -> setAllDuration());
     }
 
+    /**
+     * Sets available duration for picked time.
+     */
     private void setAllDuration() {
         allDuration.removeAll();
         allDuration.clear();
@@ -90,6 +99,11 @@ public class AppointmentEditController extends AppointmentController {
         }
     }
 
+    /**
+     * Returns maximum duration a selected time.
+     *
+     * @return Max duration for selected time
+     */
     private int getMaxDuration() {
         ZonedDateTime selectedTime = timeComboBox.getSelectionModel().getSelectedItem();
         if (selectedTime == null) {
@@ -122,6 +136,12 @@ public class AppointmentEditController extends AppointmentController {
         return !startTime.isBefore(time);
     }
 
+    /**
+     * Filters available time.
+     *
+     * @param date the date
+     * @param id   the id
+     */
     public void filterAvailableTime(LocalDate date, int id) {
         timeComboBox.setValue(null);
         timeComboBox.setItems(null);
@@ -152,6 +172,12 @@ public class AppointmentEditController extends AppointmentController {
         timeComboBox.setItems(filteredAvailableTimes);
     }
 
+    /**
+     * Checks for overlapping appointments
+     *
+     * @param time
+     * @return
+     */
     private boolean getValidTimes(ZonedDateTime time) {
         if (appointments.isEmpty()) {
             return true;
@@ -166,6 +192,14 @@ public class AppointmentEditController extends AppointmentController {
                 });
         return !isNotValidTime;
     }
+
+    /**
+     * Saves updated appointments.
+     *
+     * @param actionEvent the action event
+     * @throws SQLException the sql exception
+     * @throws IOException  the io exception
+     */
     public void onSaveButtonClick(ActionEvent actionEvent) throws SQLException, IOException {
         String title = titleField.getText();
         String description = descriptionArea.getText();

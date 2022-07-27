@@ -13,6 +13,9 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Optional;
 
+/**
+ * Controller for updating customer details.
+ */
 public class CustomerEditController extends CustomerController {
     @Override
     public void initialize() {
@@ -40,6 +43,12 @@ public class CustomerEditController extends CustomerController {
         divisionComboBox.getSelectionModel().select(division);
     }
 
+    /**
+     * Cancel button handler. Cancels update and returns to main screen.
+     *
+     * @param actionEvent the action event
+     * @throws IOException
+     */
     @Override
     public void onCancelButtonClick(ActionEvent actionEvent) throws IOException {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -51,6 +60,12 @@ public class CustomerEditController extends CustomerController {
         }
     }
 
+    /**
+     * Save button handler. Saves update and returns to main screens.
+     *
+     * @param actionEvent the action event
+     * @throws IOException
+     */
     @Override
     public void onSaveButtonClick(ActionEvent actionEvent) throws IOException {
 

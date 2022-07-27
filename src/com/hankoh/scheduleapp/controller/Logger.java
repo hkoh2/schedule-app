@@ -6,10 +6,17 @@ import java.io.IOException;
 import java.time.LocalTime;
 
 /**
- * User login attempts.
+ * Logging user logins. Saves login attempts to file.
  */
 public class Logger {
     private static final String logFile = "login_activity.txt";
+
+    /**
+     * Logs login attempts.
+     *
+     * @param username   username attempting to login.
+     * @param isLoggedIn validation for login.
+     */
     public static void loginAttempted(String username, boolean isLoggedIn) {
         try {
             File file = new File(logFile);

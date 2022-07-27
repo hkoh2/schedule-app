@@ -28,70 +28,268 @@ import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.*;
 
+/**
+ * Controller for main screen.
+ */
 public class MainController {
+    /**
+     * The Appointments tab.
+     */
     public Tab appointmentsTab;
+    /**
+     * The Customers tab.
+     */
     public Tab customersTab;
+    /**
+     * The New appointment button.
+     */
     public Button newAppointmentButton;
+    /**
+     * The Edit appointment button.
+     */
     public Button editAppointmentButton;
+    /**
+     * The Delete appointment button.
+     */
     public Button deleteAppointmentButton;
+    /**
+     * The New customer button.
+     */
     public Button newCustomerButton;
+    /**
+     * The Edit customer button.
+     */
     public Button editCustomerButton;
+    /**
+     * The Delete customer button.
+     */
     public Button deleteCustomerButton;
+    /**
+     * The Logout button.
+     */
     public Button logoutButton;
+    /**
+     * The Exit button.
+     */
     public Button exitButton;
+    /**
+     * The Customers label.
+     */
     public Label customersLabel;
+    /**
+     * The Appointments label.
+     */
     public Label appointmentsLabel;
+    /**
+     * The Welcome text.
+     */
     public Text welcomeText;
+    /**
+     * The Main title label.
+     */
     public Text mainTitleLabel;
+    /**
+     * The Appointment filter combo.
+     */
     public ComboBox<String> appointmentFilterCombo;
+    /**
+     * The Appointment user column.
+     */
     public TableColumn<Appointment, String> appointmentUserColumn;
+    /**
+     * The Appointment customer column.
+     */
     public TableColumn<Appointment, String> appointmentCustomerColumn;
+    /**
+     * The Appointment end column.
+     */
     public TableColumn<Appointment, ZonedDateTime> appointmentEndColumn;
+    /**
+     * The Appointment start column.
+     */
     public TableColumn<Appointment, ZonedDateTime> appointmentStartColumn;
+    /**
+     * The Appointment type column.
+     */
     public TableColumn<Appointment, String> appointmentTypeColumn;
+    /**
+     * The Appointment location column.
+     */
     public TableColumn<Appointment, String> appointmentLocationColumn;
+    /**
+     * The Appointment description column.
+     */
     public TableColumn<Appointment, String> appointmentDescriptionColumn;
+    /**
+     * The Appointment title column.
+     */
     public TableColumn<Appointment, String> appointmentTitleColumn;
+    /**
+     * The Appointment id column.
+     */
     public TableColumn<Appointment, Integer> appointmentIdColumn;
+    /**
+     * The Appointments table.
+     */
     public TableView<Appointment> appointmentsTable;
+    /**
+     * The Customer id column.
+     */
     public TableColumn<Customer, Integer> customerIdColumn;
+    /**
+     * The Customer name column.
+     */
     public TableColumn<Customer, String> customerNameColumn;
+    /**
+     * The Customer address column.
+     */
     public TableColumn<Customer, String> customerAddressColumn;
+    /**
+     * The Customer postal column.
+     */
     public TableColumn<Customer, String> customerPostalColumn;
+    /**
+     * The Customer phone column.
+     */
     public TableColumn<Customer, String> customerPhoneColumn;
+    /**
+     * The Customers table.
+     */
     public TableView<Customer> customersTable;
+    /**
+     * The Main tab pane.
+     */
     public TabPane mainTabPane;
+    /**
+     * The Month filter combo box.
+     */
     public ComboBox<YearMonth> monthFilterComboBox;
+    /**
+     * The Week filter combo box.
+     */
     public ComboBox<YearWeek> weekFilterComboBox;
+    /**
+     * The Customer country column.
+     */
     public TableColumn<Customer, String> customerCountryColumn;
+    /**
+     * The Contacts report tab.
+     */
     public Tab contactsReportTab;
+    /**
+     * The Contacts report table view.
+     */
     public TableView<Appointment> contactsReportTableView;
+    /**
+     * The Contact report id.
+     */
     public TableColumn<Appointment, Integer> contactReportId;
+    /**
+     * The Contact report title.
+     */
     public TableColumn<Appointment, String> contactReportTitle;
+    /**
+     * The Contact report type.
+     */
     public TableColumn<Appointment, String> contactReportType;
+    /**
+     * The Contact report description.
+     */
     public TableColumn<Appointment, String> contactReportDescription;
+    /**
+     * The Contact report start.
+     */
     public TableColumn<Appointment, ZonedDateTime> contactReportStart;
+    /**
+     * The Contact report end.
+     */
     public TableColumn<Appointment, ZonedDateTime> contactReportEnd;
+    /**
+     * The Contact report customer id.
+     */
     public TableColumn<Contact, Integer> contactReportCustomerId;
+    /**
+     * The Contacts combo box.
+     */
     public ComboBox<Contact> contactsComboBox;
+    /**
+     * The Type month report tab.
+     */
     public Tab typeMonthReportTab;
+    /**
+     * The Type month table view.
+     */
     public TableView<MonthTotal> typeMonthTableView;
+    /**
+     * The Month type column.
+     */
     public TableColumn<MonthTotal, Month> monthTypeColumn;
+    /**
+     * The Month type total column.
+     */
     public TableColumn<MonthTotal, Integer> monthTypeTotalColumn;
+    /**
+     * The Customers report tab.
+     */
     public Tab customersReportTab;
+    /**
+     * The By customer table view.
+     */
     public TableView<CustomerTotal> byCustomerTableView;
+    /**
+     * The By customer id.
+     */
     public TableColumn<CustomerTotal, Integer> byCustomerId;
+    /**
+     * The By customer name.
+     */
     public TableColumn<CustomerTotal, String> byCustomerName;
+    /**
+     * The By customer total.
+     */
     public TableColumn<CustomerTotal, Integer> byCustomerTotal;
+    /**
+     * The By total time.
+     */
     public TableColumn<CustomerTotal, Integer> byTotalTime;
+    /**
+     * The By average time.
+     */
     public TableColumn<CustomerTotal, Integer> byAverageTime;
+    /**
+     * The Type combo box.
+     */
     public ComboBox<String> typeComboBox;
+    /**
+     * The Reports tab.
+     */
     public Tab reportsTab;
+    /**
+     * Language on locale.
+     */
     protected ResourceBundle msg;
+    /**
+     * Contains all appointments.
+     */
     private ObservableList<Appointment> appointments;
+    /**
+     * Contains all customers
+     */
     private ObservableList<Customer> customers = FXCollections.observableArrayList();
+    /**
+     * The Appointments by month.
+     */
     Map<YearMonth, List<Appointment>> appointmentsByMonth;
+    /**
+     * The Appointments by week.
+     */
     Map<YearWeek, List<Appointment>> appointmentsByWeek;
+
+    /**
+     * Initialize.
+     *
+     * @throws SQLException the sql exception
+     */
     public void initialize() throws SQLException {
         msg = ResourceBundle.getBundle(
                 "com.hankoh.scheduleapp.properties.MessagesBundle",
@@ -236,16 +434,31 @@ public class MainController {
 
     }
 
+    /**
+     * Gets all appointments from database.
+     *
+     * @throws SQLException
+     */
     private void getAllAppointments() throws SQLException {
         AppointmentDao appointmentDao = new AppointmentDao();
         appointments = appointmentDao.getAllAppointments();
     }
 
+    /**
+     * Gets all customers from database.
+     *
+     * @throws SQLException
+     */
     private void getAllCustomers() throws SQLException {
         CustomerDao customerDao = new CustomerDao();
         customers = customerDao.getAllCustomers();
     }
 
+    /**
+     * Initializes customer reports.
+     *
+     * @throws SQLException
+     */
     private void initializeCustomerReport() throws SQLException {
 
         contactsReportTab.setText(msg.getString("report.by_contacts"));
@@ -287,6 +500,10 @@ public class MainController {
 
     }
 
+    /**
+     * Initializes reports by type and month.
+     * @throws SQLException
+     */
     private void initializeTypeMonthReport() throws SQLException {
         monthTypeColumn.setText(msg.getString("report.month_type"));
         monthTypeTotalColumn.setText(msg.getString("report.total"));
@@ -306,6 +523,11 @@ public class MainController {
         typeComboBox.valueProperty().addListener((ov, oldVal, newVal) -> getTypeMonthTotal(newVal));
     }
 
+    /**
+     * Creates reports by type and month
+     *
+     * @param newVal
+     */
     private void getTypeMonthTotal(String newVal) {
         Map<Month, List<Appointment>> appointmentsByMonth = appointments.stream()
                 .filter(apt -> apt.getType().equals(newVal))
@@ -322,6 +544,9 @@ public class MainController {
     }
 
 
+    /**
+     * Initializes reports by contacts
+     */
     private void initializeContactReport() {
 
         contactReportId.setText(msg.getString("appointment.column.id"));
@@ -361,12 +586,23 @@ public class MainController {
         }
     }
 
+    /**
+     * Adds contacts to report for filtering by contact.
+     *
+     * @throws SQLException
+     */
     private void setContacts() throws SQLException {
         ObservableList<Contact> allContacts = getAllContacts();
         contactsComboBox.setItems(allContacts);
     }
 
 
+    /**
+     * Gets all available contacts from database.
+     *
+     * @return all available contacts
+     * @throws SQLException
+     */
     private ObservableList<Contact> getAllContacts() throws SQLException {
         ContactDao contactDao = new ContactDao();
         return contactDao.getAllContacts().stream()
@@ -374,6 +610,12 @@ public class MainController {
                 .collect(toCollection(FXCollections::observableArrayList));
     }
 
+    /**
+     * Filters appointment by all, months, and weeks.
+     *
+     * @param newVal type of filter for appointments.
+     * @throws SQLException
+     */
     private void filterAppointments(String newVal) throws SQLException {
         String all = msg.getString("appointment.all");
         String month = msg.getString("appointment.month");
@@ -410,6 +652,11 @@ public class MainController {
         }
     }
 
+    /**
+     * Separates appointments by month.
+     *
+     * @return reports by month
+     */
     private Map<YearMonth, List<Appointment>> groupingByMonth() {
         return appointments.stream()
                 .collect(groupingBy(
@@ -418,6 +665,11 @@ public class MainController {
         ));
     }
 
+    /**
+     * Separates appointments by week.
+     *
+     * @return reports by week.
+     */
     private Map<YearWeek, List<Appointment>> groupingByWeek() {
         return appointments.stream()
                 .collect(groupingBy(
@@ -426,6 +678,12 @@ public class MainController {
                 ));
     }
 
+    /**
+     * Determines the start and end date of the week for an appointment.
+     *
+     * @param apt appointment
+     * @return YearWeek class that contains start and end date of a week for a given appointment.
+     */
     public YearWeek getWeekRange(Appointment apt) {
         ZonedDateTime startTime = apt.getStartTime();
         ZonedDateTime weekStart = startTime.with(DayOfWeek.MONDAY);
@@ -435,11 +693,23 @@ public class MainController {
         return new YearWeek(start, end);
     }
 
+    /**
+     * Returns month that the appointment falls into.
+     *
+     * @param apt appointment.
+     * @return YearMonth for the appointment.
+     */
     public YearMonth getYearMonth(Appointment apt) {
         LocalDate start = apt.getStartTime().toLocalDate();
         return YearMonth.from(start);
     }
 
+    /**
+     * Custom time display for TableView
+     *
+     * @param zdt appointment time
+     * @return TableCell display
+     */
     private TableCell<Appointment, ZonedDateTime> formatStart(TableColumn<Appointment, ZonedDateTime> zdt) {
         return new TableCell<>() {
             @Override
@@ -454,16 +724,30 @@ public class MainController {
         };
     }
 
+    /**
+     * Date and time formatter for appointments
+     *
+     * @return formatted date and time
+     */
     private DateTimeFormatter dateTimeFormatter() {
         return DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
                 .withLocale(Locale.getDefault());
     }
 
+    /**
+     * Stores selected customer to data storage for sharing with other controllers.
+     *
+     * @param newVal selected customer from TableView
+     */
     private void setSelectedCustomer(Customer newVal) {
         DataStorage ds = DataStorage.getInstance();
         ds.setCurrentCustomer(newVal);
     }
 
+    /**
+     * Stores the last selected tab in the main screen. When returning to main screen, the last tab selected
+     * is saved.
+     */
     private void setSelectedTab() {
         mainTabPane
                 .getSelectionModel()
@@ -472,6 +756,12 @@ public class MainController {
     }
 
 
+    /**
+     * New appointment button. Transitions to new appointment screen.
+     *
+     * @param actionEvent the action event
+     * @throws IOException the io exception
+     */
     public void onNewAppointmentButtonClick(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/hankoh/scheduleapp/view/appointment-add2.fxml"));
         Parent root = loader.load();
@@ -481,6 +771,12 @@ public class MainController {
         stage.show();
     }
 
+    /**
+     * Edit appointment button. Transitions to edit appointment screen.
+     *
+     * @param actionEvent the action event
+     * @throws IOException the io exception
+     */
     public void onEditAppointmentButtonClick(ActionEvent actionEvent) throws IOException {
         DataStorage ds = DataStorage.getInstance();
         Appointment appointment = appointmentsTable.getSelectionModel().getSelectedItem();
@@ -496,12 +792,17 @@ public class MainController {
         stage.show();
     }
 
+    /**
+     * Delete appointment screen. Deletes selected appointment.
+     *
+     * @param actionEvent the action event
+     * @throws SQLException the sql exception
+     */
     public void onDeleteAppointmentButtonClick(ActionEvent actionEvent) throws SQLException {
         Appointment selected = appointmentsTable.getSelectionModel().getSelectedItem();
         if (selected == null) {
             return;
         }
-
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle(msg.getString("appointment.delete.title"));
@@ -533,6 +834,12 @@ public class MainController {
         }
     }
 
+    /**
+     * New customer button. Transitions to new customer screen.
+     *
+     * @param actionEvent the action event
+     * @throws IOException the io exception
+     */
     public void onNewCustomerButtonClick(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/hankoh/scheduleapp/view/customer-add.fxml"));
         Parent root = loader.load();
@@ -542,6 +849,12 @@ public class MainController {
         stage.show();
     }
 
+    /**
+     * Edit customer button. Transitions to edit customer screen.
+     *
+     * @param actionEvent the action event
+     * @throws IOException the io exception
+     */
     public void onEditCustomerButtonClick(ActionEvent actionEvent) throws IOException {
         Customer selectedCustomer = customersTable.getSelectionModel().getSelectedItem();
         if (selectedCustomer == null) {
@@ -556,6 +869,12 @@ public class MainController {
         stage.show();
     }
 
+    /**
+     * Delete customer button. Deletes selected customer.
+     *
+     * @param actionEvent the action event
+     * @throws SQLException the sql exception
+     */
     public void onDeleteCustomerButtonClick(ActionEvent actionEvent) throws SQLException {
         Customer selectedCustomer = customersTable.getSelectionModel().getSelectedItem();
         if (selectedCustomer == null) {
@@ -581,6 +900,12 @@ public class MainController {
         }
     }
 
+    /**
+     * Log out button. Logs user out to login screen.
+     *
+     * @param actionEvent the action event
+     * @throws IOException the io exception
+     */
     public void onLogoutButtonClick(ActionEvent actionEvent) throws IOException {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle(msg.getString("logout"));
@@ -597,6 +922,11 @@ public class MainController {
         }
     }
 
+    /**
+     * Exit button. Exits application.
+     *
+     * @param actionEvent the action event
+     */
     public void onExitButtonClick(ActionEvent actionEvent) {
         Stage stage = (Stage) exitButton.getScene().getWindow();
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -609,6 +939,12 @@ public class MainController {
         }
     }
 
+    /**
+     * Stores the current tab in data storage. Allows the app to remember the last location
+     * in the main screen.
+     *
+     * @param tab last tab selected in main screen.
+     */
     private void setCurrentTab(Tab tab) {
         DataStorage ds = DataStorage.getInstance();
         int index = tab

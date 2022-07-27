@@ -10,6 +10,9 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Optional;
 
+/**
+ * Controller to add new customers.
+ */
 public class CustomerAddController extends CustomerController {
 
     @Override
@@ -17,6 +20,12 @@ public class CustomerAddController extends CustomerController {
         super.initialize();
     }
 
+    /**
+     * Cancel button. Returns to main screen.
+     *
+     * @param actionEvent
+     * @throws IOException
+     */
     @Override
     public void onCancelButtonClick(ActionEvent actionEvent) throws IOException {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -28,6 +37,12 @@ public class CustomerAddController extends CustomerController {
         }
     }
 
+    /**
+     * Saves new customers.
+     *
+     * @param actionEvent
+     * @throws IOException
+     */
     @Override
     public void onSaveButtonClick(ActionEvent actionEvent) throws IOException {
         String name = nameField.getText();
