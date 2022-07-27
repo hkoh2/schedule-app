@@ -147,7 +147,7 @@ public class MainController {
         appointmentLocationColumn.setCellValueFactory(new PropertyValueFactory<>("location"));
         appointmentTypeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
         appointmentCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("customerName"));
-        appointmentUserColumn.setCellValueFactory(new PropertyValueFactory<>("userName"));;
+        appointmentUserColumn.setCellValueFactory(new PropertyValueFactory<>("userName"));
         appointmentStartColumn.setCellValueFactory(new PropertyValueFactory<>("startTime"));
         appointmentStartColumn.setCellFactory(this::formatStart);
         appointmentEndColumn.setCellValueFactory(new PropertyValueFactory<>("endTime"));
@@ -269,7 +269,7 @@ public class MainController {
 
         getAllCustomers();
         getAllAppointments();
-        customers.stream().forEach(customer -> {
+        customers.forEach(customer -> {
             ObservableList<Appointment> filteredAppointments = appointments.stream()
                     .filter(appointment ->
                             appointment.getCustomerId() == customer.getCustomerId())
@@ -296,7 +296,7 @@ public class MainController {
 
         getAllAppointments();
 
-        HashSet<String> allTypesSet = new HashSet<String>(appointments.stream()
+        HashSet<String> allTypesSet = new HashSet<>(appointments.stream()
                 .map(Appointment::getType)
                 .collect(Collectors.toCollection(HashSet::new)));
         ObservableList<String> allTypes = FXCollections.observableArrayList(allTypesSet);
@@ -337,9 +337,9 @@ public class MainController {
         contactReportType.setCellValueFactory(new PropertyValueFactory<>("type"));
         contactReportCustomerId.setCellValueFactory(new PropertyValueFactory<>("customerName"));
         contactReportStart.setCellValueFactory(new PropertyValueFactory<>("startTime"));
-        contactReportStart.setCellFactory(column -> formatStart(column));
+        contactReportStart.setCellFactory(this::formatStart);
         contactReportEnd.setCellValueFactory(new PropertyValueFactory<>("endTime"));
-        contactReportEnd.setCellFactory(column -> formatStart(column));
+        contactReportEnd.setCellFactory(this::formatStart);
 
         FilteredList<Appointment> filteredList= new FilteredList<>(appointments);
         SortedList<Appointment> sortedList = new SortedList<>(filteredList);
@@ -372,22 +372,6 @@ public class MainController {
         return contactDao.getAllContacts().stream()
                 .sorted()
                 .collect(toCollection(FXCollections::observableArrayList));
-    }
-
-    private TableCell<Customer, String> formatAddress(TableColumn<Customer, String> column) {
-        return new TableCell<>() {
-
-            @Override
-            protected void updateItem(String address, boolean empty) {
-
-                super.updateItem(address, empty);
-                if (empty) {
-                    setText("");
-                } else {
-                    setText("");
-                }
-            }
-        };
     }
 
     private void filterAppointments(String newVal) throws SQLException {
@@ -423,26 +407,23 @@ public class MainController {
             appointmentsByWeek.keySet().stream().sorted().forEach(
                     key -> weekFilterComboBox.getItems().add(key)
             );
-            return;
         }
     }
 
-    private Map groupingByMonth() {
-        Map<YearMonth, List<Appointment>> appointmentMap = appointments.stream()
+    private Map<YearMonth, List<Appointment>> groupingByMonth() {
+        return appointments.stream()
                 .collect(groupingBy(
-                appointment -> getYearMonth(appointment),
+                        this::getYearMonth,
                 mapping(appointment -> appointment, toCollection(FXCollections::observableArrayList))
         ));
-        return appointmentMap;
     }
 
-    private Map groupingByWeek() {
-        Map<YearWeek, List<Appointment>> appointmentMap = appointments.stream()
+    private Map<YearWeek, List<Appointment>> groupingByWeek() {
+        return appointments.stream()
                 .collect(groupingBy(
-                        appointment -> getWeekRange(appointment),
+                        this::getWeekRange,
                         mapping(appointment -> appointment, toCollection(FXCollections::observableArrayList))
                 ));
-        return appointmentMap;
     }
 
     public YearWeek getWeekRange(Appointment apt) {
@@ -451,10 +432,8 @@ public class MainController {
         ZonedDateTime weekEnd = weekStart.plusDays(4);
         LocalDate start = weekStart.toLocalDate();
         LocalDate end = weekEnd.toLocalDate();
-        YearWeek weekRange = new YearWeek(start, end);
-        return weekRange;
+        return new YearWeek(start, end);
     }
-
 
     public YearMonth getYearMonth(Appointment apt) {
         LocalDate start = apt.getStartTime().toLocalDate();
@@ -577,7 +556,7 @@ public class MainController {
         stage.show();
     }
 
-    public void onDeleteCustomerButtonClick(ActionEvent actionEvent) throws SQLException, IOException {
+    public void onDeleteCustomerButtonClick(ActionEvent actionEvent) throws SQLException {
         Customer selectedCustomer = customersTable.getSelectionModel().getSelectedItem();
         if (selectedCustomer == null) {
             return;

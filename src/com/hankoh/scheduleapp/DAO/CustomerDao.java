@@ -12,7 +12,6 @@ public class CustomerDao {
 
     public CustomerDao() {
         conn = JDBC.getConnection();
-
     }
 
     public ObservableList<Customer> getAllCustomers() throws SQLException {
@@ -23,7 +22,6 @@ public class CustomerDao {
     private void getCustomersDB() throws SQLException {
 
         Connection conn = JDBC.getConnection();
-        //String query = "SELECT * FROM customers";
         String query = """
                 SELECT * FROM customers
                 INNER JOIN first_level_divisions
@@ -53,9 +51,7 @@ public class CustomerDao {
                     country,
                     divisionId
             );
-
             customers.add(customer);
-
         }
     }
 

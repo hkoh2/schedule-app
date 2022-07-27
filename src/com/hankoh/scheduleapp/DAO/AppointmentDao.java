@@ -18,13 +18,13 @@ public class AppointmentDao {
 
     public ObservableList<Appointment> getAllAppointments() throws SQLException {
         String query = """
-                SELECT * 
-                FROM appointments 
-                INNER JOIN customers 
-                ON appointments.Customer_ID = customers.Customer_ID 
-                INNER JOIN users 
-                ON appointments.User_ID = users.User_ID 
-                INNER JOIN contacts 
+                SELECT *
+                FROM appointments
+                INNER JOIN customers
+                ON appointments.Customer_ID = customers.Customer_ID
+                INNER JOIN users
+                ON appointments.User_ID = users.User_ID
+                INNER JOIN contacts
                 ON appointments.Contact_ID = contacts.Contact_ID
                 """;
         Statement stmt = conn.createStatement();
@@ -39,7 +39,6 @@ public class AppointmentDao {
             Timestamp end = rs.getTimestamp("End");
             int customerId = rs.getInt("Customers.Customer_ID");
             String customerName = rs.getString("Customer_Name");
-            String customerAddress = rs.getString("Address");
             String userName = rs.getString("User_Name");
             int userId = rs.getInt("User_ID");
             int contactId = rs.getInt("Contact_ID");
@@ -99,9 +98,6 @@ public class AppointmentDao {
             Timestamp endTime = rs.getTimestamp("End");
             ZonedDateTime zonedStart = startTime.toInstant().atZone(ZoneId.systemDefault());
             ZonedDateTime zonedEnd = endTime.toInstant().atZone(ZoneId.systemDefault());
-
-            LocalDateTime st = startTime.toLocalDateTime();
-            LocalDateTime et = endTime.toLocalDateTime();
 
             Appointment appointment = new Appointment(
                     id,
@@ -173,10 +169,6 @@ public class AppointmentDao {
         stmt.setTimestamp(7, endTime);
         return stmt;
 
-    }
-
-    private boolean checkBusinessHours(Timestamp start, Timestamp end) {
-        return false;
     }
 
     private PreparedStatement getUpdateStatement(Appointment appointment) throws SQLException {

@@ -2,7 +2,6 @@ package com.hankoh.scheduleapp.DAO;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class JDBC {
@@ -20,18 +19,13 @@ public class JDBC {
     // Password
     private static Connection connection = null;
     // Connection Interface
-    private static PreparedStatement preparedStatement;
     public static void makeConnection() {
         try {
             Class.forName(driver); // Locate Driver
-            //password = Details.getPassword(); // Assign password
             connection = DriverManager.getConnection(jdbcUrl, userName, password);
-            // reference Connection object
             System.out.println("Connection successful!");
         }
-        catch(ClassNotFoundException e) {
-            System.out.println("Error:" + e.getMessage());
-        }        catch(SQLException e) {
+        catch(ClassNotFoundException | SQLException e) {
             System.out.println("Error:" + e.getMessage());
         }
     }
@@ -44,19 +38,7 @@ public class JDBC {
             System.out.println("Connection closed!");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-        }    }
-    public static void makePreparedStatement(String sqlStatement, Connection conn) throws SQLException {
-        if (conn != null)
-            preparedStatement = conn.prepareStatement(sqlStatement);
-        else
-            System.out.println("Prepared Statement Creation Failed!");
-    }
-    public static PreparedStatement getPreparedStatement() throws SQLException {
-        if (preparedStatement != null)
-            return preparedStatement;
-        else
-            System.out.println("Null reference to Prepared Statement");
-        return null;
+        }
     }
 }
 

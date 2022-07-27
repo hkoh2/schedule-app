@@ -29,7 +29,6 @@ public class AppointmentAddController extends AppointmentController {
         allDuration.clear();
 
         int max = getMaxDuration();
-
         int time = 0;
         while (time < max) {
             time += 15;
@@ -49,7 +48,6 @@ public class AppointmentAddController extends AppointmentController {
 
         Appointment minApt = appointments.stream()
                 .filter(apt -> filterTimeAfter(apt, selectedTime))
-                .peek(apt -> System.out.println(apt.getStartTime()))
                 .min(Comparator.comparing(Appointment::getStartTime))
                 .orElse(null);
 
@@ -63,15 +61,12 @@ public class AppointmentAddController extends AppointmentController {
         int nextAppointmentMinutes = (int) Duration.between(selectedTime, minStart).toMinutes();
         int maxMinutes = Math.min(nextAppointmentMinutes, durationToEnd);
 
-        return maxMinutes > MAX_DURATION ? MAX_DURATION : maxMinutes;
+        return Math.min(maxMinutes, MAX_DURATION);
     }
 
     private boolean filterTimeAfter(Appointment apt, ZonedDateTime time) {
         ZonedDateTime startTime = apt.getStartTime();
-        if (startTime.isBefore(time)) {
-            return false;
-        }
-        return true;
+        return !startTime.isBefore(time);
     }
 
     public void initialize() {
@@ -95,7 +90,6 @@ public class AppointmentAddController extends AppointmentController {
     }
 
     public void filterAvailableTime(LocalDate date) {
-        System.out.println(date);
         if (date == null) {
             datePicker.setValue(null);
             return;
@@ -114,7 +108,7 @@ public class AppointmentAddController extends AppointmentController {
         ObservableList<ZonedDateTime> filteredAvailableTimes = availTimes.stream()
                 // filter needs to return true if time is not conflicting
                 // with other appointments
-                .filter(time -> getValidTimes(time))
+                .filter(this::getValidTimes)
                 .collect(Collectors.toCollection(FXCollections::observableArrayList));
 
         timeComboBox.setItems(filteredAvailableTimes);
@@ -128,29 +122,10 @@ public class AppointmentAddController extends AppointmentController {
         boolean isNotValidTime = appointments.stream().anyMatch(apt -> {
             ZonedDateTime aptStartTime = apt.getStartTime();
             ZonedDateTime aptEndTime = apt.getEndTime();
-            if (!time.isBefore(aptStartTime) && time.isBefore(aptEndTime)) {
-                return true;
-            }
-            return false;
+            return !time.isBefore(aptStartTime) && time.isBefore(aptEndTime);
         });
         return !isNotValidTime;
     }
-
-
-    //public void onExitButtonClick(ActionEvent actionEvent) throws IOException {
-    //    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-    //    alert.setTitle(msg.getString("logout"));
-    //    alert.setHeaderText(msg.getString("logout"));
-    //    alert.setContentText(msg.getString("logout_msg"));
-    //    Optional<ButtonType> choice = alert.showAndWait();
-    //    if (choice.isPresent() && choice.get() == ButtonType.OK) {
-    //        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/hankoh/scheduleapp/view/main.fxml")));
-    //        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-    //        stage.setTitle(msg.getString("login.title"));
-    //        stage.setScene(new Scene(root));
-    //        stage.show();
-    //    }
-    //}
 
     public void onSaveButtonClick(ActionEvent actionEvent) throws IOException, SQLException {
         String title = titleField.getText();
@@ -166,7 +141,6 @@ public class AppointmentAddController extends AppointmentController {
                 .getSelectedItem();
 
         // validate title
-        boolean inputError = false;
         boolean titleIsValid = fieldIsValid(
                 title,
                 titleError,
@@ -188,10 +162,6 @@ public class AppointmentAddController extends AppointmentController {
                 "type_empty"
         );
 
-        //if (date == null || date.toString().isEmpty()) {
-        //    startDateError.setText(msg.getString("start_date_empty"));
-        //    inputError = true;
-        //}
         boolean dateIsValid = fieldIsValid(
                 date,
                 startDateError,
@@ -210,7 +180,6 @@ public class AppointmentAddController extends AppointmentController {
                 "duration_error"
         );
 
-
         if (!titleIsValid ||
                 !descriptionIsValid ||
                 !locationIsValid ||
@@ -218,10 +187,8 @@ public class AppointmentAddController extends AppointmentController {
                 !timeIsValid ||
                 !durationIsValid ||
                 !dateIsValid) {
-            System.out.println("Field error");
             return;
         }
-
 
         Customer selectedCustomer = customerComboBox
                 .getSelectionModel()
@@ -248,7 +215,9 @@ public class AppointmentAddController extends AppointmentController {
         );
 
         AppointmentDao appointmentDao = new AppointmentDao();
-        appointmentDao.addAppointment(appointment);
+        if (appointmentDao.addAppointment(appointment)) {
+            return;
+        }
         returnToMain(actionEvent);
     }
 }

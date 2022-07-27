@@ -27,8 +27,6 @@ public class CustomerEditController extends CustomerController {
         phoneField.setText(customer.getPhone());
         postalField.setText(customer.getPostalCode());
 
-        int divisionId = customer.getDivisionId();
-
         Division division = divisions.stream()
                 .filter(div -> div.getDivisionId() == customer.getDivisionId())
                 .findFirst()
@@ -59,15 +57,11 @@ public class CustomerEditController extends CustomerController {
         int id = Integer.parseInt(idField.getText());
         String name = nameField.getText();
         String address = addressField.getText();
-        Country country = countryComboBox
-                .getSelectionModel()
-                .getSelectedItem();
         Division division = divisionComboBox
                 .getSelectionModel()
                 .getSelectedItem();
         String postal = postalField.getText();
         String phone = phoneField.getText();
-
 
         boolean nameIsValid = fieldIsValid(
                 name,
@@ -120,7 +114,6 @@ public class CustomerEditController extends CustomerController {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle(msg.getString("customer.updated.title"));
             alert.setHeaderText(msg.getString("customer.updated.header"));
-            //alert.set
             alert.showAndWait();
             returnToMain(actionEvent);
         } else {

@@ -4,8 +4,6 @@ import com.hankoh.scheduleapp.DAO.UserDao;
 import com.hankoh.scheduleapp.model.DataStorage;
 import com.hankoh.scheduleapp.model.User;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -41,7 +39,6 @@ public class LoginController {
     public Label usernameLabel;
     public ComboBox<String> languageCombo;
     public Button devLoginButton;
-    private final ObservableList<String> language = FXCollections.observableArrayList("English", "Français");
     public TextField password;
     public TextField username;
 
@@ -61,12 +58,6 @@ public class LoginController {
 
         // lambda for closing app
         exitButton.setOnAction(event -> Platform.exit());
-
-    }
-
-    public void onExitButtonClick() {
-        // not used.
-
     }
 
     public void onLoginButtonClick(ActionEvent actionEvent) throws SQLException, IOException {
@@ -75,15 +66,12 @@ public class LoginController {
         // Checks username and password.
         // Also adds user to DS.
         if (userDao.loginUser(username.getText(), password.getText())) {
-            System.out.println("Logged in");
             loginErrorText.setText("Logged In!");
             Logger.loginAttempted(username.getText(), true);
             loginUser(actionEvent);
         } else {
-            System.out.println("Wrong username or password");
             loginErrorText.setText("Wrong username or password");
             Logger.loginAttempted(username.getText(), false);
-            // provide error messages.
         }
     }
 
@@ -98,14 +86,10 @@ public class LoginController {
     public void onLanguageSelect(ActionEvent actionEvent) {
         String langVal = languageCombo.getValue();
         switch (langVal) {
-            case "english":
-                System.out.println("English selected");
-                break;
-            case "français":
-                System.out.println("French selected");
-                break;
-            default:
-                break;
+            case "english" -> System.out.println("English selected");
+            case "français" -> System.out.println("French selected");
+            default -> {
+            }
         }
     }
 

@@ -66,9 +66,7 @@ public class CustomerController extends Internationalizable {
 
         countryComboBox.setItems(countries);
         countryComboBox.getSelectionModel().selectFirst();
-        countryComboBox.valueProperty().addListener(
-                (options, newVal, oldVal) -> changeDivision(options, newVal, oldVal)
-        );
+        countryComboBox.valueProperty().addListener(this::changeDivision);
 
         DivisionDao divisionDao = new DivisionDao();
         try {
@@ -89,7 +87,6 @@ public class CustomerController extends Internationalizable {
 
         divisionComboBox.setItems(filteredDivision);
         divisionComboBox.getSelectionModel().selectFirst();
-
     }
 
     protected boolean fieldIsValid(String val, Label label, String message) {
@@ -108,7 +105,6 @@ public class CustomerController extends Internationalizable {
     }
 
     private void changeDivision(ObservableValue<? extends Country> options, Country oldValue, Country newValue) {
-        System.out.println("Country changed!!!!!");
         divisionComboBox.setItems(filterDivision(newValue.getCountryId()));
         divisionComboBox.getSelectionModel().selectFirst();
     }
@@ -126,6 +122,5 @@ public class CustomerController extends Internationalizable {
         stage.setTitle(msg.getString("main.title"));
         stage.setScene(new Scene(root));
         stage.show();
-
     }
 }

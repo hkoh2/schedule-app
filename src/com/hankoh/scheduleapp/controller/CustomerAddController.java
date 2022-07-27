@@ -1,43 +1,20 @@
 package com.hankoh.scheduleapp.controller;
 
 import com.hankoh.scheduleapp.DAO.CustomerDao;
-import com.hankoh.scheduleapp.model.Country;
 import com.hankoh.scheduleapp.model.Customer;
-import com.hankoh.scheduleapp.model.Division;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.Comparator;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class CustomerAddController extends CustomerController {
-
-    //ObservableList<Country> countries = FXCollections.observableArrayList();
-    //ObservableList<Division> divisions = FXCollections.observableArrayList();
 
     @Override
     public void initialize() {
         super.initialize();
-    }
-
-    private void changeDivision(ObservableValue<? extends Country> options, Country oldValue, Country newValue) {
-        System.out.println("Country changed!!!!!");
-        divisionComboBox.setItems(filterDivision(newValue.getCountryId()));
-        divisionComboBox.getSelectionModel().selectFirst();
-    }
-
-    private ObservableList<Division> filterDivision(int countryId) {
-        return divisions.stream()
-                .filter(div -> div.getCountryId() == countryId)
-                .sorted(Comparator.comparing(Division::getDivision))
-                .collect(Collectors.toCollection(FXCollections::observableArrayList));
     }
 
     @Override
@@ -57,15 +34,10 @@ public class CustomerAddController extends CustomerController {
         String address = addressField.getText();
         String postal = postalField.getText();
         String phone = phoneField.getText();
-        int countryId = countryComboBox
-                .getSelectionModel()
-                .getSelectedItem()
-                .getCountryId();
         int divisionId = divisionComboBox
                 .getSelectionModel()
                 .getSelectedItem()
                 .getDivisionId();
-
 
         boolean nameIsValid = fieldIsValid(
                 name,
@@ -118,7 +90,7 @@ public class CustomerAddController extends CustomerController {
 
             returnToMain(actionEvent);
         } else {
-            System.out.println("DB Error");
+            System.out.println("Customer Add Error");
         }
     }
 }

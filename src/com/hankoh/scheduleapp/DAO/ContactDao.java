@@ -17,22 +17,6 @@ public class ContactDao {
         return contacts;
     }
 
-    public Contact getContactById(int id) throws SQLException {
-        Connection conn = JDBC.getConnection();
-        String query = "SELECT * FROM contacts WHERE Contact_ID = ?";
-        Statement stmt = conn.createStatement();
-        ResultSet rs = stmt.executeQuery(query);
-        if (!rs.isBeforeFirst()) {
-            return null;
-        }
-        rs.next();
-        return new Contact(
-                rs.getInt("Contact_ID"),
-                rs.getString("Contact_Name"),
-                rs.getString("Email")
-        );
-    }
-
     private void getContactsDB() throws SQLException {
         Connection conn = JDBC.getConnection();
         String query = "SELECT * FROM contacts";

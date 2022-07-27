@@ -42,7 +42,6 @@ public class YearWeek implements Comparable<YearWeek> {
         }
         return -1;
     }
-
     @Override
     public int hashCode() {
         return 31 * 1 + start.toString().hashCode();

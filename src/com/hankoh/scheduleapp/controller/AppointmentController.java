@@ -62,7 +62,6 @@ public class AppointmentController extends Internationalizable {
     public Label locationError;
     public Label startDateError;
     public Label startTimeError;
-    public Label endDateError;
     public Label endTimeError;
     public Label typeError;
     public Label timeLabel;
@@ -96,10 +95,8 @@ public class AppointmentController extends Internationalizable {
         durationLabel.setText(msg.getString("appointment.duration"));
         durationComboBox.setPromptText(msg.getString("appointment.prompt_duration"));
         contactLabel.setText(msg.getString("appointment.contact"));
-
         exitButton.setText(msg.getString("cancel"));
         saveButton.setText(msg.getString("save_button"));
-
 
         CustomerDao customerDao = new CustomerDao();
         try {
@@ -174,8 +171,6 @@ public class AppointmentController extends Internationalizable {
                 }
             }
         };
-
-
     }
 
      protected ObservableList<ZonedDateTime> getAvailTimes(LocalDate date) {
@@ -202,7 +197,7 @@ public class AppointmentController extends Internationalizable {
     }
 
     private Callback<DatePicker, DateCell> disableWeekends() {
-        final Callback<DatePicker, DateCell> weekendCellFactory = (final DatePicker datePicker) -> new DateCell() {
+        return (final DatePicker datePicker1) -> new DateCell() {
             @Override
             public void updateItem(LocalDate item, boolean empty) {
                 super.updateItem(item, empty);
@@ -212,7 +207,6 @@ public class AppointmentController extends Internationalizable {
                 }
             }
         };
-        return weekendCellFactory;
     }
 
     public void onExitButtonClick(ActionEvent actionEvent) throws IOException {
@@ -243,7 +237,7 @@ public class AppointmentController extends Internationalizable {
             return false;
         }
         if (date == null || date.toString().isEmpty()) {
-            startDateError.setText(msg.getString("start_date_empty"));
+            startDateError.setText(msg.getString(message));
             return false;
         }
         label.setText("");
@@ -266,9 +260,6 @@ public class AppointmentController extends Internationalizable {
         label.setText("");
         return true;
     }
-
-
-
 
     public void clearDatePicker() {
         datePicker.setValue(null);

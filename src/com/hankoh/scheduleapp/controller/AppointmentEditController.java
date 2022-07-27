@@ -52,11 +52,9 @@ public class AppointmentEditController extends AppointmentController {
 
         ZonedDateTime startDateTime = selectedAppointment.getStartTime();
         ZonedDateTime endDateTime = selectedAppointment.getEndTime();
-
         LocalDate startDate = selectedAppointment.getStartTime().toLocalDate();
 
         int id = selectedAppointment.getAppointmentId();
-
         datePicker.setValue(startDate);
         filterAvailableTime(startDate, id);
         setAllDuration();
@@ -85,7 +83,6 @@ public class AppointmentEditController extends AppointmentController {
         allDuration.clear();
 
         int max = getMaxDuration();
-
         int time = 0;
         while (time < max) {
             time += 15;
@@ -94,16 +91,13 @@ public class AppointmentEditController extends AppointmentController {
     }
 
     private int getMaxDuration() {
-
         ZonedDateTime selectedTime = timeComboBox.getSelectionModel().getSelectedItem();
-
         if (selectedTime == null) {
             return 0;
         }
 
         LocalDate endDate = datePicker.getValue();
         ZonedDateTime businessEndTime = ZonedDateTime.of(endDate, LocalTime.of(22, 0), businessZoneId);
-
 
         Appointment minApt = appointments.stream()
                 .filter(apt -> filterTimeAfter(apt, selectedTime))
@@ -120,15 +114,12 @@ public class AppointmentEditController extends AppointmentController {
         ZonedDateTime minStart = minApt.getStartTime();
         int nextAppointmentMinutes = (int) Duration.between(selectedTime, minStart).toMinutes();
         int maxMinutes = Math.min(nextAppointmentMinutes, durationToEnd);
-        return maxMinutes > MAX_DURATION ? MAX_DURATION : maxMinutes;
+        return Math.min(maxMinutes, MAX_DURATION);
     }
 
     private boolean filterTimeAfter(Appointment apt, ZonedDateTime time) {
         ZonedDateTime startTime = apt.getStartTime();
-        if (startTime.isBefore(time)) {
-            return false;
-        }
-        return true;
+        return !startTime.isBefore(time);
     }
 
     public void filterAvailableTime(LocalDate date, int id) {
@@ -146,7 +137,6 @@ public class AppointmentEditController extends AppointmentController {
             appointments = appointmentDao.getAppointmentsByDate(date).stream()
                     .filter(appointment -> appointment.getAppointmentId() != id)
                     .collect(Collectors.toCollection(FXCollections::observableArrayList));
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -156,16 +146,14 @@ public class AppointmentEditController extends AppointmentController {
         ObservableList<ZonedDateTime> filteredAvailableTimes = availTimes.stream()
                 // filter needs to return true if time is not conflicting
                 // with other appointments
-                .filter(time -> getValidTimes(time, id))
+                .filter(this::getValidTimes)
                 .collect(Collectors.toCollection(FXCollections::observableArrayList));
 
         timeComboBox.setItems(filteredAvailableTimes);
-
     }
 
-    private boolean getValidTimes(ZonedDateTime time, int id) {
+    private boolean getValidTimes(ZonedDateTime time) {
         if (appointments.isEmpty()) {
-            System.out.println("Appointment Empty!!!");
             return true;
         }
         boolean isNotValidTime = appointments.stream()
@@ -174,10 +162,7 @@ public class AppointmentEditController extends AppointmentController {
                 .anyMatch(apt -> {
                     ZonedDateTime aptStartTime = apt.getStartTime();
                     ZonedDateTime aptEndTime = apt.getEndTime();
-                    if (!time.isBefore(aptStartTime) && time.isBefore(aptEndTime)) {
-                        return true;
-                    }
-                    return false;
+                    return !time.isBefore(aptStartTime) && time.isBefore(aptEndTime);
                 });
         return !isNotValidTime;
     }
@@ -193,8 +178,6 @@ public class AppointmentEditController extends AppointmentController {
         AppointmentDuration duration = durationComboBox
                 .getSelectionModel()
                 .getSelectedItem();
-
-
 
         boolean titleIsValid = fieldIsValid(
                 title,
@@ -235,7 +218,6 @@ public class AppointmentEditController extends AppointmentController {
                 "duration_error"
         );
 
-
         if (!titleIsValid ||
                 !descriptionIsValid ||
                 !locationIsValid ||
@@ -243,7 +225,6 @@ public class AppointmentEditController extends AppointmentController {
                 !timeIsValid ||
                 !durationIsValid ||
                 !dateIsValid) {
-            System.out.println("Field error");
             return;
         }
 
