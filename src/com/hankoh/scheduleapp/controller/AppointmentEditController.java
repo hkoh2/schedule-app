@@ -132,12 +132,6 @@ public class AppointmentEditController extends AppointmentController {
     }
 
     public void filterAvailableTime(LocalDate date, int id) {
-        // Need to reset time and duration
-        //timeComboBox.getSelectionModel().clearSelection();
-        //timeComboBox.setItems(null);
-        //durationComboBox.getSelectionModel().clearSelection();
-        //durationComboBox.getItems().clear();
-        //durationComboBox.setItems(null);
         timeComboBox.setValue(null);
         timeComboBox.setItems(null);
         durationComboBox.setValue(null);
@@ -177,7 +171,6 @@ public class AppointmentEditController extends AppointmentController {
         boolean isNotValidTime = appointments.stream()
                 // Removes selected appointment time block so that the
                 // same time can be selected
-                //.filter(appointment -> appointment.getAppointmentId() != id)
                 .anyMatch(apt -> {
                     ZonedDateTime aptStartTime = apt.getStartTime();
                     ZonedDateTime aptEndTime = apt.getEndTime();
@@ -224,10 +217,6 @@ public class AppointmentEditController extends AppointmentController {
                 "type_empty"
         );
 
-        //if (date == null || date.toString().isEmpty()) {
-        //    startDateError.setText(msg.getString("start_date_empty"));
-        //    inputError = true;
-        //}
         boolean dateIsValid = fieldIsValid(
                 date,
                 startDateError,

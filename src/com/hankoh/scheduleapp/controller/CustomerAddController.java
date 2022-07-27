@@ -8,18 +8,12 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Comparator;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -51,14 +45,9 @@ public class CustomerAddController extends CustomerController {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle(msg.getString("customer.cancel"));
         alert.setHeaderText(msg.getString("customer.confirm_cancel"));
-        alert.setContentText(msg.getString("customer.cancel"));
         Optional<ButtonType> choice = alert.showAndWait();
         if (choice.isPresent() && choice.get() == ButtonType.OK) {
-            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/hankoh/scheduleapp/view/main.fxml")));
-            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            stage.setTitle(msg.getString("main.title"));
-            stage.setScene(new Scene(root));
-            stage.show();
+            returnToMain(actionEvent);
         }
     }
 
@@ -127,7 +116,7 @@ public class CustomerAddController extends CustomerController {
         }
         if (customerAdded) {
 
-            moveToMain(actionEvent);
+            returnToMain(actionEvent);
         } else {
             System.out.println("DB Error");
         }

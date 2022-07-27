@@ -86,6 +86,7 @@ public class MainController {
     public TableColumn<CustomerTotal, Integer> byTotalTime;
     public TableColumn<CustomerTotal, Double> byAverageTime;
     public ComboBox<String> typeComboBox;
+    public Tab reportsTab;
     protected ResourceBundle msg;
     private ObservableList<Appointment> appointments;
     private ObservableList<Customer> customers = FXCollections.observableArrayList();
@@ -111,12 +112,14 @@ public class MainController {
         editAppointmentButton.setText(msg.getString("edit"));
         deleteAppointmentButton.setText(msg.getString("delete"));
 
-
         customersTab.setText(msg.getString("main.customers"));
         customersLabel.setText(msg.getString("main.customers"));
         newCustomerButton.setText(msg.getString("new"));
         editCustomerButton.setText(msg.getString("edit"));
         deleteCustomerButton.setText(msg.getString("delete"));
+
+        reportsTab.setText(msg.getString("main.reports"));
+
 
         logoutButton.setText(msg.getString("logout"));
         exitButton.setText(msg.getString("exit_button"));
@@ -137,9 +140,7 @@ public class MainController {
         customerPostalColumn.setText(msg.getString("customer.column.postal"));
         customerPhoneColumn.setText(msg.getString("customer.column.phone"));
 
-
         getAllAppointments();
-
         appointmentIdColumn.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
         appointmentTitleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         appointmentDescriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
@@ -154,7 +155,6 @@ public class MainController {
         appointmentsTable.setItems(appointments);
 
         getAllCustomers();
-
         customerIdColumn.setCellValueFactory(new PropertyValueFactory<>("customerId"));
         customerNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         customerAddressColumn.setCellValueFactory(new PropertyValueFactory<>("fullAddress"));

@@ -97,7 +97,7 @@ public class AppointmentController extends Internationalizable {
         durationComboBox.setPromptText(msg.getString("appointment.prompt_duration"));
         contactLabel.setText(msg.getString("appointment.contact"));
 
-        exitButton.setText(msg.getString("exit_button"));
+        exitButton.setText(msg.getString("cancel"));
         saveButton.setText(msg.getString("save_button"));
 
 
@@ -217,14 +217,13 @@ public class AppointmentController extends Internationalizable {
 
     public void onExitButtonClick(ActionEvent actionEvent) throws IOException {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle(msg.getString("logout"));
-        alert.setHeaderText(msg.getString("logout"));
-        alert.setContentText(msg.getString("logout_msg"));
+        alert.setTitle(msg.getString("appointment.cancel.title"));
+        alert.setHeaderText(msg.getString("appointment.cancel.header"));
         Optional<ButtonType> choice = alert.showAndWait();
         if (choice.isPresent() && choice.get() == ButtonType.OK) {
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/hankoh/scheduleapp/view/main.fxml")));
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            stage.setTitle(msg.getString("login.title"));
+            stage.setTitle(msg.getString("title"));
             stage.setScene(new Scene(root));
             stage.show();
         }

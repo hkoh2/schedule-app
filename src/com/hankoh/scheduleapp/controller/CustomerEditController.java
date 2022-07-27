@@ -7,9 +7,11 @@ import com.hankoh.scheduleapp.model.DataStorage;
 import com.hankoh.scheduleapp.model.Division;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Optional;
 
 public class CustomerEditController extends CustomerController {
     @Override
@@ -42,7 +44,13 @@ public class CustomerEditController extends CustomerController {
 
     @Override
     public void onCancelButtonClick(ActionEvent actionEvent) throws IOException {
-        moveToMain(actionEvent);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle(msg.getString("customer.cancel"));
+        alert.setHeaderText(msg.getString("customer.confirm_cancel"));
+        Optional<ButtonType> choice = alert.showAndWait();
+        if (choice.isPresent() && choice.get() == ButtonType.OK) {
+            returnToMain(actionEvent);
+        }
     }
 
     @Override
@@ -114,7 +122,7 @@ public class CustomerEditController extends CustomerController {
             alert.setHeaderText(msg.getString("customer.updated.header"));
             //alert.set
             alert.showAndWait();
-            moveToMain(actionEvent);
+            returnToMain(actionEvent);
         } else {
             System.out.println("Customer update error");
         }

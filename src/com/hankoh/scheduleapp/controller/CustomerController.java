@@ -120,7 +120,7 @@ public class CustomerController extends Internationalizable {
                 .collect(Collectors.toCollection(FXCollections::observableArrayList));
 
     }
-    protected void moveToMain(ActionEvent actionEvent) throws IOException {
+    protected void returnToMain(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/hankoh/scheduleapp/view/main.fxml")));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.setTitle(msg.getString("main.title"));
