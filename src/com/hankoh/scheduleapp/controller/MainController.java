@@ -84,7 +84,7 @@ public class MainController {
     public TableColumn<CustomerTotal, String> byCustomerName;
     public TableColumn<CustomerTotal, Integer> byCustomerTotal;
     public TableColumn<CustomerTotal, Integer> byTotalTime;
-    public TableColumn<CustomerTotal, Double> byAverageTime;
+    public TableColumn<CustomerTotal, Integer> byAverageTime;
     public ComboBox<String> typeComboBox;
     public Tab reportsTab;
     protected ResourceBundle msg;
@@ -286,8 +286,6 @@ public class MainController {
         byCustomerTableView.setItems(customerTotals);
 
     }
-
-
 
     private void initializeTypeMonthReport() throws SQLException {
         monthTypeColumn.setText(msg.getString("report.month_type"));

@@ -48,6 +48,6 @@ public class CustomerTotal {
         if (total == 0) {
             return 0;
         }
-        return totalTime / (double) total;
+        return Math.round(totalTime / (double) total);
     }
 }
