@@ -25,62 +25,227 @@ import java.time.*;
 import java.util.Objects;
 import java.util.Optional;
 
+/**
+ * The type Appointment controller.
+ */
 public class AppointmentController extends Internationalizable {
+    /**
+     * The Id field.
+     */
     public TextField idField;
+    /**
+     * The Title field.
+     */
     public TextField titleField;
+    /**
+     * The Id label.
+     */
     public Label idLabel;
+    /**
+     * The Title label.
+     */
     public Label titleLabel;
+    /**
+     * The Description label.
+     */
     public Label descriptionLabel;
+    /**
+     * The Description area.
+     */
     public TextArea descriptionArea;
+    /**
+     * The Type label.
+     */
     public Label typeLabel;
+    /**
+     * The Start time label.
+     */
     public Label startTimeLabel;
+    /**
+     * The End time label.
+     */
     public Label endTimeLabel;
+    /**
+     * The Type field.
+     */
     public TextField typeField;
+    /**
+     * The Start date picker.
+     */
     public DatePicker startDatePicker;
+    /**
+     * The End date picker.
+     */
     public DatePicker endDatePicker;
+    /**
+     * The Name label.
+     */
     public Label nameLabel;
+    /**
+     * The Name field.
+     */
     public TextField nameField;
+    /**
+     * The User field.
+     */
     public TextField userField;
+    /**
+     * The User label.
+     */
     public Label userLabel;
+    /**
+     * The Location label.
+     */
     public Label locationLabel;
+    /**
+     * The Location field.
+     */
     public TextField locationField;
+    /**
+     * The Start hour field.
+     */
     public TextField startHourField;
+    /**
+     * The Start minute field.
+     */
     public TextField startMinuteField;
+    /**
+     * The Start meridiem combo box.
+     */
     public ComboBox<String> startMeridiemComboBox;
+    /**
+     * The End hour field.
+     */
     public TextField endHourField;
+    /**
+     * The End minute field.
+     */
     public TextField endMinuteField;
+    /**
+     * The End meridiem combo box.
+     */
     public ComboBox<String> endMeridiemComboBox;
+    /**
+     * The Save button.
+     */
     public Button saveButton;
+    /**
+     * The Exit button.
+     */
     public Button exitButton;
+    /**
+     * The Appointment title label.
+     */
     public Label appointmentTitleLabel;
+    /**
+     * The User combo box.
+     */
     public ComboBox<User> userComboBox;
+    /**
+     * The Customer combo box.
+     */
     public ComboBox<Customer> customerComboBox;
+    /**
+     * The Contact label.
+     */
     public Label contactLabel;
+    /**
+     * The Contact combo box.
+     */
     public ComboBox<Contact> contactComboBox;
+    /**
+     * The Title error.
+     */
     public Label titleError;
+    /**
+     * The Description error.
+     */
     public Label descriptionError;
+    /**
+     * The Location error.
+     */
     public Label locationError;
+    /**
+     * The Start date error.
+     */
     public Label startDateError;
+    /**
+     * The Start time error.
+     */
     public Label startTimeError;
+    /**
+     * The End time error.
+     */
     public Label endTimeError;
+    /**
+     * The Type error.
+     */
     public Label typeError;
+    /**
+     * The Time label.
+     */
     public Label timeLabel;
+    /**
+     * The Duration label.
+     */
     public Label durationLabel;
+    /**
+     * The Start end time label.
+     */
     public Label startEndTimeLabel;
+    /**
+     * The Duration combo box.
+     */
     public ComboBox<AppointmentDuration> durationComboBox;
+    /**
+     * The Time combo box.
+     */
     public ComboBox<ZonedDateTime> timeComboBox;
+    /**
+     * The Date picker.
+     */
     public DatePicker datePicker;
+    /**
+     * The Date label.
+     */
     public Label dateLabel;
+    /**
+     * The Duration inc.
+     */
     protected final int DURATION_INC = 15;
+    /**
+     * The Customers.
+     */
     protected ObservableList<Customer> customers = FXCollections.observableArrayList();
+    /**
+     * The Users.
+     */
     protected ObservableList<User> users = FXCollections.observableArrayList();
+    /**
+     * The Contacts.
+     */
     protected ObservableList<Contact> contacts = FXCollections.observableArrayList();
+    /**
+     * The Appointments.
+     */
     protected ObservableList<Appointment> appointments = FXCollections.observableArrayList();
+    /**
+     * The All duration.
+     */
     protected ObservableList<AppointmentDuration> allDuration = FXCollections.observableArrayList();
+    /**
+     * The Business zone id.
+     */
     protected final ZoneId businessZoneId = ZoneId.of("US/Eastern");
+    /**
+     * The Max duration.
+     */
     protected final int MAX_DURATION = 60;
     private boolean dateError = false;
 
+    /**
+     * Initialize.
+     */
     public void initialize() {
         appointmentTitleLabel.setText(msg.getString("appointment.main_title"));
         titleLabel.setText(msg.getString("appointment.title"));
@@ -173,7 +338,13 @@ public class AppointmentController extends Internationalizable {
         };
     }
 
-     protected ObservableList<ZonedDateTime> getAvailTimes(LocalDate date) {
+    /**
+     * Gets avail times.
+     *
+     * @param date the date
+     * @return the avail times
+     */
+    protected ObservableList<ZonedDateTime> getAvailTimes(LocalDate date) {
 
         if (date == null) {
             return null;
@@ -209,6 +380,12 @@ public class AppointmentController extends Internationalizable {
         };
     }
 
+    /**
+     * On exit button click.
+     *
+     * @param actionEvent the action event
+     * @throws IOException the io exception
+     */
     public void onExitButtonClick(ActionEvent actionEvent) throws IOException {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle(msg.getString("appointment.cancel.title"));
@@ -223,6 +400,14 @@ public class AppointmentController extends Internationalizable {
         }
     }
 
+    /**
+     * Field is valid boolean.
+     *
+     * @param title   the title
+     * @param label   the label
+     * @param message the message
+     * @return the boolean
+     */
     protected boolean fieldIsValid(String title, Label label, String message) {
         if (title == null || title.isBlank()) {
             label.setText(msg.getString(message));
@@ -232,6 +417,14 @@ public class AppointmentController extends Internationalizable {
         return true;
     }
 
+    /**
+     * Field is valid boolean.
+     *
+     * @param date    the date
+     * @param label   the label
+     * @param message the message
+     * @return the boolean
+     */
     protected boolean fieldIsValid(LocalDate date, Label label, String message) {
         if (dateError) {
             return false;
@@ -244,6 +437,14 @@ public class AppointmentController extends Internationalizable {
         return true;
     }
 
+    /**
+     * Time field is valid boolean.
+     *
+     * @param time    the time
+     * @param label   the label
+     * @param message the message
+     * @return the boolean
+     */
     protected boolean timeFieldIsValid(ZonedDateTime time, Label label, String message) {
         if (time == null) {
             label.setText(msg.getString(message));
@@ -252,6 +453,15 @@ public class AppointmentController extends Internationalizable {
         label.setText("");
         return true;
     }
+
+    /**
+     * Combo box is valid boolean.
+     *
+     * @param duration the duration
+     * @param label    the label
+     * @param message  the message
+     * @return the boolean
+     */
     protected boolean comboBoxIsValid(AppointmentDuration duration, Label label, String message) {
         if (duration == null) {
             label.setText(msg.getString(message));
@@ -261,10 +471,19 @@ public class AppointmentController extends Internationalizable {
         return true;
     }
 
+    /**
+     * Clear date picker.
+     */
     public void clearDatePicker() {
         datePicker.setValue(null);
     }
 
+    /**
+     * Return to main.
+     *
+     * @param actionEvent the action event
+     * @throws IOException the io exception
+     */
     protected void returnToMain(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/hankoh/scheduleapp/view/main.fxml")));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();

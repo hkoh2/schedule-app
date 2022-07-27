@@ -18,12 +18,21 @@ import java.time.ZonedDateTime;
 import java.util.Comparator;
 import java.util.stream.Collectors;
 
+/**
+ * The type Appointment add controller.
+ */
 public class AppointmentAddController extends AppointmentController {
 
+    /**
+     * Instantiates a new Appointment add controller.
+     */
     public AppointmentAddController() {
         super();
     }
 
+    /**
+     * Sets duration of appointments by available time
+     */
     private void setAllDuration() {
         allDuration.removeAll();
         allDuration.clear();
@@ -36,6 +45,11 @@ public class AppointmentAddController extends AppointmentController {
         }
     }
 
+    /**
+     * Calculates the max duration for a time chosen.
+     *
+     * @return Maximum duration of appointment for a time chosen.
+     */
     private int getMaxDuration() {
 
         ZonedDateTime selectedTime = timeComboBox.getSelectionModel().getSelectedItem();
@@ -64,11 +78,21 @@ public class AppointmentAddController extends AppointmentController {
         return Math.min(maxMinutes, MAX_DURATION);
     }
 
+    /**
+     * Checks if there are any appointment before a chosen time. If time is before appointment if filtered out.
+     *
+     * @param apt Appointments to filter if before the chosen time
+     * @param time Time picked
+     * @return Appointments that exists after the selected time
+     */
     private boolean filterTimeAfter(Appointment apt, ZonedDateTime time) {
         ZonedDateTime startTime = apt.getStartTime();
         return !startTime.isBefore(time);
     }
 
+    /**
+     * Initializing FXML
+     */
     public void initialize() {
         super.initialize();
 
@@ -89,6 +113,11 @@ public class AppointmentAddController extends AppointmentController {
                 .addListener((ov, oldVal, newVal) -> setAllDuration());
     }
 
+    /**
+     * Filters available time for a date picked.
+     *
+     * @param date the date picked
+     */
     public void filterAvailableTime(LocalDate date) {
         if (date == null) {
             datePicker.setValue(null);
@@ -112,9 +141,14 @@ public class AppointmentAddController extends AppointmentController {
                 .collect(Collectors.toCollection(FXCollections::observableArrayList));
 
         timeComboBox.setItems(filteredAvailableTimes);
-
     }
 
+    /**
+     * Filters out any times that exists between existing appointments.
+     *
+     * @param time time chosen
+     * @return boolean if time between existing appointments
+     */
     private boolean getValidTimes(ZonedDateTime time) {
         if (appointments.isEmpty()) {
             return true;
@@ -127,6 +161,13 @@ public class AppointmentAddController extends AppointmentController {
         return !isNotValidTime;
     }
 
+    /**
+     * On save button click. Saves new appointments.
+     *
+     * @param actionEvent the action event
+     * @throws IOException  the io exception
+     * @throws SQLException the sql exception
+     */
     public void onSaveButtonClick(ActionEvent actionEvent) throws IOException, SQLException {
         String title = titleField.getText();
         String description = descriptionArea.getText();
