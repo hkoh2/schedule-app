@@ -521,6 +521,9 @@ public class MainController {
 
     public void onDeleteAppointmentButtonClick(ActionEvent actionEvent) throws SQLException {
         Appointment selected = appointmentsTable.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            return;
+        }
 
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
