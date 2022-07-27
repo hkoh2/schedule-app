@@ -2,27 +2,57 @@ package com.hankoh.scheduleapp.controller;
 
 import java.time.LocalDate;
 
+/**
+ * YearWeek class contains the start and end date of a week.
+ * Used for filtering appointments.
+ */
 public class YearWeek implements Comparable<YearWeek> {
     private LocalDate start;
     private LocalDate end;
 
+    /**
+     * Instantiates a YearWeek class.
+     *
+     * @param start start date of appointment.
+     * @param end   end date of appointment.
+     */
     public YearWeek(LocalDate start, LocalDate end) {
         this.start = start;
         this.end = end;
     }
 
+    /**
+     * Gets start date.
+     *
+     * @return start date.
+     */
     public LocalDate getStart() {
         return start;
     }
 
+    /**
+     * Sets start date.
+     *
+     * @param start start date.
+     */
     public void setStart(LocalDate start) {
         this.start = start;
     }
 
+    /**
+     * Gets end date.
+     *
+     * @return end date.
+     */
     public LocalDate getEnd() {
         return end;
     }
 
+    /**
+     * Sets end.
+     *
+     * @param end end date.
+     */
     public void setEnd(LocalDate end) {
         this.end = end;
     }

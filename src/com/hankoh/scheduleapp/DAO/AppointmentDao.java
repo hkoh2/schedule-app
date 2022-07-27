@@ -7,15 +7,30 @@ import javafx.collections.ObservableList;
 import java.sql.*;
 import java.time.*;
 
+/**
+ * Data access object for appointments.
+ */
 public class AppointmentDao {
 
     private final ObservableList<Appointment> appointments = FXCollections.observableArrayList();
+    /**
+     * The Conn.
+     */
     Connection conn;
 
+    /**
+     * Instantiates a new Appointment dao.
+     */
     public AppointmentDao() {
         conn = JDBC.getConnection();
     }
 
+    /**
+     * Gets all appointments from database.
+     *
+     * @return the all appointments
+     * @throws SQLException the sql exception
+     */
     public ObservableList<Appointment> getAllAppointments() throws SQLException {
         String query = """
                 SELECT *
@@ -75,6 +90,13 @@ public class AppointmentDao {
         return appointments;
     }
 
+    /**
+     * Gets appointments by date.
+     *
+     * @param date the date
+     * @return the appointments by date
+     * @throws SQLException the sql exception
+     */
     public ObservableList<Appointment> getAppointmentsByDate(LocalDate date) throws SQLException {
         String query = """
         SELECT Appointment_ID, Start, End
@@ -112,6 +134,13 @@ public class AppointmentDao {
 
     }
 
+    /**
+     * Adds new appointment to database.
+     *
+     * @param appointment new appointment to add
+     * @return the boolean
+     * @throws SQLException the sql exception
+     */
     public boolean addAppointment(Appointment appointment) throws SQLException {
 
         PreparedStatement conflictStmt = getConflictTimeStatement(appointment);
@@ -128,6 +157,13 @@ public class AppointmentDao {
         return true;
     }
 
+    /**
+     * Removes appointment by id
+     *
+     * @param appointmentId appointment id to remove
+     * @return the boolean
+     * @throws SQLException the sql exception
+     */
     public boolean removeAppointment(int appointmentId) throws SQLException {
         PreparedStatement stmt = getRemoveStatement(appointmentId);
         int count = stmt.executeUpdate();
@@ -138,6 +174,12 @@ public class AppointmentDao {
         return false;
     }
 
+    /**
+     * Updates appointment.
+     *
+     * @param appointment the appointment
+     * @throws SQLException the sql exception
+     */
     public void updateAppointment(Appointment appointment) throws SQLException {
         PreparedStatement stmt = getUpdateStatement(appointment);
         System.out.println(stmt);
@@ -145,6 +187,13 @@ public class AppointmentDao {
         System.out.println(count + " appointment updated");
     }
 
+    /**
+     * Prepared statement for checking appointment conflicts.
+     *
+     * @param appointment appointment to check
+     * @return
+     * @throws SQLException
+     */
     private PreparedStatement getConflictTimeStatement(Appointment appointment) throws SQLException {
         String query = """
                 SELECT * FROM appointments
@@ -171,6 +220,13 @@ public class AppointmentDao {
 
     }
 
+    /**
+     * Creates prepared statement for updating appointments.
+     *
+     * @param appointment appointment to update
+     * @return
+     * @throws SQLException
+     */
     private PreparedStatement getUpdateStatement(Appointment appointment) throws SQLException {
         String query = """
                 UPDATE appointments
@@ -202,6 +258,13 @@ public class AppointmentDao {
         return stmt;
     }
 
+    /**
+     * Gets insert statement to add new appointment to database.
+     *
+     * @param appointment appointment to add.
+     * @return the insert statement
+     * @throws SQLException the sql exception
+     */
     public PreparedStatement getInsertStatement(Appointment appointment) throws SQLException {
         String query = """
                 INSERT INTO appointments
@@ -223,6 +286,13 @@ public class AppointmentDao {
         return stmt;
     }
 
+    /**
+     * Gets remove statement.
+     *
+     * @param appointmentId appointment id to remove
+     * @return the remove statement
+     * @throws SQLException the sql exception
+     */
     public PreparedStatement getRemoveStatement(int appointmentId) throws SQLException {
         String query = """
                 DELETE FROM appointments

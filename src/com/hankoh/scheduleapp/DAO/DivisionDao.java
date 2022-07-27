@@ -9,10 +9,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/**
+ * The type Division dao.
+ */
 public class DivisionDao {
 
     private final ObservableList<Division> divisions = FXCollections.observableArrayList();
 
+    /**
+     * Gets all divisions.
+     *
+     * @return the all divisions
+     * @throws SQLException the sql exception
+     */
     public ObservableList<Division> getAllDivisions() throws SQLException {
         getDivisionsDB();
         return divisions;

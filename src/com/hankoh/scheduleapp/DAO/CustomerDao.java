@@ -6,19 +6,38 @@ import javafx.collections.ObservableList;
 
 import java.sql.*;
 
+/**
+ * Data access object for customers.
+ */
 public class CustomerDao {
     private final ObservableList<Customer> customers = FXCollections.observableArrayList();
+    /**
+     * The Conn.
+     */
     Connection conn;
 
+    /**
+     * Instantiates a new Customer dao.
+     */
     public CustomerDao() {
         conn = JDBC.getConnection();
     }
 
+    /**
+     * Gets all customers.
+     *
+     * @return the all customers
+     * @throws SQLException the sql exception
+     */
     public ObservableList<Customer> getAllCustomers() throws SQLException {
         getCustomersDB();
         return customers;
     }
 
+    /**
+     * Retrieves customers from the database.
+     * @throws SQLException
+     */
     private void getCustomersDB() throws SQLException {
 
         Connection conn = JDBC.getConnection();
@@ -55,6 +74,13 @@ public class CustomerDao {
         }
     }
 
+    /**
+     * Adds customers to database.
+     *
+     * @param customer customer to add
+     * @return confirmation of database insert
+     * @throws SQLException the sql exception
+     */
     public boolean addCustomer(Customer customer) throws SQLException {
         PreparedStatement stmt = getInsertStatement(customer);
         int count = stmt.executeUpdate();
@@ -65,6 +91,13 @@ public class CustomerDao {
         return false;
     }
 
+    /**
+     * Updates customer details.
+     *
+     * @param customer customer to update
+     * @return confirmation of updating customer
+     * @throws SQLException the sql exception
+     */
     public boolean editCustomer(Customer customer) throws SQLException {
         PreparedStatement stmt = getUpdateStatement(customer);
         int count = stmt.executeUpdate();
@@ -97,6 +130,13 @@ public class CustomerDao {
         return stmt;
     }
 
+    /**
+     * Gets prepared statement for inserting new customer.
+     *
+     * @param customer
+     * @return prepared statement for JDBC
+     * @throws SQLException
+     */
     private PreparedStatement getInsertStatement(Customer customer) throws SQLException {
         String query = """
                 INSERT INTO customers
@@ -113,6 +153,13 @@ public class CustomerDao {
         return stmt;
     }
 
+    /**
+     * Deletes customer by id.
+     *
+     * @param id customer ID to delete
+     * @return confirmation of deleting customer
+     * @throws SQLException the sql exception
+     */
     public boolean deleteCustomerById(int id) throws SQLException {
         PreparedStatement stmt = getDeleteStatement(id);
         int count = 0;
@@ -127,6 +174,14 @@ public class CustomerDao {
         }
         return false;
     }
+
+    /**
+     * Creates prepared statement for deleting customer from database.
+     *
+     * @param id customer ID to delete
+     * @return prepared statement
+     * @throws SQLException
+     */
     private PreparedStatement getDeleteStatement(int id) throws SQLException {
         String query = """
                 DELETE FROM customers WHERE Customer_ID = ?

@@ -94,7 +94,7 @@ public class LoginController {
     }
 
     /**
-     * On login button click.
+     * On login button click. Validates user before logging in.
      *
      * @param actionEvent the action event
      * @throws SQLException the sql exception

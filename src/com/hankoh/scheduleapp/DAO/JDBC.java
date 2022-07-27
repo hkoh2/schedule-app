@@ -4,6 +4,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * JDBC driver
+ */
 public class JDBC {
     private static final String protocol = "jdbc";
     private static final String vendor = ":mysql:";
@@ -18,7 +21,10 @@ public class JDBC {
     private static final String password = "Passw0rd!";
     // Password
     private static Connection connection = null;
-    // Connection Interface
+
+    /**
+     * Creates connection to database.
+     */
     public static void makeConnection() {
         try {
             Class.forName(driver); // Locate Driver
@@ -29,9 +35,19 @@ public class JDBC {
             System.out.println("Error:" + e.getMessage());
         }
     }
+
+    /**
+     * Returns database connection for application.
+     *
+     * @return dataabse connection
+     */
     public static Connection getConnection() {
         return connection;
     }
+
+    /**
+     * Closes database connection
+     */
     public static void closeConnection() {
         try {
             connection.close();
