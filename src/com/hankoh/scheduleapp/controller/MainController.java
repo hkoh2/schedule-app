@@ -953,6 +953,5 @@ public class MainController {
                 .getSelectedIndex();
         ds.setCurrentTab(tab);
         ds.setCurrentTabIndex(index);
-        System.out.println(tab.getText());
     }
 }
