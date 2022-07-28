@@ -11,7 +11,15 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+/**
+ * Main class. Entry point for application. Database connection initiated.
+ */
 public class Main extends Application {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
     public static void main(String[] args) {
 
         // Test location

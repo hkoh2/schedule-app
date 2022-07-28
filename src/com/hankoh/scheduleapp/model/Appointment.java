@@ -4,7 +4,8 @@ import java.sql.Timestamp;
 import java.time.ZonedDateTime;
 
 /**
- * The type Appointment.
+ * Appointment class hold customer appointments. All time elements are
+ * in ZonedDateTime.
  */
 public class Appointment {
     private int appointmentId;
@@ -23,11 +24,12 @@ public class Appointment {
     private String contactEmail;
 
     /**
-     * Instantiates a new Appointment.
+     * Instantiates a new Appointment. Used to check for any conflicts
+     * between appointments.
      *
-     * @param appointmentId the appointment id
-     * @param startTime     the start time
-     * @param endTime       the end time
+     * @param appointmentId appointment id
+     * @param startTime     start time
+     * @param endTime       end time
      */
     public Appointment(
             int appointmentId,
@@ -40,22 +42,22 @@ public class Appointment {
     }
 
     /**
-     * Instantiates a new Appointment.
+     * Instantiates a new Appointment. Contains all properties for appointment.
      *
-     * @param appointmentId the appointment id
-     * @param title         the title
-     * @param description   the description
-     * @param location      the location
-     * @param type          the type
-     * @param startTime     the start time
-     * @param endTime       the end time
-     * @param customerId    the customer id
-     * @param customerName  the customer name
-     * @param userId        the user id
-     * @param userName      the user name
-     * @param contactId     the contact id
-     * @param contactName   the contact name
-     * @param contactEmail  the contact email
+     * @param appointmentId appointment id
+     * @param title         title
+     * @param description   description
+     * @param location      location
+     * @param type          type
+     * @param startTime     start time
+     * @param endTime       end time
+     * @param customerId    customer id
+     * @param customerName  customer name
+     * @param userId        user id
+     * @param userName      username
+     * @param contactId     contact id
+     * @param contactName   contact name
+     * @param contactEmail  contact email
      */
     public Appointment(
             int appointmentId,
@@ -89,7 +91,8 @@ public class Appointment {
     }
 
     /**
-     * Instantiates a new Appointment.
+     * Instantiates a new Appointment. Used for creating new appointment
+     * without user ID. IDs are auto-generated.
      *
      * @param title       the title
      * @param description the description
@@ -124,7 +127,7 @@ public class Appointment {
     }
 
     /**
-     * Instantiates a new Appointment.
+     * Instantiates a new Appointment. Used for updating appointments.
      *
      * @param id          the id
      * @param title       the title
