@@ -31,6 +31,29 @@ public class AppointmentAddController extends AppointmentController {
     }
 
     /**
+     * Initializing FXML
+     */
+    public void initialize() {
+        super.initialize();
+
+        idField.setText(msg.getString("appointment.id_auto"));
+
+        customerComboBox.getSelectionModel().selectFirst();
+        userComboBox.getSelectionModel().selectFirst();
+        contactComboBox.getSelectionModel().selectFirst();
+
+        datePicker.valueProperty()
+                .addListener((ov, oldVal, newVal) -> filterAvailableTime(newVal));
+
+        customerComboBox.valueProperty()
+                .addListener((ov, oldVal, newVal) -> clearDatePicker());
+
+        durationComboBox.setItems(allDuration);
+        timeComboBox.valueProperty()
+                .addListener((ov, oldVal, newVal) -> setAllDuration());
+    }
+
+    /**
      * Sets duration of appointments by available time
      */
     private void setAllDuration() {
@@ -88,29 +111,6 @@ public class AppointmentAddController extends AppointmentController {
     private boolean filterTimeAfter(Appointment apt, ZonedDateTime time) {
         ZonedDateTime startTime = apt.getStartTime();
         return !startTime.isBefore(time);
-    }
-
-    /**
-     * Initializing FXML
-     */
-    public void initialize() {
-        super.initialize();
-
-        idField.setText(msg.getString("appointment.id_auto"));
-
-        customerComboBox.getSelectionModel().selectFirst();
-        userComboBox.getSelectionModel().selectFirst();
-        contactComboBox.getSelectionModel().selectFirst();
-
-        datePicker.valueProperty()
-                .addListener((ov, oldVal, newVal) -> filterAvailableTime(newVal));
-
-        customerComboBox.valueProperty()
-                .addListener((ov, oldVal, newVal) -> clearDatePicker());
-
-        durationComboBox.setItems(allDuration);
-        timeComboBox.valueProperty()
-                .addListener((ov, oldVal, newVal) -> setAllDuration());
     }
 
     /**
