@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="462.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hankoh.scheduleapp.controller.LoginController">
+<AnchorPane prefHeight="462.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hankoh.scheduleapp.controller.LoginController">
    <children>
       <GridPane layoutX="66.0" layoutY="139.0" prefHeight="227.0" prefWidth="354.0">
         <columnConstraints>
@@ -32,8 +39,8 @@
                </GridPane.margin>
             </Label>
             <Button fx:id="loginButton" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#onLoginButtonClick" text="Log In" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
-            <Text fx:id="loginErrorText" strokeType="OUTSIDE" strokeWidth="0.0" text="Error message" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Button fx:id="devLoginButton" mnemonicParsing="false" onAction="#onDevLoginClick" text="Button" GridPane.rowIndex="3" />
+            <Text fx:id="loginErrorText" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Button fx:id="devLoginButton" mnemonicParsing="false" onAction="#onDevLoginClick" text="Button" visible="false" GridPane.rowIndex="3" />
          </children>
       </GridPane>
       <Text fx:id="titleText" layoutX="66.0" layoutY="51.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Schedule App">
@@ -42,6 +49,6 @@
          </font>
       </Text>
       <Button fx:id="exitButton" layoutX="550.0" layoutY="14.0" mnemonicParsing="false" text="Exit" />
-      <ComboBox fx:id="languageCombo" layoutX="20.0" layoutY="422.0" onAction="#onLanguageSelect" prefWidth="150.0" />
+      <ComboBox fx:id="languageCombo" layoutX="20.0" layoutY="422.0" onAction="#onLanguageSelect" prefWidth="150.0" visible="false" />
    </children>
 </AnchorPane>

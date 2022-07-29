@@ -30,7 +30,7 @@ import java.util.ResourceBundle;
  * Lambda - Instead of attaching an event handler to the button, a lambda
  * function was used to terminate the application.
  */
-public class LoginController {
+public class LoginController extends Internationalizable {
     /**
      * The Title text.
      */
@@ -106,11 +106,11 @@ public class LoginController {
         // Checks username and password.
         // Also adds user to DS.
         if (userDao.loginUser(username.getText(), password.getText())) {
-            loginErrorText.setText("Logged In!");
+            loginErrorText.setText(msg.getString("login_success"));
             Logger.loginAttempted(username.getText(), true);
             loginUser(actionEvent);
         } else {
-            loginErrorText.setText("Wrong username or password");
+            loginErrorText.setText(msg.getString("login_error"));
             Logger.loginAttempted(username.getText(), false);
         }
     }
