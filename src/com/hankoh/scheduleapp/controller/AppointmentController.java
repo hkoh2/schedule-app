@@ -303,6 +303,9 @@ public class AppointmentController extends Internationalizable {
             @Override
             public LocalDate fromString(String s) {
                 try {
+                    if (s.isBlank()) {
+                        throw new DateTimeException("Empty date");
+                    }
                     startDateError.setText("");
                     dateError = false;
                     return defaultConverter.fromString(s);
