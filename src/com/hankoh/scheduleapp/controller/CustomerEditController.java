@@ -17,6 +17,14 @@ import java.util.Optional;
  * Controller for updating customer details.
  */
 public class CustomerEditController extends CustomerController {
+    /**
+     * Initializes customer edit screen.
+     * <p>
+     *     Lambda used in stream to set the comboboxes to the
+     *     existing customer data.
+     * </p>
+     *
+     */
     @Override
     public void initialize() {
         super.initialize();

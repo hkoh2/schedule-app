@@ -612,6 +612,10 @@ public class MainController {
 
     /**
      * Filters appointment by all, months, and weeks.
+     * <p>
+     *     Lambda used in stream to group appointment list elements
+     *     by each report criteria.
+     * </p>
      *
      * @param newVal type of filter for appointments.
      * @throws SQLException
@@ -654,6 +658,9 @@ public class MainController {
 
     /**
      * Separates appointments by month.
+     * <p>
+     *     Lambda stream used to separate appointments by month.
+     * </p>
      *
      * @return reports by month
      */
@@ -667,6 +674,9 @@ public class MainController {
 
     /**
      * Separates appointments by week.
+     * <p>
+     *     Lambda stream used to separate appointment by week.
+     * </p>
      *
      * @return reports by week.
      */

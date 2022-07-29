@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.hankoh.scheduleapp"},{"l":"com.hankoh.scheduleapp.controller"},{"l":"com.hankoh.scheduleapp.DAO"},{"l":"com.hankoh.scheduleapp.model"}];updateSearchResults();

@@ -32,6 +32,10 @@ public class AppointmentAddController extends AppointmentController {
 
     /**
      * Initializing FXML
+     *
+     * <p>
+     *     Lambda for adding listener to FXML
+     * </p>
      */
     public void initialize() {
         super.initialize();
@@ -70,6 +74,9 @@ public class AppointmentAddController extends AppointmentController {
 
     /**
      * Calculates the max duration for a time chosen.
+     * <p>
+     *     Lambda for filtering overlapping appointment times using stream.
+     * </p>
      *
      * @return Maximum duration of appointment for a time chosen.
      */
@@ -145,6 +152,10 @@ public class AppointmentAddController extends AppointmentController {
 
     /**
      * Filters out any times that exists between existing appointments.
+     *
+     * <p>
+     *     Lambda using streams to filter available times.
+     * </p>
      *
      * @param time time chosen
      * @return boolean if time between existing appointments

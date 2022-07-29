@@ -26,6 +26,15 @@ public class AppointmentEditController extends AppointmentController {
         super();
     }
 
+    /**
+     * Initializes appointment edit screen.
+     *
+     * <p>
+     *     Lambda used for streams to select customer, user, and contacts for
+     *     an existing appointment. Additional lambdas used for event
+     *     listener.
+     * </p>
+     */
     public void initialize() {
         super.initialize();
         DataStorage ds = DataStorage.getInstance();
@@ -102,6 +111,12 @@ public class AppointmentEditController extends AppointmentController {
     /**
      * Returns maximum duration a selected time.
      *
+     * <p>
+     *     Lambda used in stream to find earliest appointments from the
+     *     selected time. If appointment is closer than the maximum duration
+     *     allowed, maximum duration is adjusted.
+     * </p>
+     *
      * @return Max duration for selected time
      */
     private int getMaxDuration() {
@@ -138,6 +153,10 @@ public class AppointmentEditController extends AppointmentController {
 
     /**
      * Filters available time.
+     * <p>
+     *     Lambda used for stream to filter available time from
+     *     all available time.
+     * </p>
      *
      * @param date the date
      * @param id   the id
@@ -174,9 +193,13 @@ public class AppointmentEditController extends AppointmentController {
 
     /**
      * Checks for overlapping appointments
+     * <p>
+     *     Lambda used in stream to find if the time is
+     *     during an existing appointment.
+     * </p>
      *
-     * @param time
-     * @return
+     * @param time time selected
+     * @return confirms valid time.
      */
     private boolean getValidTimes(ZonedDateTime time) {
         if (appointments.isEmpty()) {

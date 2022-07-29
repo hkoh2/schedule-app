@@ -123,7 +123,11 @@ public class CustomerController extends Internationalizable {
     ObservableList<Division> divisions = FXCollections.observableArrayList();
 
     /**
-     * Initialize.
+     * Initialize customer FXML.
+     * <p>
+     *     Lambda used in stream to separate divisions by country.
+     * </p>
+     *
      */
     public void initialize() {
         titleLabel.setText(msg.getString("customer.title"));

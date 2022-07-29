@@ -245,6 +245,10 @@ public class AppointmentController extends Internationalizable {
 
     /**
      * Initialize.
+     *
+     * <p>
+     *     Lambda for customer view for table cells.
+     * </p>
      */
     public void initialize() {
         appointmentTitleLabel.setText(msg.getString("appointment.main_title"));
@@ -324,6 +328,11 @@ public class AppointmentController extends Internationalizable {
         });
     }
 
+    /**
+     * Custom display format for time ComboBox
+     *
+     * @return
+     */
     private ListCell<ZonedDateTime> timeFormat() {
         return new ListCell<>() {
             @Override
@@ -367,6 +376,11 @@ public class AppointmentController extends Internationalizable {
         return allTimes;
     }
 
+    /**
+     * Disables weekend for date picker.
+     *
+     * @return
+     */
     private Callback<DatePicker, DateCell> disableWeekends() {
         return (final DatePicker datePicker1) -> new DateCell() {
             @Override
