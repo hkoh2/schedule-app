@@ -86,7 +86,6 @@ public class AppointmentDao {
             appointments.add(appointment);
         }
 
-        //System.out.println("Appointment size - " + appointments.size());
         return appointments;
     }
 
@@ -182,7 +181,6 @@ public class AppointmentDao {
      */
     public void updateAppointment(Appointment appointment) throws SQLException {
         PreparedStatement stmt = getUpdateStatement(appointment);
-        System.out.println(stmt);
         int count = stmt.executeUpdate();
         System.out.println(count + " appointment updated");
     }

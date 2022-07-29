@@ -267,9 +267,8 @@ public class AppointmentAddController extends AppointmentController {
         );
 
         AppointmentDao appointmentDao = new AppointmentDao();
-        if (appointmentDao.addAppointment(appointment)) {
-            return;
-        }
+        appointmentDao.addAppointment(appointment);
         returnToMain(actionEvent);
+
     }
 }
