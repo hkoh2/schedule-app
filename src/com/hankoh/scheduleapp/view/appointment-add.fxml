@@ -11,10 +11,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
 
 <AnchorPane prefHeight="735.0" prefWidth="795.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hankoh.scheduleapp.controller.AppointmentAddController">
    <children>
@@ -47,79 +44,51 @@
             <Label fx:id="descriptionLabel" text="Description" GridPane.rowIndex="4" />
             <TextArea fx:id="descriptionArea" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <Label fx:id="typeLabel" text="Type" GridPane.rowIndex="6" />
-            <Label fx:id="startTimeLabel" text="Date" GridPane.rowIndex="7" />
+            <Label fx:id="dateLabel" text="Date" GridPane.rowIndex="7" />
             <Label fx:id="endTimeLabel" text="End Time" visible="false" GridPane.rowIndex="9" />
             <TextField fx:id="typeField" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-            <DatePicker fx:id="startDatePicker" prefHeight="26.0" prefWidth="333.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+            <DatePicker fx:id="datePicker" prefHeight="26.0" prefWidth="333.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
             <Label fx:id="nameLabel" text="Customer Name" GridPane.rowIndex="2" />
             <Label fx:id="userLabel" text="User" GridPane.rowIndex="11" />
             <Label fx:id="locationLabel" text="Location" GridPane.rowIndex="5" />
             <TextField fx:id="locationField" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="8">
-               <children>
-                  <TextField fx:id="startHourField" prefHeight="26.0" prefWidth="110.0">
-                     <padding>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </padding>
-                     <HBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </HBox.margin>
-                  </TextField>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text=":">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                  </Text>
-                  <TextField fx:id="startMinuteField" prefWidth="110.0">
-                     <padding>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </padding>
-                     <HBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </HBox.margin>
-                  </TextField>
-                  <ComboBox fx:id="startMeridiemComboBox" prefWidth="110.0" />
-               </children>
-            </HBox>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="9">
-               <children>
-                  <TextField fx:id="endHourField" prefHeight="26.0" prefWidth="110.0">
-                     <padding>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </padding>
-                     <HBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </HBox.margin>
-                  </TextField>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text=":">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                  </Text>
-                  <TextField fx:id="endMinuteField" prefWidth="110.0">
-                     <padding>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </padding>
-                     <HBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </HBox.margin>
-                  </TextField>
-                  <ComboBox fx:id="endMeridiemComboBox" prefWidth="110.0" />
-               </children>
-            </HBox>
-            <ComboBox fx:id="customerComboBox" prefHeight="26.0" prefWidth="330.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <ComboBox fx:id="userComboBox" prefHeight="26.0" prefWidth="331.0" GridPane.columnIndex="1" GridPane.rowIndex="11" />
+            <ComboBox fx:id="customerComboBox" prefHeight="26.0" prefWidth="330.0" promptText="Select Customer" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <ComboBox fx:id="userComboBox" prefHeight="26.0" prefWidth="331.0" promptText="Select User" GridPane.columnIndex="1" GridPane.rowIndex="11" />
             <Label fx:id="contactLabel" text="Contact" GridPane.rowIndex="12" />
-            <ComboBox fx:id="contactComboBox" prefHeight="26.0" prefWidth="332.0" GridPane.columnIndex="1" GridPane.rowIndex="12" />
-            <Label fx:id="titleError" text="label" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-            <Label fx:id="descriptionError" text="label" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-            <Label fx:id="locationError" text="label" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="5" />
-            <Label fx:id="typeError" text="label" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="6" />
-            <Label fx:id="startTimeError" text="label" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="8" />
-            <Label fx:id="endTimeError" prefHeight="18.0" prefWidth="26.0" text="label" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="9" />
-            <Label fx:id="startDateError" prefHeight="18.0" prefWidth="58.0" text="label" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="7" />
-            <Label text="Start Time" GridPane.rowIndex="8" />
-            <Label text="End Time" GridPane.rowIndex="9" />
+            <ComboBox fx:id="contactComboBox" prefHeight="26.0" prefWidth="332.0" promptText="Select Contact" GridPane.columnIndex="1" GridPane.rowIndex="12" />
+            <Label fx:id="titleError" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="3">
+               <GridPane.margin>
+                  <Insets left="5.0" />
+               </GridPane.margin></Label>
+            <Label fx:id="descriptionError" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="4">
+               <GridPane.margin>
+                  <Insets left="5.0" />
+               </GridPane.margin></Label>
+            <Label fx:id="locationError" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="5">
+               <GridPane.margin>
+                  <Insets left="5.0" />
+               </GridPane.margin></Label>
+            <Label fx:id="typeError" prefHeight="18.0" prefWidth="179.0" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="6">
+               <GridPane.margin>
+                  <Insets left="5.0" />
+               </GridPane.margin></Label>
+            <Label fx:id="startTimeError" prefHeight="18.0" prefWidth="203.0" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="8">
+               <GridPane.margin>
+                  <Insets left="5.0" />
+               </GridPane.margin></Label>
+            <Label fx:id="endTimeError" prefHeight="18.0" prefWidth="206.0" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="9">
+               <GridPane.margin>
+                  <Insets left="5.0" />
+               </GridPane.margin></Label>
+            <Label fx:id="startDateError" prefHeight="18.0" prefWidth="181.0" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="7">
+               <GridPane.margin>
+                  <Insets left="5.0" />
+               </GridPane.margin></Label>
+            <Label fx:id="timeLabel" text="Time" GridPane.rowIndex="8" />
+            <Label fx:id="durationLabel" text="Duration" GridPane.rowIndex="9" />
+            <Label fx:id="startEndTimeLabel" text="Label" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+            <ComboBox fx:id="durationComboBox" prefHeight="26.0" prefWidth="336.0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+            <ComboBox fx:id="timeComboBox" prefHeight="26.0" prefWidth="335.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
          </children>
       </GridPane>
       <ButtonBar layoutX="581.0" layoutY="681.0" prefHeight="40.0" prefWidth="200.0">

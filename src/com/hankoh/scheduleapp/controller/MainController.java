@@ -773,7 +773,7 @@ public class MainController {
      * @throws IOException the io exception
      */
     public void onNewAppointmentButtonClick(ActionEvent actionEvent) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/hankoh/scheduleapp/view/appointment-add2.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/hankoh/scheduleapp/view/appointment-add.fxml"));
         Parent root = loader.load();
         Stage stage = (Stage)((Node) actionEvent.getSource()).getScene().getWindow();
         stage.setTitle(msg.getString("appointment.main_title"));
@@ -794,7 +794,7 @@ public class MainController {
             return;
         }
         ds.setCurrentAppointment(appointment);
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/hankoh/scheduleapp/view/appointment-edit2.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/hankoh/scheduleapp/view/appointment-edit.fxml"));
         Parent root = loader.load();
         Stage stage = (Stage)((Node) actionEvent.getSource()).getScene().getWindow();
         stage.setTitle(msg.getString("modify.title"));
