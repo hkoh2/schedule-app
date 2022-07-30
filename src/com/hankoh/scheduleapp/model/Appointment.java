@@ -434,4 +434,9 @@ public class Appointment {
     public void setContactId(int contactId) {
         this.contactId = contactId;
     }
+
+    public String toStringAlert() {
+        System.out.println(getStartTime());
+        return this.appointmentId + " " + this.customerName;
+    }
 }

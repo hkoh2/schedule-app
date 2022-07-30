@@ -432,6 +432,26 @@ public class MainController {
         initializeTypeMonthReport();
         initializeCustomerReport();
 
+        if (ds.loggedIn()) {
+            //show appointments
+            showUpcomingAppointment();
+            ds.setLoggedIn(false);
+        }
+    }
+
+    private void showUpcomingAppointment() {
+        ArrayList<Appointment> upcoming = appointments.stream()
+                .filter(appointment -> filterUpcoming(appointment))
+                .collect(toCollection(ArrayList::new));
+        upcoming.forEach(Appointment::toStringAlert);
+    }
+
+    private boolean filterUpcoming(Appointment appointment) {
+        ZonedDateTime start = appointment.getStartTime();
+        ZonedDateTime now = ZonedDateTime.now();
+        //System.out.println(Duration.between(now, start).toMinutes());
+        return Duration.between(now, start).toMinutes() < 5000 &&
+                Duration.between(now, start).toMinutes() >= 0;
     }
 
     /**

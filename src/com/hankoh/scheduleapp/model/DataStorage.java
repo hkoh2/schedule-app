@@ -14,6 +14,7 @@ public final class DataStorage {
     private int currentTabIndex;
     private Customer currentCustomer;
     private Appointment currentAppointment;
+    private boolean loggedIn = false;
 
     private DataStorage() {}
 
@@ -122,5 +123,13 @@ public final class DataStorage {
      */
     public Customer getCurrentCustomer() {
         return currentCustomer;
+    }
+
+    public boolean loggedIn() {
+        return loggedIn;
+    }
+
+    public void setLoggedIn(boolean loggedIn) {
+        this.loggedIn = loggedIn;
     }
 }

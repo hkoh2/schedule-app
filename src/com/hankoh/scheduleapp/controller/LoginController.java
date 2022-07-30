@@ -96,6 +96,8 @@ public class LoginController extends Internationalizable {
 
         ZoneId zoneId = ZoneId.systemDefault();
         zoneLabel.setText(zoneId.toString());
+        DataStorage ds = DataStorage.getInstance();
+        ds.setLoggedIn(true);
     }
 
     /**
