@@ -50,5 +50,6 @@
       </Text>
       <Button fx:id="exitButton" layoutX="550.0" layoutY="14.0" mnemonicParsing="false" text="Exit" />
       <ComboBox fx:id="languageCombo" layoutX="20.0" layoutY="422.0" onAction="#onLanguageSelect" prefWidth="150.0" visible="false" />
+      <Label fx:id="zoneLabel" layoutX="66.0" layoutY="72.0" text="Zone" />
    </children>
 </AnchorPane>

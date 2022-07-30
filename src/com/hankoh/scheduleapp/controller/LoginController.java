@@ -18,6 +18,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.ZoneId;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -71,6 +72,7 @@ public class LoginController extends Internationalizable {
      * The Username.
      */
     public TextField username;
+    public Label zoneLabel;
 
     /**
      * Initialize.
@@ -91,6 +93,9 @@ public class LoginController extends Internationalizable {
 
         // lambda for closing app
         exitButton.setOnAction(event -> Platform.exit());
+
+        ZoneId zoneId = ZoneId.systemDefault();
+        zoneLabel.setText(zoneId.toString());
     }
 
     /**
