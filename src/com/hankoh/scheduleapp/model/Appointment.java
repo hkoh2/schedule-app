@@ -437,6 +437,6 @@ public class Appointment {
 
     public String toStringAlert() {
         System.out.println(getStartTime());
-        return this.appointmentId + " " + this.customerName;
+        return this.appointmentId + " " + this.customerName + " " + this.description;
     }
 }

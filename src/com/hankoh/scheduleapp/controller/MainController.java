@@ -442,15 +442,29 @@ public class MainController {
     private void showUpcomingAppointment() {
         ArrayList<Appointment> upcoming = appointments.stream()
                 .filter(appointment -> filterUpcoming(appointment))
+                .peek(Appointment::toStringAlert)
                 .collect(toCollection(ArrayList::new));
-        upcoming.forEach(Appointment::toStringAlert);
+        // TODO create alert dialog and lambda javadoc
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(msg.getString("upcoming.title"));
+        alert.setHeaderText(upcoming.size() + " " + msg.getString("upcoming.header"));
+        if (upcoming.isEmpty()) {
+            alert.setContentText(msg.getString("upcoming.none"));
+        } else {
+            String strAppointment = "";
+            for (Appointment apt : upcoming) {
+                strAppointment += apt.toStringAlert() + "\n";
+            }
+            alert.setContentText(strAppointment);
+        }
+        alert.show();
     }
 
     private boolean filterUpcoming(Appointment appointment) {
         ZonedDateTime start = appointment.getStartTime();
         ZonedDateTime now = ZonedDateTime.now();
         //System.out.println(Duration.between(now, start).toMinutes());
-        return Duration.between(now, start).toMinutes() < 5000 &&
+        return Duration.between(now, start).toMinutes() < 30 &&
                 Duration.between(now, start).toMinutes() >= 0;
     }
 
