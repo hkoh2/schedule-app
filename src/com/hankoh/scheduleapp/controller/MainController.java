@@ -939,6 +939,11 @@ public class MainController {
             CustomerDao customerDao = new CustomerDao();
             if (customerDao.deleteCustomerById(selectedCustomer.getCustomerId())) {
                 customersTable.setItems(customerDao.getAllCustomers());
+                Alert errorAlert = new Alert(Alert.AlertType.INFORMATION);
+                errorAlert.setTitle(msg.getString("customer.delete.confirmation"));
+                errorAlert.setHeaderText(msg.getString("customer.delete.customer"));
+                errorAlert.setContentText(selectedCustomer.getName() + " deleted");
+                errorAlert.showAndWait();
                 return;
             }
             Alert errorAlert = new Alert(Alert.AlertType.WARNING);
