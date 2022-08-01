@@ -23,7 +23,6 @@ public class Main extends Application {
     public static void main(String[] args) {
 
         // Test location
-        Locale.setDefault(new Locale("fr", "FR"));
         JDBC.makeConnection();
         launch(args);
     }
