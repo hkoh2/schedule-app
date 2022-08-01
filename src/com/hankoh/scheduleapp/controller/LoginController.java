@@ -76,6 +76,9 @@ public class LoginController extends Internationalizable {
 
     /**
      * Initialize.
+     * <p>
+     *     Lambda used for closing the application.
+     * </p>
      */
     public void initialize() {
 

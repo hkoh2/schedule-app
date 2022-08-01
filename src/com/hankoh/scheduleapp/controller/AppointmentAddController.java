@@ -34,7 +34,7 @@ public class AppointmentAddController extends AppointmentController {
      * Initializing FXML
      *
      * <p>
-     *     Lambda for adding listener to FXML
+     *     Lambda for adding listener to various FXML components.
      * </p>
      */
     public void initialize() {
@@ -58,7 +58,7 @@ public class AppointmentAddController extends AppointmentController {
     }
 
     /**
-     * Sets duration of appointments by available time
+     * Sets duration of appointments by available time in 15 minutes intervals.
      */
     private void setAllDuration() {
         allDuration.removeAll();
@@ -122,6 +122,9 @@ public class AppointmentAddController extends AppointmentController {
 
     /**
      * Filters available time for a date picked.
+     * <p>
+     *     Lambda used for stream. Filters any conflicting times from available times.
+     * </p>
      *
      * @param date the date picked
      */
@@ -269,6 +272,5 @@ public class AppointmentAddController extends AppointmentController {
         AppointmentDao appointmentDao = new AppointmentDao();
         appointmentDao.addAppointment(appointment);
         returnToMain(actionEvent);
-
     }
 }

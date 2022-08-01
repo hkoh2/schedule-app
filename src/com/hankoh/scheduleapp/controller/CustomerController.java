@@ -219,8 +219,8 @@ public class CustomerController extends Internationalizable {
     /**
      * Filters divisions by country ID.
      *
-     * @param countryId
-     * @return
+     * @param countryId country id to filter
+     * @return list of division with country id
      */
     private ObservableList<Division> filterDivision(int countryId) {
         return divisions.stream()

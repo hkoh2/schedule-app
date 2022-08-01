@@ -21,7 +21,7 @@ public class CustomerEditController extends CustomerController {
      * Initializes customer edit screen.
      * <p>
      *     Lambda used in stream to set the comboboxes to the
-     *     existing customer data.
+     *     existing customer data, which includes division and country.
      * </p>
      *
      */

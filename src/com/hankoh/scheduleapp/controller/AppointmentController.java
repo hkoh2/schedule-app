@@ -244,10 +244,10 @@ public class AppointmentController extends Internationalizable {
     private boolean dateError = false;
 
     /**
-     * Initialize.
+     * Initializes FXML components for Appointment controllers.
      *
      * <p>
-     *     Lambda for customer view for table cells.
+     *     Lambda for custom display for time ComboBox.
      * </p>
      */
     public void initialize() {
@@ -351,10 +351,10 @@ public class AppointmentController extends Internationalizable {
     }
 
     /**
-     * Gets avail times.
+     * Gets available times between business hours.
      *
-     * @param date the date
-     * @return the avail times
+     * @param date selected date
+     * @return list of available times
      */
     protected ObservableList<ZonedDateTime> getAvailTimes(LocalDate date) {
 
@@ -398,7 +398,7 @@ public class AppointmentController extends Internationalizable {
     }
 
     /**
-     * On exit button click.
+     * Cancels appointment add or edit and returns to main screen.
      *
      * @param actionEvent the action event
      * @throws IOException the io exception
@@ -418,12 +418,12 @@ public class AppointmentController extends Internationalizable {
     }
 
     /**
-     * Field is valid boolean.
+     * Validates inputs. Input cannot be empty.
      *
-     * @param title   the title
-     * @param label   the label
-     * @param message the message
-     * @return the boolean
+     * @param title   user input
+     * @param label   label for error message
+     * @param message error message
+     * @return validate user input
      */
     protected boolean fieldIsValid(String title, Label label, String message) {
         if (title == null || title.isBlank()) {
@@ -435,12 +435,12 @@ public class AppointmentController extends Internationalizable {
     }
 
     /**
-     * Field is valid boolean.
+     * Validates date picker.
      *
      * @param date    the date
-     * @param label   the label
-     * @param message the message
-     * @return the boolean
+     * @param label   label for error message
+     * @param message error message
+     * @return validate date picker
      */
     protected boolean fieldIsValid(LocalDate date, Label label, String message) {
         if (dateError) {
@@ -450,17 +450,21 @@ public class AppointmentController extends Internationalizable {
             startDateError.setText(msg.getString(message));
             return false;
         }
+        if (date.getDayOfWeek() == DayOfWeek.SATURDAY || date.getDayOfWeek() == DayOfWeek.SUNDAY) {
+            startDateError.setText(msg.getString("datepicker.error.weekend"));
+            return false;
+        }
         label.setText("");
         return true;
     }
 
     /**
-     * Time field is valid boolean.
+     * Validation for start time ComboBox. Time must be selected.
      *
-     * @param time    the time
-     * @param label   the label
-     * @param message the message
-     * @return the boolean
+     * @param time    start time
+     * @param label   label for error message
+     * @param message error message
+     * @return validates time field
      */
     protected boolean timeFieldIsValid(ZonedDateTime time, Label label, String message) {
         if (time == null) {
@@ -472,12 +476,12 @@ public class AppointmentController extends Internationalizable {
     }
 
     /**
-     * Combo box is valid boolean.
+     * Validation for appointment duration. Duration must be selected.
      *
-     * @param duration the duration
-     * @param label    the label
-     * @param message  the message
-     * @return the boolean
+     * @param duration appointment duration
+     * @param label    label for error message
+     * @param message  error message
+     * @return validates duration
      */
     protected boolean comboBoxIsValid(AppointmentDuration duration, Label label, String message) {
         if (duration == null) {
@@ -489,14 +493,14 @@ public class AppointmentController extends Internationalizable {
     }
 
     /**
-     * Clear date picker.
+     * Clears date picker.
      */
     public void clearDatePicker() {
         datePicker.setValue(null);
     }
 
     /**
-     * Return to main.
+     * Return to main screen.
      *
      * @param actionEvent the action event
      * @throws IOException the io exception

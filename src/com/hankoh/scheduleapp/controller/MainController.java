@@ -439,12 +439,17 @@ public class MainController {
         }
     }
 
+    /**
+     * Shows upcoming appointments after logging in.
+     * <p>
+     *     Lambda used for stream to filter appointments within 15 minutes of logging in.
+     * </p>
+     */
     private void showUpcomingAppointment() {
         ArrayList<Appointment> upcoming = appointments.stream()
                 .filter(appointment -> filterUpcoming(appointment))
                 .peek(Appointment::toStringAlert)
                 .collect(toCollection(ArrayList::new));
-        // TODO create alert dialog and lambda javadoc
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(msg.getString("upcoming.title"));
         alert.setHeaderText(upcoming.size() + " " + msg.getString("upcoming.header"));
@@ -460,11 +465,16 @@ public class MainController {
         alert.show();
     }
 
+    /**
+     * Used to filter appointments.
+     *
+     * @param appointment
+     * @return all appointments within 15 minutes for current time
+     */
     private boolean filterUpcoming(Appointment appointment) {
         ZonedDateTime start = appointment.getStartTime();
         ZonedDateTime now = ZonedDateTime.now();
-        //System.out.println(Duration.between(now, start).toMinutes());
-        return Duration.between(now, start).toMinutes() < 30 &&
+        return Duration.between(now, start).toMinutes() < 15 &&
                 Duration.between(now, start).toMinutes() >= 0;
     }
 
@@ -490,6 +500,9 @@ public class MainController {
 
     /**
      * Initializes customer reports.
+     * <p>
+     *     Lambda used for stream to filter customers by total and average time.
+     * </p>
      *
      * @throws SQLException
      */
@@ -536,6 +549,10 @@ public class MainController {
 
     /**
      * Initializes reports by type and month.
+     * <p>
+     *     Lambda used for stream to filter appointments by type and month.
+     * </p>
+     *
      * @throws SQLException
      */
     private void initializeTypeMonthReport() throws SQLException {
@@ -559,6 +576,9 @@ public class MainController {
 
     /**
      * Creates reports by type and month
+     * <p>
+     *     Lambda used for stream to filter appointments by month.
+     * </p>
      *
      * @param newVal
      */
@@ -648,7 +668,7 @@ public class MainController {
      * Filters appointment by all, months, and weeks.
      * <p>
      *     Lambda used in stream to group appointment list elements
-     *     by each report criteria.
+     *     by each report criteria. Used to show all appointments, appointments by month, and appintment by week.
      * </p>
      *
      * @param newVal type of filter for appointments.
@@ -799,7 +819,6 @@ public class MainController {
                 .addListener((ov, oldTab, newTab) -> setCurrentTab(newTab));
     }
 
-
     /**
      * New appointment button. Transitions to new appointment screen.
      *
@@ -838,6 +857,10 @@ public class MainController {
 
     /**
      * Delete appointment screen. Deletes selected appointment.
+     *
+     * <p>
+     *     Lambda used to regenerate the filtered appointments by week and month.
+     * </p>
      *
      * @param actionEvent the action event
      * @throws SQLException the sql exception
