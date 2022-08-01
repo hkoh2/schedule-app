@@ -856,6 +856,11 @@ public class MainController {
         if (choice.isPresent() && choice.get() == ButtonType.OK) {
             AppointmentDao appointmentDao = new AppointmentDao();
             if (appointmentDao.removeAppointment(selected.getAppointmentId())) {
+                Alert deletedAlert = new Alert(Alert.AlertType.INFORMATION);
+                deletedAlert.setTitle(msg.getString("appointment.delete.confirmation"));
+                deletedAlert.setHeaderText(msg.getString("appointment.delete.appointment"));
+                deletedAlert.setContentText(selected.getAppointmentId() + " " + selected.getCustomerName() + " " + selected.getDescription());
+                deletedAlert.showAndWait();
                 appointments = appointmentDao.getAllAppointments();
                 appointmentsTable.setItems(appointments);
                 appointmentsByMonth = groupingByMonth();
