@@ -2,6 +2,9 @@ package com.hankoh.scheduleapp.model;
 
 import java.sql.Timestamp;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.util.Locale;
 
 /**
  * Appointment class hold customer appointments. All time elements are
@@ -437,6 +440,25 @@ public class Appointment {
 
     public String toStringAlert() {
         System.out.println(getStartTime());
-        return this.appointmentId + " " + this.customerName + " " + this.description;
+        String strAlert = """
+                ID: %s
+                Title: %s
+                Description: %s
+                Location: %s
+                Type: %s
+                Start time: %s
+                End time: %s
+                """;
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).withLocale(Locale.getDefault());
+        String alertText = String.format(strAlert,
+                this.appointmentId,
+                this.title,
+                this.description,
+                this.location,
+                this.type,
+                this.getStartTime().format(dateTimeFormatter),
+                this.getEndTime().format(dateTimeFormatter)
+        );
+        return alertText; //this.appointmentId + "\n" + this.customerName + " " + this.description;
     }
 }
