@@ -874,7 +874,7 @@ public class MainController {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle(msg.getString("appointment.delete.title"));
         alert.setHeaderText(msg.getString("appointment.delete.header"));
-        alert.setContentText(msg.getString("appointment.delete.context") + ", " + selected.getTitle() + "?");
+        alert.setContentText(selected.toStringAlert());
         Optional<ButtonType> choice = alert.showAndWait();
         if (choice.isPresent() && choice.get() == ButtonType.OK) {
             AppointmentDao appointmentDao = new AppointmentDao();
@@ -882,7 +882,7 @@ public class MainController {
                 Alert deletedAlert = new Alert(Alert.AlertType.INFORMATION);
                 deletedAlert.setTitle(msg.getString("appointment.delete.confirmation"));
                 deletedAlert.setHeaderText(msg.getString("appointment.delete.appointment"));
-                deletedAlert.setContentText(selected.getAppointmentId() + " " + selected.getCustomerName() + " " + selected.getDescription());
+                deletedAlert.setContentText(selected.toStringAlert());
                 deletedAlert.showAndWait();
                 appointments = appointmentDao.getAllAppointments();
                 appointmentsTable.setItems(appointments);
