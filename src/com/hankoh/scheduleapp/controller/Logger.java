@@ -3,7 +3,7 @@ package com.hankoh.scheduleapp.controller;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 /**
  * Logging user logins. Saves login attempts to file.
@@ -28,7 +28,8 @@ public class Logger {
 
             String status = isLoggedIn ? "SUCCESS" : "FAILED";
             FileWriter writer = new FileWriter(logFile, true);
-            writer.write(LocalDateTime.now() + "\t" + username + "\t" + status + "\n");
+            //ZonedDateTime now = ZonedDateTime.now(ZoneId.of("UTC"));
+            writer.write(Instant.now() + "\t" + username + "\t" + status + "\n");
             writer.close();
             System.out.println("Login attempt logged");
         } catch (IOException e) {
