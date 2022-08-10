@@ -61,6 +61,7 @@
                               <TableColumn fx:id="customerIdColumn" prefWidth="52.800048828125" text="ID" />
                               <TableColumn fx:id="customerNameColumn" prefWidth="180.00000762939453" text="Customer Name" />
                               <TableColumn fx:id="customerAddressColumn" prefWidth="256.7999572753906" text="Address" />
+                              <TableColumn fx:id="divisionColumn" prefWidth="75.0" text="Division" />
                               <TableColumn fx:id="customerCountryColumn" prefWidth="89.5999755859375" text="Country" />
                               <TableColumn fx:id="customerPostalColumn" minWidth="0.0" prefWidth="159.199951171875" text="Postal Code" />
                               <TableColumn fx:id="customerPhoneColumn" minWidth="0.0" prefWidth="182.4000244140625" text="Phone" />

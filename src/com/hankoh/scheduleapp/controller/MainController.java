@@ -264,6 +264,7 @@ public class MainController {
      * The Reports tab.
      */
     public Tab reportsTab;
+    public TableColumn<Customer, String> divisionColumn;
     /**
      * Language on locale.
      */
@@ -334,6 +335,7 @@ public class MainController {
         customerIdColumn.setText(msg.getString("customer.column.id"));
         customerNameColumn.setText(msg.getString("customer.column.name"));
         customerAddressColumn.setText(msg.getString("customer.column.address"));
+        divisionColumn.setText(msg.getString("customer.column.division"));
         customerCountryColumn.setText(msg.getString("customer.column.country"));
         customerPostalColumn.setText(msg.getString("customer.column.postal"));
         customerPhoneColumn.setText(msg.getString("customer.column.phone"));
@@ -355,10 +357,11 @@ public class MainController {
         getAllCustomers();
         customerIdColumn.setCellValueFactory(new PropertyValueFactory<>("customerId"));
         customerNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        customerAddressColumn.setCellValueFactory(new PropertyValueFactory<>("fullAddress"));
+        customerAddressColumn.setCellValueFactory(new PropertyValueFactory<>("address"));
         customerPostalColumn.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
         customerPhoneColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
         customerCountryColumn.setCellValueFactory(new PropertyValueFactory<>("country"));
+        divisionColumn.setCellValueFactory(new PropertyValueFactory<>("division"));
         customersTable.setItems(customers);
 
         setSelectedTab();
