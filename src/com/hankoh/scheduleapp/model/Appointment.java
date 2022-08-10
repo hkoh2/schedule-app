@@ -459,6 +459,20 @@ public class Appointment {
                 this.getStartTime().format(dateTimeFormatter),
                 this.getEndTime().format(dateTimeFormatter)
         );
-        return alertText; //this.appointmentId + "\n" + this.customerName + " " + this.description;
+        return alertText;
+    }
+
+    public String getDeleteMessage() {
+        String message = """
+                ID: %s, Title: %s, Type: %s Start: %s
+                """;
+
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).withLocale(Locale.getDefault());
+        return String.format(message,
+                this.appointmentId,
+                this.title,
+                this.type,
+                this.getStartTime().format(dateTimeFormatter)
+                );
     }
 }

@@ -959,26 +959,35 @@ public class MainController {
             return;
         }
 
+        ArrayList<Appointment> deleteAppointments = appointments.stream().filter(appointment -> appointment.getCustomerId() == selectedCustomer.getCustomerId())
+                .collect(toCollection(ArrayList::new));
+
+        String deleteAppointmentMessage = "";
+        for (Appointment appointment : deleteAppointments) {
+            deleteAppointmentMessage += appointment.getDeleteMessage();
+        }
+
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle(msg.getString("customer.delete.title"));
         alert.setHeaderText(msg.getString("customer.delete.header"));
-        alert.setContentText(msg.getString("customer.delete.context") + ", " + selectedCustomer.getName() + "?");
+        if (deleteAppointments.isEmpty()) {
+            deleteAppointmentMessage = "No appointments available.";
+        }
+        alert.setContentText(deleteAppointmentMessage);
         Optional<ButtonType> choice = alert.showAndWait();
         if (choice.isPresent() && choice.get() == ButtonType.OK) {
             CustomerDao customerDao = new CustomerDao();
-            if (customerDao.deleteCustomerById(selectedCustomer.getCustomerId())) {
-                customersTable.setItems(customerDao.getAllCustomers());
-                Alert errorAlert = new Alert(Alert.AlertType.INFORMATION);
-                errorAlert.setTitle(msg.getString("customer.delete.confirmation"));
-                errorAlert.setHeaderText(msg.getString("customer.delete.customer"));
-                errorAlert.setContentText(selectedCustomer.getName() + " deleted");
-                errorAlert.showAndWait();
-                return;
-            }
-            Alert errorAlert = new Alert(Alert.AlertType.WARNING);
-            errorAlert.setTitle(msg.getString("customer.error.title"));
-            errorAlert.setHeaderText(msg.getString("customer.error.header"));
-            errorAlert.setContentText(msg.getString("customer.error.context"));
+            AppointmentDao appointmentDao = new AppointmentDao();
+            appointmentDao.removeAppointmentByCustomerId(selectedCustomer.getCustomerId());
+            customerDao.deleteCustomerById(selectedCustomer.getCustomerId());
+            appointments = appointmentDao.getAllAppointments();
+            appointmentsTable.setItems(appointments);
+            customers.remove(selectedCustomer);
+            customersTable.setItems(customerDao.getAllCustomers());
+            Alert errorAlert = new Alert(Alert.AlertType.INFORMATION);
+            errorAlert.setTitle(msg.getString("customer.delete.confirmation"));
+            errorAlert.setHeaderText(msg.getString("customer.delete.customer"));
+            errorAlert.setContentText(selectedCustomer.getName() + " deleted");
             errorAlert.showAndWait();
         }
     }

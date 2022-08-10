@@ -174,6 +174,39 @@ public class AppointmentDao {
     }
 
     /**
+     * Removes appointments by customer ID.
+     *
+     * @param customerId customer id to remove
+     * @return confirm if appointments are removed
+     * @throws SQLException
+     */
+    public boolean removeAppointmentByCustomerId(int customerId) throws SQLException {
+        PreparedStatement stmt = getRemoveByCustomer(customerId);
+        int count = stmt.executeUpdate();
+        if (count > 0) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Gets prepared statement to remove appointments by customer ID.
+     *
+     * @param customerId customer id to remove
+     * @return prepared statement
+     * @throws SQLException
+     */
+    private PreparedStatement getRemoveByCustomer(int customerId) throws SQLException {
+        String query = """
+                DELETE FROM appointments
+                WHERE Customer_ID = ?
+                """;
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setInt(1, customerId);
+        return stmt;
+    }
+
+    /**
      * Updates appointment.
      *
      * @param appointment the appointment
