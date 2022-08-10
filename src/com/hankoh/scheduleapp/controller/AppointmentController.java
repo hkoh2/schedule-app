@@ -16,7 +16,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 import javafx.util.StringConverter;
 
 import java.io.IOException;
@@ -291,7 +290,6 @@ public class AppointmentController extends Internationalizable {
         }
 
         contactComboBox.setItems(contacts);
-        datePicker.setDayCellFactory(disableWeekends());
 
         final StringConverter<LocalDate> defaultConverter = datePicker.getConverter();
         datePicker.setConverter(new StringConverter<>() {
@@ -380,24 +378,6 @@ public class AppointmentController extends Internationalizable {
     }
 
     /**
-     * Disables weekend for date picker.
-     *
-     * @return
-     */
-    private Callback<DatePicker, DateCell> disableWeekends() {
-        return (final DatePicker datePicker1) -> new DateCell() {
-            @Override
-            public void updateItem(LocalDate item, boolean empty) {
-                super.updateItem(item, empty);
-                if (item.getDayOfWeek() == DayOfWeek.SATURDAY || item.getDayOfWeek() == DayOfWeek.SUNDAY) {
-                    setDisable(true);
-                    setStyle("-fx-background-color: #808080;");
-                }
-            }
-        };
-    }
-
-    /**
      * Cancels appointment add or edit and returns to main screen.
      *
      * @param actionEvent the action event
@@ -448,10 +428,6 @@ public class AppointmentController extends Internationalizable {
         }
         if (date == null || date.toString().isEmpty()) {
             startDateError.setText(msg.getString(message));
-            return false;
-        }
-        if (date.getDayOfWeek() == DayOfWeek.SATURDAY || date.getDayOfWeek() == DayOfWeek.SUNDAY) {
-            startDateError.setText(msg.getString("datepicker.error.weekend"));
             return false;
         }
         label.setText("");
