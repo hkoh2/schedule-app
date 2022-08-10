@@ -265,6 +265,7 @@ public class MainController {
      */
     public Tab reportsTab;
     public TableColumn<Customer, String> divisionColumn;
+    public TableColumn<Appointment, String> appointmentContactColumn;
     /**
      * Language on locale.
      */
@@ -331,6 +332,7 @@ public class MainController {
         appointmentEndColumn.setText(msg.getString("appointment.column.end"));
         appointmentCustomerColumn.setText(msg.getString("appointment.column.customer"));
         appointmentUserColumn.setText(msg.getString("appointment.column.user"));
+        appointmentContactColumn.setText(msg.getString("appointment.column.contact"));
 
         customerIdColumn.setText(msg.getString("customer.column.id"));
         customerNameColumn.setText(msg.getString("customer.column.name"));
@@ -352,6 +354,7 @@ public class MainController {
         appointmentStartColumn.setCellFactory(this::formatStart);
         appointmentEndColumn.setCellValueFactory(new PropertyValueFactory<>("endTime"));
         appointmentEndColumn.setCellFactory(this::formatStart);
+        appointmentContactColumn.setCellValueFactory(new PropertyValueFactory<>("contactName"));
         appointmentsTable.setItems(appointments);
 
         getAllCustomers();

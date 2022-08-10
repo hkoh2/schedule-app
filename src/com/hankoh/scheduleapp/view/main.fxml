@@ -34,6 +34,7 @@
                               <TableColumn fx:id="appointmentStartColumn" prefWidth="106.39996337890625" text="Start" />
                               <TableColumn fx:id="appointmentEndColumn" prefWidth="150.4000244140625" text="End" />
                               <TableColumn fx:id="appointmentCustomerColumn" prefWidth="89.5999755859375" text="Customer" />
+                              <TableColumn fx:id="appointmentContactColumn" prefWidth="75.0" text="Contacts" />
                               <TableColumn fx:id="appointmentUserColumn" prefWidth="160.0" text="User" />
                           </columns>
                         </TableView>
