@@ -7,16 +7,15 @@ import java.sql.SQLException;
 public class JDBC {
     private static final String protocol = "jdbc";
     private static final String vendor = ":mysql:";
-    private static final String location = "//localhost/";
+    private static final String location = "//localhost:8081/";
     private static final String databaseName = "client_schedule";
     private static final String jdbcUrl = protocol + vendor + location + databaseName + "?connectionTimeZone = SERVER";
     // LOCAL
     private static final String driver = "com.mysql.cj.jdbc.Driver";
     // Driver reference
-    private static final String userName = "sqlUser";
+    private static final String userName = "sauser";
     // Username
-    private static final String password = "Passw0rd!";
-    // Password
+    private static final String password = "sauserpw";
     private static Connection connection = null;
     // Connection Interface
     public static void makeConnection() {

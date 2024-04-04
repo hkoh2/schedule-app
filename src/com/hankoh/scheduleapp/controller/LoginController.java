@@ -86,9 +86,9 @@ public class LoginController {
     public void onLanguageSelect(ActionEvent actionEvent) {
         String langVal = languageCombo.getValue();
         switch (langVal) {
-            case "english" -> System.out.println("English selected");
-            case "français" -> System.out.println("French selected");
-            default -> {
+            case "english" : System.out.println("English selected");
+            case "français" : System.out.println("French selected");
+            default : {
             }
         }
     }
