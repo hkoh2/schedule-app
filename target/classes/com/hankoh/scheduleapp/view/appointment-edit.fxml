@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="670.0" prefWidth="795.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hankoh.scheduleapp.controller.AppointmentEditController">
+   <children>
+      <GridPane layoutX="31.0" layoutY="100.0" prefHeight="444.0" prefWidth="602.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <TextField fx:id="idField" GridPane.columnIndex="1" />
+            <TextField fx:id="titleField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Label fx:id="idLabel" text="Appointment ID" />
+            <Label fx:id="titleLabel" text="Title" GridPane.rowIndex="3" />
+            <Label fx:id="descriptionLabel" text="Description" GridPane.rowIndex="4" />
+            <TextArea fx:id="descriptionArea" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <Label fx:id="typeLabel" text="Type" GridPane.rowIndex="6" />
+            <Label fx:id="startTimeLabel" text="Start Time" GridPane.rowIndex="7" />
+            <Label fx:id="endTimeLabel" text="End Time" GridPane.rowIndex="8" />
+            <TextField fx:id="typeField" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            <DatePicker fx:id="startDatePicker" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+            <DatePicker fx:id="endDatePicker" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+            <Label fx:id="nameLabel" text="Customer Name" GridPane.rowIndex="2" />
+            <TextField fx:id="nameField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="userField" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+            <Label fx:id="userLabel" text="User" GridPane.rowIndex="9" />
+            <Label fx:id="locationLabel" text="Location" GridPane.rowIndex="5" />
+            <TextField fx:id="locationField" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="7">
+               <children>
+                  <TextField fx:id="startHourField" prefHeight="26.0" prefWidth="110.0">
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </TextField>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text=":">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Text>
+                  <TextField fx:id="startMinuteField" prefWidth="110.0">
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </TextField>
+                  <ComboBox fx:id="startMeridiemComboBox" prefWidth="110.0" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="8">
+               <children>
+                  <TextField fx:id="endHourField" prefHeight="26.0" prefWidth="110.0">
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </TextField>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text=":">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Text>
+                  <TextField fx:id="endMinuteField" prefWidth="110.0">
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </TextField>
+                  <ComboBox fx:id="endMeridiemComboBox" prefWidth="110.0" />
+               </children>
+            </HBox>
+         </children>
+      </GridPane>
+      <ButtonBar layoutX="521.0" layoutY="590.0" prefHeight="40.0" prefWidth="200.0">
+        <buttons>
+          <Button fx:id="saveButton" mnemonicParsing="false" onAction="#onSaveButtonClick" text="Save" />
+            <Button fx:id="exitButton" mnemonicParsing="false" onAction="#onExitButtonClick" text="Exit" />
+        </buttons>
+      </ButtonBar>
+      <Label fx:id="appointmentTitleLabel" layoutX="67.0" layoutY="48.0" text="Edit Appointment" />
+   </children>
+</AnchorPane>
